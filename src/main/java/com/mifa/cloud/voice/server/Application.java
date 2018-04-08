@@ -1,4 +1,4 @@
-package com.mifa.cloud.voice.server.api;
+package com.mifa.cloud.voice.server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;

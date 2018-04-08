@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: voice-server-api #应用名称,与application.properities中保持一致
+  session:
+    store-type: none 
+  datasource:
+    url: jdbc:mysql://10.105.2.217:3391/voice-cloud?characterEncoding=UTF-8
+    username: bmdb
+    password: 4321dbca*^%
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: false
+    generate-ddl: false
+  rabbitmq:
+    host: 10.105.85.56
+    port: 5672
+    username: bmdb
+    password: bmdb
+
+
+
+server:
+  port: 5001  #Tomcat端口
+  max-http-header-size: 4194304
+  tomcat:
+    max-http-post-size: 0
+    
+#mybatis
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true  #表字段自动映射-驼峰
+    useColumnLabel: true
+
+#服务注册与发现
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:2001/eureka/  #Eureka Server
+
+  #服务注册时，在Eureka的实例配置
+  #metadata-map.cluster：指定服务集群名称（一个服务集群包括多个app）
+  instance:
+    preferIpAddress: true
+    statusPageUrlPath: /info
+    metadata-map:
+      cluster: MAIN
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000  #Feign超时时间
+
+  

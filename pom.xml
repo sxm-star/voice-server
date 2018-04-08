@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mifa.cloud</groupId>
-	<artifactId>voice-server-api</artifactId>
-	<version>0.0.1</version>
+	<artifactId>voice-service</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>voice-server-api</name>
+	<name>voice-server</name>
 	<description>米发智能云语音服务</description>
 
 	<parent>
@@ -24,6 +24,47 @@
 	</properties>
 
 	<dependencies>
+        <!--&lt;!&ndash; Mybatis &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.mybatis</groupId>-->
+            <!--<artifactId>mybatis</artifactId>-->
+            <!--<version>3.4.5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.mybatis</groupId>-->
+            <!--<artifactId>mybatis-spring</artifactId>-->
+            <!--<version>1.2.2</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>javax.persistence</groupId>-->
+            <!--<artifactId>persistence-api</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; 分页助手 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.pagehelper</groupId>-->
+            <!--<artifactId>pagehelper</artifactId>-->
+            <!--<version>3.7.5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.jsqlparser</groupId>-->
+            <!--<artifactId>jsqlparser</artifactId>-->
+            <!--<version>0.9.1</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; 通用Mapper &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.abel533</groupId>-->
+            <!--<artifactId>mapper</artifactId>-->
+            <!--<version>2.3.4</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; 连接池 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.jolbox</groupId>-->
+            <!--<artifactId>bonecp-spring</artifactId>-->
+            <!--<version>0.8.0.RELEASE</version>-->
+        <!--</dependency>-->
 		<dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-actuator</artifactId>
@@ -62,6 +103,7 @@
 		    <artifactId>springfox-swagger2</artifactId>
 		    <version>2.5.0</version>
 		</dependency>
+
 		<dependency>
 		    <groupId>io.springfox</groupId>
 		    <artifactId>springfox-swagger-ui</artifactId>
@@ -165,6 +207,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
