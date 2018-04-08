@@ -12,8 +12,14 @@ spring:
     database: MYSQL
     show-sql: false
     generate-ddl: false
+  rabbitmq:
+    host: 10.105.85.56
+    port: 5672
+    username: bmdb
+    password: bmdb
 
-    
+
+
 server:
   port: 5001  #Tomcat端口
   max-http-header-size: 4194304
