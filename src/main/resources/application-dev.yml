@@ -18,6 +18,17 @@ spring:
     username: bmdb
     password: bmdb
 
+#redis
+jedis:
+  host: 127.0.0.1
+  port: 6379
+  maxTotal: 100
+  maxIdle: 50
+  maxWaitMillis: 1000
+
+#文件上传
+upload:
+  path: D:/uploadfile
 
 
 server:

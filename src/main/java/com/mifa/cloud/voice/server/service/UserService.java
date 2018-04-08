@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,4 +10,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserService {
+
 }

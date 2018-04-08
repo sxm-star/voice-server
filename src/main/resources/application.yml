@@ -25,7 +25,15 @@ server:
   max-http-header-size: 4194304
   tomcat:
     max-http-post-size: 0
-    
+
+#redis
+jedis:
+  host: 127.0.0.1
+  port: 6379
+  maxTotal: 100
+  maxIdle: 50
+  maxWaitMillis: 1000
+
 #mybatis
 mybatis:
   configuration:
