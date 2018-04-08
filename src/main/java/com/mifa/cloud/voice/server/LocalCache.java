@@ -1,4 +1,4 @@
-package com.mifa.cloud.voice.server.api;
+package com.mifa.cloud.voice.server;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

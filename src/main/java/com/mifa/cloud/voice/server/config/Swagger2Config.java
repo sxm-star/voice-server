@@ -1,4 +1,4 @@
-package com.mifa.cloud.voice.server.api.config;
+package com.mifa.cloud.voice.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
