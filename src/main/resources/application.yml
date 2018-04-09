@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: voice-server-api #应用名称,与application.properities中保持一致
   session:

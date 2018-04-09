@@ -29,6 +29,11 @@ jedis:
 #文件上传
 upload:
   path: D:/uploadfile
+#h5地址
+h5:
+ app:
+  url:
+   path: http://127.0.0.1/h5-app
 
 
 server:
