@@ -1,9 +1,20 @@
 package com.mifa.cloud.voice.server.dao;
 
-/**
- * @author: sxm
- * @date: 2018/4/8 19:01
- * @version: v1.0.0
- */
+import com.mifa.cloud.voice.server.pojo.UserDo;
+
 public interface UserDao {
+
+    int deleteByPrimaryKey(String id);
+
+    int insert(UserDo record);
+
+    int insertSelective(UserDo record);
+
+
+    UserDo selectByPrimaryKey(String id);
+
+
+    int updateByPrimaryKeySelective(UserDo record);
+
+    int updateByPrimaryKey(UserDo record);
 }

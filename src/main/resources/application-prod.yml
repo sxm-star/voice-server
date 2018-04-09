@@ -3,21 +3,27 @@ spring:
     name: voice-server-api #应用名称,与application.properities中保持一致
   session:
     store-type: none
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/mfivc-cloud?characterEncoding=UTF-8
-    username: root
-    password: root
-    driver-class-name: com.mysql.jdbc.Driver
-  jpa:
-    database: MYSQL
-    show-sql: false
-    generate-ddl: false
     rabbitmq:
       host: 10.105.85.56
       port: 5672
       username: bmdb
       password: bmdb
-
+#####数据库配置#######
+ds:
+ driverClassName: com.mysql.jdbc.Driver
+ url: jdbc:mysql://127.0.0.1:3306/voice-cloud?useUnicode=true&amp;characterEncoding=UTF-8
+ username: root
+ password: root
+ initialSize: 10
+ minIdle: 10
+ maxIdle: 15
+ maxActive: 15
+ maxWait: 1000
+ testOnBorrow: false
+ testWhileIdle: true
+ timeBetweenEvictionRunsMillis: 10000
+ numTestsPerEvictionRun: 3
+ minEvictableIdleTimeMillis: 300000
 
 server:
   port: 5001  #Tomcat端口
@@ -25,11 +31,7 @@ server:
   tomcat:
     max-http-post-size: 0
 
-#mybatis
-mybatis:
-  configuration:
-    mapUnderscoreToCamelCase: true  #表字段自动映射-驼峰
-    useColumnLabel: true
+
 
 #服务注册与发现
 eureka:
