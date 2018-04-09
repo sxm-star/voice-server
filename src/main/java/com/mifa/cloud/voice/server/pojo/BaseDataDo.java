@@ -14,10 +14,6 @@ import java.util.Date;
 @Getter
 @ToString
 public class BaseDataDo implements Serializable {
-    /**
-	 * 数据库主键
-	 */
-	private String id;
 
 	/**
 	 * 创建时间

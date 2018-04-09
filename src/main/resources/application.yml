@@ -11,6 +11,7 @@ spring:
     username: bmdb
     password: bmdb
 
+
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
@@ -68,6 +69,8 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 30000  #Feign超时时间
+            timeoutInMilliseconds: 30000
+logging:
+  file: logback.xml #Feign超时时间
 
   
