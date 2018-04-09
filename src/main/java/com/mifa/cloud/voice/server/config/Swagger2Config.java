@@ -28,7 +28,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.mifa.cloud.voice.server.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.mifa.cloud.voice.server.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
