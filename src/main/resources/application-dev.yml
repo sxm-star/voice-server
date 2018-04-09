@@ -12,9 +12,9 @@ spring:
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
- url: jdbc:mysql://127.0.0.1:3306/voice-cloud?useUnicode=true&amp;characterEncoding=UTF-8
- username: root
- password: root
+ url: jdbc:mysql://10.105.2.217:3391/voice-cloud?useUnicode=true&amp;characterEncoding=UTF-8
+ username: bmdb
+ password: 4321dbca*^%
  initialSize: 10
  minIdle: 10
  maxIdle: 15
@@ -37,12 +37,16 @@ jedis:
 #文件上传
 upload:
   path: D:/uploadfile
+
 #h5地址
 h5:
  app:
   url:
    path: http://127.0.0.1/h5-app
 
+#请求网关前缀
+immu:
+  url: /voice-api/auth
 
 server:
   port: 5001  #Tomcat端口
