@@ -2,9 +2,6 @@ package com.mifa.cloud.voice.server.pojo;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 /**
  * @author 
  */
@@ -13,8 +10,6 @@ public class UserDo extends BaseDataDo {
     /**
      * 用户唯一标识
      */
-    @Id
-    @GeneratedValue
     private String id;
 
     /**
