@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
+
 
 /**
  * Created by Administrator on 2018/4/9.
@@ -32,6 +34,7 @@ public class UserRegisterDTO {
      * */
     @ApiModelProperty("登录密码")
     @NotEmpty(message = "密码不能为空")
+    @Size(min = 6, max = 30)
     private String loginPasswd;
 
     /**
@@ -52,7 +55,7 @@ public class UserRegisterDTO {
      * 短信验证码
      * */
     @ApiModelProperty("短信验证码")
-    @NotEmpty(message = "短信验证码不能为空")
+    @NotEmpty(message = "验证码不能为空")
     private String mobieAuthCode;
 
     /**

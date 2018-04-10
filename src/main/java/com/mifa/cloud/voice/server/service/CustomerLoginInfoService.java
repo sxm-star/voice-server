@@ -42,5 +42,9 @@ public class CustomerLoginInfoService {
     }
 
 
+    public int updateByPrimaryKeySelective(CustomerLoginInfo record){
+        return customerLoginInfoMapper.updateByPrimaryKeySelective(record);
+    }
+
 
 }
