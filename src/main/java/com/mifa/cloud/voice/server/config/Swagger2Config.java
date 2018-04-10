@@ -38,7 +38,6 @@ public class Swagger2Config {
                 .title("RESTful APIs")
                 .description("项目API")
                 .termsOfServiceUrl("http://www.mifaqianbao.cn/")
-                .contact("智能语音云")
                 .version("1.0")
                 .build();
     }
