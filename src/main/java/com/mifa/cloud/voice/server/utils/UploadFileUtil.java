@@ -1,7 +1,7 @@
 package com.mifa.cloud.voice.server.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mifa.cloud.voice.server.config.Const;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class UploadFileUtil {
     private static final int HEADERWIDTH = 1080;
     private static final int HEADERHEIGHT = 1920;
 
-    public JSONObject upload(MultipartFile file, Const aconst) throws Exception {
+    public JSONObject upload(MultipartFile file, ConstConfig aconst) throws Exception {
         JSONObject json = new JSONObject();
         if (!file.isEmpty()) {
             try {

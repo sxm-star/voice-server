@@ -3,7 +3,7 @@ package com.mifa.cloud.voice.server.controller.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.mifa.cloud.voice.server.config.Const;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.utils.UploadFileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +29,7 @@ public class UploadFileController {
 
 
     @Autowired
-    private Const aconst;
+    private ConstConfig aconst;
     @Autowired
     private UploadFileUtil uploadFileUtil;
 

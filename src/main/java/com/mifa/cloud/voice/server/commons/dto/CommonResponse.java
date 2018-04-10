@@ -20,18 +20,44 @@ public class CommonResponse {
 	private String success;			//成功标志
     @ApiModelProperty("错误码")
 	private String errCode;			//错误码
-    @ApiModelProperty("错误信息")
+    @ApiModelProperty("提示信息")
 	private String errMsg;			//错误信息
-	private Object body;	//Body
+	private Object data;			//data
 
 	public CommonResponse() {
 		setSuccess(TRUE);
 	}
 
-	public CommonResponse(String success, String errCode, String errMsg, Object body){
+	public CommonResponse(String success, String errCode, String errMsg, Object data){
 		this.success = success;
 		this.errCode = errCode;
 		this.errMsg = errMsg;
-		this.body = body;
+		this.data = data;
 	}
+
+	public static CommonResponse successCommonResponse() {
+		return new CommonResponse();
+	}
+
+	public static CommonResponse successCommonResponse(Object data) {
+		return new CommonResponse(TRUE, "", "", data);
+	}
+
+	public static CommonResponse successCommonResponse(String errMsg, Object data) {
+		return new CommonResponse(TRUE, "", errMsg, data);
+	}
+
+	public static CommonResponse failCommonResponse() {
+		return new CommonResponse(FALSE, "", "", null);
+	}
+
+	public static CommonResponse failCommonResponse(String errMsg) {
+		return new CommonResponse(FALSE, "400", errMsg, null);
+	}
+
+	public static CommonResponse failCommonResponse(String errCode, String errMsg) {
+		return new CommonResponse(FALSE, errCode, errMsg, null);
+	}
+
+
 }

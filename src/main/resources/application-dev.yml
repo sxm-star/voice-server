@@ -44,9 +44,6 @@ h5:
   url:
    path: http://127.0.0.1/h5-app
 
-#请求网关前缀
-immu:
-  url: /voice-api/auth
 
 server:
   port: 5001  #Tomcat端口
