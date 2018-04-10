@@ -2,13 +2,8 @@ package com.mifa.cloud.voice.server.dao;
 
 import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDO;
 import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDOExample;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import org.apache.ibatis.annotations.Param;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.List;
 
 public interface SystemRoleResourceDAO {
     long countByExample(SystemRoleResourceDOExample example);
