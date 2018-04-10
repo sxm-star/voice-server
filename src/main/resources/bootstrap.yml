@@ -1,0 +1,13 @@
+####### 定义的语音渠道
+appConfig:
+  #阿里云语音通道
+  aliyunVoice:
+    accountId: LTAIBsqMANiyaR9u
+    accessSecret: oCLx4mIfSPKTAdfHhf07NgXOzY3Yv1
+    voiceUrl: http://h.1069106.com:1210/
+
+  #即信语音通道
+  jixinVoice:
+    accountId: b1a593ca514fd08adf922d205fecb18e
+    authToken: fe2b66b47d4ca417005b0bf6da3918ae
+    voiceUrl: https://api.139130.com:9999/
