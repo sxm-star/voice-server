@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.commons.dto;
 
+import com.mifa.cloud.voice.server.commons.enums.ErrorKeyEnums;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,6 +36,14 @@ public class CommonResponse {
 		this.data = data;
 	}
 
+    public CommonResponse(String success, ErrorKeyEnums errorKeyEnums, Object body){
+        this.success = success;
+        this.errCode = errorKeyEnums.getCode();
+        this.errMsg = errorKeyEnums.getMsg();
+        this.body = body;
+    }
+
+
 	public static CommonResponse successCommonResponse() {
 		return new CommonResponse();
 	}
@@ -58,6 +67,5 @@ public class CommonResponse {
 	public static CommonResponse failCommonResponse(String errCode, String errMsg) {
 		return new CommonResponse(FALSE, errCode, errMsg, null);
 	}
-
 
 }
