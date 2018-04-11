@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class RbacController {
             @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string",value = "角色ID,选填")
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse findRoleResourceList(String contractNo, String roleId){
+    public CommonResponse<List<ResourceDto>> findRoleResourceList(String contractNo, String roleId){
         Preconditions.checkArgument(StringUtils.isNotEmpty(contractNo), "客户号不能为空");
         RoleDto role = roleService.getRoleById(roleId==null?customerLoginInfoService.selectByPrimaryKey(contractNo).getContractNoRoleId():Long.parseLong(roleId));
         Map<Long, RoleResourceDto> map = roleResourceService
@@ -70,7 +71,7 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取系统角色列表操作")
-    public CommonResponse findRoleList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
+    public CommonResponse<List<RoleDto>> findRoleList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
 
         return CommonResponse.successCommonResponse(roleService.getRoleList(roleName,roleEnum,roleStatus));
     }
@@ -80,7 +81,7 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse insertRole(@RequestBody @Valid  RolePostDto rolePostDto){
+    public CommonResponse<Boolean> insertRole(@RequestBody @Valid  RolePostDto rolePostDto){
         RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
         roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
@@ -94,10 +95,21 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse alterRole(@RequestBody @Valid  RolePostDto rolePostDto){
+    public CommonResponse<Boolean> alterRole(@RequestBody @Valid  RolePostDto rolePostDto){
         RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
         roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
         return CommonResponse.successCommonResponse(roleService.updateRole(roleDto));
     }
+
+    @ApiOperation("批量删除系统角色")
+    @RequestMapping(value = "/role",method = RequestMethod.DELETE)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "用户权限列表获取操作")
+    public CommonResponse<Boolean> delRoles(@RequestBody List<Long> roleIds){
+        Preconditions.checkArgument(CollectionUtils.isNotEmpty(roleIds), "角色ID号不能为空");
+        return CommonResponse.successCommonResponse(roleService.delRoles(roleIds));
+    }
+
 }
