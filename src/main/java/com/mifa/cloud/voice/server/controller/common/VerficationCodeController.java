@@ -42,7 +42,7 @@ public class VerficationCodeController {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @GetMapping(value = "/getImageVerficationCode")
+    @GetMapping(value = "/get_image_verfication_code")
     @ApiOperation(value = "图形验证码", notes = "图形验证码")
     @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query")})
     public void imageVerficationCode(HttpServletRequest request, HttpServletResponse response){
@@ -66,7 +66,7 @@ public class VerficationCodeController {
         }
     }
 
-    @PostMapping(value = "/getMobileVerficationCode")
+    @PostMapping(value = "/get_mobile_verfication_code")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
     public CommonResponse mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
         String code = String.valueOf(RandomSort.generateRandomNum(6));
