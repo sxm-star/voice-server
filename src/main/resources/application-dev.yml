@@ -12,7 +12,7 @@ spring:
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
- url: jdbc:mysql://10.105.2.217:3391/voice-cloud?useUnicode=true&amp;characterEncoding=UTF-8
+ url: jdbc:mysql://10.105.2.217:3391/voice-cloud?useUnicode=true&amp;characterEncoding=utf-8
  username: bmdb
  password: 4321dbca*^%
  initialSize: 10
