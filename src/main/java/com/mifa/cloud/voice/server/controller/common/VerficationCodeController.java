@@ -1,13 +1,17 @@
 package com.mifa.cloud.voice.server.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.StaticConst;
 import com.mifa.cloud.voice.server.dto.MobileVerficationCodeDTO;
+import com.mifa.cloud.voice.server.dto.UserPwdMobileDTO;
+import com.mifa.cloud.voice.server.service.VerficationService;
 import com.mifa.cloud.voice.server.utils.ImageUtil;
+import com.netflix.discovery.converters.Auto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,13 +40,17 @@ public class VerficationCodeController {
 
     @Autowired
     private KeyValueDao keyValueDao;
+
     @Autowired
     private ImageUtil imageUtil;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @GetMapping(value = "/get_image_verfication_code")
+    @Autowired
+    private VerficationService verficationService;
+
+    @GetMapping(value = "/auth_code/get_image_verfication_code")
     @ApiOperation(value = "图形验证码", notes = "图形验证码")
     @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query")})
     public void imageVerficationCode(HttpServletRequest request, HttpServletResponse response){
@@ -65,7 +74,7 @@ public class VerficationCodeController {
         }
     }
 
-    @PostMapping(value = "/get_mobile_verfication_code")
+    @PostMapping(value = "/auth_code/get_mobile_verfication_code")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
     public CommonResponse mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
         String code = String.valueOf(RandomSort.generateRandomNum(6));
@@ -81,7 +90,22 @@ public class VerficationCodeController {
         return CommonResponse.successCommonResponse();
     }
 
+    @PostMapping("/auth_code/verify_mobile_code")
+    @ApiOperation(value = "校验手机验证码")
+    @Loggable(descp = "校验手机验证码")
+    public CommonResponse verifyMobileCode(@RequestBody @Valid UserPwdMobileDTO param) {
 
+        // 校验短信验证码
+        String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
+        if(StringUtils.isEmpty(mobileAuthCode)) {
+            return CommonResponse.failCommonResponse("手机验证码已过期，请重新获取");
+        }
+        if(!mobileAuthCode.equals(param.getMobileVerficationCode())) {
+            return CommonResponse.failCommonResponse("验证码错误");
+        }
+        return CommonResponse.successCommonResponse();
+
+    }
 
 
 
