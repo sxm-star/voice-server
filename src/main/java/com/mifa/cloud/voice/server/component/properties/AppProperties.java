@@ -17,6 +17,7 @@ public class AppProperties {
 
     private JixinVoice jixinVoice;
 
+    private MontnetsVoice montnetsVoice;
 	@Data
 	public static class AliyunVoice{
 		private String accessId;
@@ -28,6 +29,13 @@ public class AppProperties {
         private String accessId;
         private String authToken;
         private String voiceUrl;
+    }
+    @Data
+    public static class MontnetsVoice{
+       private String  appkey;
+       private String  userid;
+       private String  pwd;
+       private String  voiceUrl;
     }
 
 
