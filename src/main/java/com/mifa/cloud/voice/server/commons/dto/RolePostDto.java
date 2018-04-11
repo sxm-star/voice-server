@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @ApiModel("新增角色实体对象")
 public class RolePostDto {
+    @ApiModelProperty("修改操作 主键ID必填; 新增操作选填")
+    private Long id;
     /**
      * 角色名称
      */

@@ -70,7 +70,7 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取系统角色列表操作")
-    public CommonResponse findRoleResourceList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
+    public CommonResponse findRoleList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
 
         return CommonResponse.successCommonResponse(roleService.getRoleList(roleName,roleEnum,roleStatus));
     }
@@ -80,11 +80,24 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse findRoleResourceList(@RequestBody @Valid  RolePostDto rolePostDto){
+    public CommonResponse insertRole(@RequestBody @Valid  RolePostDto rolePostDto){
         RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
         roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
+        //安全考虑,新增操作不需要传id
+        roleDto.setId(null);
         return CommonResponse.successCommonResponse(roleService.insertRole(roleDto));
     }
 
+    @ApiOperation("修改系统角色")
+    @RequestMapping(value = "/role",method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "用户权限列表获取操作")
+    public CommonResponse alterRole(@RequestBody @Valid  RolePostDto rolePostDto){
+        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
+        roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
+        roleDto.setRoleType(rolePostDto.getRoleType().getCode());
+        return CommonResponse.successCommonResponse(roleService.updateRole(roleDto));
+    }
 }

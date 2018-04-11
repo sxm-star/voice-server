@@ -3,6 +3,8 @@ package com.mifa.cloud.voice.server.commons.dto;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author: sxm
  * @date: 2018/4/10 15:10
@@ -13,6 +15,7 @@ public class RoleDto {
     /**
      * 主键
      */
+    @NotNull(message = "主键ID不能为空")
     private Long id;
 
     /**
