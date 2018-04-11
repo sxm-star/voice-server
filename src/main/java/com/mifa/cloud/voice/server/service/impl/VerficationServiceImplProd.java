@@ -20,7 +20,7 @@ public class VerficationServiceImplProd implements VerficationService{
     @Override
     public String getmobileAuthCodeFromCache(String mobile) {
         // 校验验证码
-        String mobileAuthCode = String.valueOf(keyValueDao.get(StaticConst.MOBILE_SMS_KEY + mobile));
+        String mobileAuthCode = (String) keyValueDao.get(StaticConst.MOBILE_SMS_KEY + mobile);
         return mobileAuthCode;
     }
 }

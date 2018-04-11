@@ -34,7 +34,7 @@ public class UploadFileController {
     private UploadFileUtil uploadFileUtil;
 
 
-    @PostMapping(value = "/upFile")
+    @PostMapping(value = "/upload_file")
     @ApiOperation(value = "单个上传文件", notes = "单个上传文件")
     public String UploadFileCompress(@RequestParam("file") MultipartFile file) throws Exception{
         Map json = new HashMap();
@@ -44,7 +44,7 @@ public class UploadFileController {
         return JSONObject.toJSONString(json);
     }
 
-    //@PostMapping(value = "/upFiles")
+    //@PostMapping(value = "/upload_files")
     //@ApiOperation(value = "多个上传文件", notes = "多个上传文件")
     public String UploadFileCompressV2(MultipartHttpServletRequest multiRequest) throws Exception {
         Map json = new HashMap();

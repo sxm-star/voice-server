@@ -79,8 +79,8 @@ public class RegisterController {
                 .loginStatus("1")
                 .registType(param.getRegistType())
                 .build();
-        int result = customerLoginInfoService.insertSelective(customerLoginInfo);
-        if (result > 0) {
+        int count = customerLoginInfoService.insertSelective(customerLoginInfo);
+        if (count > 0) {
             log.info("注册接口：[注册成功]");
             return CommonResponse.successCommonResponse("注册成功",null);
         }
