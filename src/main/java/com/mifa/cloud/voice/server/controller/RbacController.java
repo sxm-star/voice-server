@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -100,4 +101,15 @@ public class RbacController {
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
         return CommonResponse.successCommonResponse(roleService.updateRole(roleDto));
     }
+
+    @ApiOperation("批量删除系统角色")
+    @RequestMapping(value = "/role",method = RequestMethod.DELETE)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "用户权限列表获取操作")
+    public CommonResponse delRoles(@RequestBody List<Long> roleIds){
+        Preconditions.checkArgument(CollectionUtils.isNotEmpty(roleIds), "角色ID号不能为空");
+        return CommonResponse.successCommonResponse(roleService.delRoles(roleIds));
+    }
+
 }

@@ -67,13 +67,11 @@ public class SystemRoleService {
         return cnt>0?Boolean.TRUE:Boolean.FALSE;
     }
 
-    /**
-     * 逻辑删除
-     * @param roleDto
-     * @return
-     */
-    public boolean delRole(RoleDto roleDto){
-         int cnt = systemRoleInfoDAO.updateByPrimaryKey(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
-         return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    public boolean delRoles(List<Long> roleIds){
+        SystemRoleInfoDOExample roleInfoDOExample = new SystemRoleInfoDOExample();
+        SystemRoleInfoDOExample.Criteria criteria = roleInfoDOExample.createCriteria();
+        criteria.andIdIn(roleIds);
+        int cnt = systemRoleInfoDAO.deleteByExample(roleInfoDOExample);
+        return cnt>0?Boolean.TRUE:Boolean.FALSE;
     }
 }
