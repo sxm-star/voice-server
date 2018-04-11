@@ -41,7 +41,7 @@ public class SystemRoleResourceService {
         return Collections.emptyList();
     }
 
-    private Map<Long,RoleResourceDto> findRoleResourceList(RoleDto ...roles){
+    public Map<Long,RoleResourceDto> findRoleResourceList(RoleDto ...roles){
         Map<Long, RoleResourceDto> resourceMap = new HashMap<>();;
         for (RoleDto role : roles) {
             if (role.getRoleStatus()!=null&&role.getRoleStatus()==0) {

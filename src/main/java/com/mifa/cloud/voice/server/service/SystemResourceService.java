@@ -20,7 +20,7 @@ import java.util.List;
  * @version: v1.0.0
  */
 @Service
-public class ResourceService {
+public class SystemResourceService {
 
     @Autowired
     SystemResourceDAO systemResourceDAO;
@@ -32,16 +32,17 @@ public class ResourceService {
      * @param resouceStatusEnum
      * @return
      */
-    List<ResourceDto> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum , ResouceStatusEnum resouceStatusEnum){
+    public List<ResourceDto> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum , ResouceStatusEnum resouceStatusEnum){
         SystemResourceDOExample resourceDOExample = new SystemResourceDOExample();
         SystemResourceDOExample.Criteria criteria = resourceDOExample.createCriteria();
+        criteria.andPidEqualTo(pid);
         if (resouceTypeEnum!=null){
             criteria.andResourceTypeEqualTo(resouceTypeEnum.getCode());
         }
         if(resouceStatusEnum!=null){
             criteria.andResourceStatusEqualTo(resouceStatusEnum.getCode());
         }
-        resourceDOExample.setOrderByClause("order by resource_order");
+        resourceDOExample.setOrderByClause(" resource_order asc ");
 
         List<SystemResourceDO> resourceDOList = systemResourceDAO.selectByExample(resourceDOExample);
         if (resourceDOList!=null || !resourceDOList.isEmpty()){
@@ -58,7 +59,7 @@ public class ResourceService {
      * @param resouceStatusEnum
      * @return
      */
-    List<ResourceDto> findAllResourceList(List<ResourceDto> resourceDtos,ResouceStatusEnum resouceStatusEnum){
+    public List<ResourceDto> findAllResourceList(List<ResourceDto> resourceDtos,ResouceStatusEnum resouceStatusEnum){
         if(resourceDtos==null || resourceDtos.isEmpty()){
             return Collections.emptyList();
         }
