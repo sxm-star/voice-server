@@ -3,9 +3,10 @@ package com.mifa.cloud.voice.server.dao;
 import com.mifa.cloud.voice.server.pojo.SystemResourceDO;
 import com.mifa.cloud.voice.server.pojo.SystemResourceDOExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface SystemResourceDAO {
     long countByExample(SystemResourceDOExample example);
 

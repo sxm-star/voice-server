@@ -3,8 +3,11 @@ package com.mifa.cloud.voice.server.dao;
 import com.mifa.cloud.voice.server.pojo.SystemRoleInfoDO;
 import com.mifa.cloud.voice.server.pojo.SystemRoleInfoDOExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public interface SystemRoleInfoDAO {
     long countByExample(SystemRoleInfoDOExample example);
 

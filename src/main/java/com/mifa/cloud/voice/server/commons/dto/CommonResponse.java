@@ -40,7 +40,7 @@ public class CommonResponse {
         this.success = success;
         this.errCode = errorKeyEnums.getCode();
         this.errMsg = errorKeyEnums.getMsg();
-        this.body = body;
+        this.data = body;
     }
 
 

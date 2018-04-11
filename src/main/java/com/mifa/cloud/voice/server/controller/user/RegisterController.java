@@ -1,6 +1,8 @@
 package com.mifa.cloud.voice.server.controller.user;
 
 import com.alibaba.fastjson.JSON;
+import com.mifa.cloud.voice.server.annotation.Loggable;
+import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.dto.UserRegisterDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
@@ -15,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -27,6 +30,7 @@ import java.util.Map;
 @RestController
 @Api(value = "用户注册",description = "用户注册",produces = MediaType.APPLICATION_JSON)
 @Slf4j
+@RequestMapping(AppConst.BASE_PATH + "v1")
 public class RegisterController {
     @Autowired
     private PasswordUtil passwordUtil;
@@ -39,29 +43,24 @@ public class RegisterController {
 
     @PostMapping("/register")
     @ApiOperation(value = "注册")
+    @Loggable(descp = "用户注册")
     public CommonResponse register(@RequestBody @Valid UserRegisterDTO param) {
-
-        log.info("注册接口入参：[{}]", JSON.toJSONString(param));
 
         // 校验验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
 
         if(StringUtils.isBlank(mobileAuthCode)) {
-            log.info("注册接口：[短信验证码已过期]");
             return CommonResponse.failCommonResponse("短信验证码已过期");
         }
         if(!mobileAuthCode.equals(param.getMobieAuthCode())) {
-            log.info("注册接口：[验证码错误]");
             return CommonResponse.failCommonResponse("验证码错误");
         }
         if(!param.getLoginPasswd().equals(param.getLoginPasswdSecond())) {
-            log.info("注册接口：[两次密码输入不一致]");
             return CommonResponse.failCommonResponse("两次密码输入不一致");
         }
         // 验证账号是否已经注册
         CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginName(param.getLoginName());
         if(loginInfo != null) {
-            log.info("注册接口：[该账号已被注册]");
             return CommonResponse.failCommonResponse("该账号已被注册");
         }
 
@@ -81,10 +80,8 @@ public class RegisterController {
                 .build();
         int count = customerLoginInfoService.insertSelective(customerLoginInfo);
         if (count > 0) {
-            log.info("注册接口：[注册成功]");
             return CommonResponse.successCommonResponse("注册成功",null);
         }
-        log.info("注册接口：[注册失败]");
         return CommonResponse.failCommonResponse("注册失败");
 
     }
