@@ -1,8 +1,8 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.mifa.cloud.voice.server.commons.dto.ResourceDto;
-import com.mifa.cloud.voice.server.commons.enums.ResouceStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.ResouceTypeEnum;
+import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.SystemResourceDAO;
 import com.mifa.cloud.voice.server.pojo.SystemResourceDO;
 import com.mifa.cloud.voice.server.pojo.SystemResourceDOExample;
@@ -32,7 +32,7 @@ public class SystemResourceService {
      * @param resouceStatusEnum
      * @return
      */
-    public List<ResourceDto> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum , ResouceStatusEnum resouceStatusEnum){
+    public List<ResourceDto> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum , StatusEnum resouceStatusEnum){
         SystemResourceDOExample resourceDOExample = new SystemResourceDOExample();
         SystemResourceDOExample.Criteria criteria = resourceDOExample.createCriteria();
         criteria.andPidEqualTo(pid);
@@ -59,12 +59,12 @@ public class SystemResourceService {
      * @param resouceStatusEnum
      * @return
      */
-    public List<ResourceDto> findAllResourceList(List<ResourceDto> resourceDtos,ResouceStatusEnum resouceStatusEnum){
+    public List<ResourceDto> findAllResourceList(List<ResourceDto> resourceDtos,StatusEnum resouceStatusEnum){
         if(resourceDtos==null || resourceDtos.isEmpty()){
             return Collections.emptyList();
         }
         resourceDtos.forEach(resourceDto -> {
-           resourceDto.setChildResource(findResourceList(resourceDto.getId(),null,ResouceStatusEnum.NORMAL));
+           resourceDto.setChildResource(findResourceList(resourceDto.getId(),null,StatusEnum.NORMAL));
         });
         return resourceDtos;
     }
