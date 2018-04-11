@@ -62,6 +62,11 @@ public class SystemRoleService {
         return cnt>0?Boolean.TRUE:Boolean.FALSE;
     }
 
+    public boolean updateRole(RoleDto roleDto){
+        int cnt = systemRoleInfoDAO.updateByPrimaryKeySelective(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
+        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    }
+
     /**
      * 逻辑删除
      * @param roleDto
