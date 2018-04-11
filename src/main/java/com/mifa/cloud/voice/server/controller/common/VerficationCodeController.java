@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
@@ -15,10 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +29,7 @@ import java.util.Map;
 @RestController
 @Api(value = "验证码", description = "验证码", produces = MediaType.APPLICATION_JSON)
 @Slf4j
+@RequestMapping(AppConst.BASE_PATH + "v1")
 public class VerficationCodeController {
 
 

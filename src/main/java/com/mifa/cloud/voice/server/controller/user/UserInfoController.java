@@ -1,5 +1,7 @@
 package com.mifa.cloud.voice.server.controller.user;
 
+import com.mifa.cloud.voice.server.annotation.Loggable;
+import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.dto.UserInfoVO;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
@@ -13,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -25,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 @RestController
 @Api(value = "用户信息管理", description = "用户信息管理", produces = MediaType.APPLICATION_JSON)
 @Slf4j
+@RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
 public class UserInfoController {
 
     @Autowired
@@ -37,11 +41,12 @@ public class UserInfoController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
     })
-    public UserInfoVO getUserInfo(@PathVariable("contractNo") String contractNo) {
+    @Loggable(descp = "获得用户信息")
+    public CommonResponse getUserInfo(@PathVariable("contractNo") String contractNo) {
 
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(contractNo);
         if(customerInfo == null) {
-            //return CommonResponse.failCommonResponse("用户不存在");
+            return CommonResponse.failCommonResponse("用户不存在");
         }
 
         UserInfoVO vo = new UserInfoVO();
@@ -50,8 +55,7 @@ public class UserInfoController {
         /** TODO 获取用户认证信息*/
 
 
-        //return CommonResponse.successCommonResponse(vo);
-        return vo;
+        return CommonResponse.successCommonResponse(vo);
     }
 
 
