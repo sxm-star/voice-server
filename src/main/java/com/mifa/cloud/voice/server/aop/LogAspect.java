@@ -271,11 +271,15 @@ public class LogAspect {
 		if (null == methodParamNames) {
 			return Collections.EMPTY_MAP;
 		}
-		for (Entry<String, Object> entry : methodParamNames.entrySet()) {
+		try {
+        for (Entry<String, Object> entry : methodParamNames.entrySet()) {
 			int index = Integer.valueOf(String.valueOf(entry.getValue()));
 			Object arg = (null == args[index] ? "" : args[index]);
 			methodParamNames.put(entry.getKey(), arg);
 		}
+        }catch (Exception e){
+            log.error("AOP 组装入参Map异常");
+        }
 		return methodParamNames;
 	}
 

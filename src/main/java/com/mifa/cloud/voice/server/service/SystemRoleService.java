@@ -56,4 +56,19 @@ public class SystemRoleService {
         }
         return Collections.EMPTY_LIST;
     }
+
+    public boolean insertRole(RoleDto roleDto){
+        int cnt = systemRoleInfoDAO.insertSelective(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
+        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    }
+
+    /**
+     * 逻辑删除
+     * @param roleDto
+     * @return
+     */
+    public boolean delRole(RoleDto roleDto){
+         int cnt = systemRoleInfoDAO.updateByPrimaryKey(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
+         return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    }
 }

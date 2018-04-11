@@ -4,16 +4,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.ResourceDto;
-import com.mifa.cloud.voice.server.commons.dto.RoleDto;
-import com.mifa.cloud.voice.server.commons.dto.RoleResourceDto;
+import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.commons.enums.RoleEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.service.SystemResourceService;
 import com.mifa.cloud.voice.server.service.SystemRoleResourceService;
 import com.mifa.cloud.voice.server.service.SystemRoleService;
+import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.ResourceUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -70,10 +69,22 @@ public class RbacController {
     @RequestMapping(value = "/role-list",method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
-    @Loggable(descp = "用户权限列表获取操作")
+    @Loggable(descp = "获取系统角色列表操作")
     public CommonResponse findRoleResourceList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
 
         return CommonResponse.successCommonResponse(roleService.getRoleList(roleName,roleEnum,roleStatus));
+    }
+
+    @ApiOperation("新增系统角色")
+    @RequestMapping(value = "/role",method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "用户权限列表获取操作")
+    public CommonResponse findRoleResourceList(@RequestBody @Valid  RolePostDto rolePostDto){
+        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
+        roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
+        roleDto.setRoleType(rolePostDto.getRoleType().getCode());
+        return CommonResponse.successCommonResponse(roleService.insertRole(roleDto));
     }
 
 }
