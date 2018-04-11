@@ -11,3 +11,10 @@ appConfig:
     accountId: b1a593ca514fd08adf922d205fecb18e
     authToken: fe2b66b47d4ca417005b0bf6da3918ae
     voiceUrl: https://api.139130.com:9999/
+
+    #梦网云通语音通道
+  montnetsVoice:
+    appkey: 02973ba013ed3f1917fb80f8b194cbf9
+    userid: E102UF
+    pwd: m5d6u7
+    voiceUrl: http://api01.monyun.cn:7901

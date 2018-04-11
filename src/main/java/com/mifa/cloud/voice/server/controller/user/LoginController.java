@@ -10,6 +10,8 @@ import com.mifa.cloud.voice.server.utils.JwtTokenUtil;
 import com.mifa.cloud.voice.server.utils.PasswordUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class LoginController {
     private PasswordUtil passwordUtil;
 
     @PostMapping("/login")
-    @ApiOperation(value = "登陆")
+    @ApiOperation(value = "登陆",response = UserLoginVO.class)
     public CommonResponse login(@RequestBody @Valid UserLoginDTO param) {
 
         log.info("登陆接口入参：[{}]", JSONObject.toJSONString(param));
