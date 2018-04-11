@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mifa.cloud.voice.server.dao.CustomerAauthPersonMapper" >
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.CustomerAauthPerson" >
+    <id column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="id_card_img_up_url" property="idCardImgUpUrl" jdbcType="VARCHAR" />
+    <result column="id_card_img_back_url" property="idCardImgBackUrl" jdbcType="VARCHAR" />
+    <result column="id_card_img_handheld_url" property="idCardImgHandheldUrl" jdbcType="VARCHAR" />
+    <result column="auth_status" property="authStatus" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    contract_no, name, id_card, profession, id_card_img_up_url, id_card_img_back_url, 
+    id_card_img_handheld_url, auth_status, remark, created_by, created_at, updated_by, 
+    updated_at
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPersonExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_customer_auth_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_auth_person
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_customer_auth_person
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPersonExample" >
+    delete from t_customer_auth_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPerson" >
+    insert into t_customer_auth_person (contract_no, name, id_card, 
+      profession, id_card_img_up_url, id_card_img_back_url, 
+      id_card_img_handheld_url, auth_status, remark, 
+      created_by, created_at, updated_by, 
+      updated_at)
+    values (#{contractNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{profession,jdbcType=VARCHAR}, #{idCardImgUpUrl,jdbcType=VARCHAR}, #{idCardImgBackUrl,jdbcType=VARCHAR}, 
+      #{idCardImgHandheldUrl,jdbcType=VARCHAR}, #{authStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPerson" >
+    insert into t_customer_auth_person
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="contractNo != null" >
+        contract_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="profession != null" >
+        profession,
+      </if>
+      <if test="idCardImgUpUrl != null" >
+        id_card_img_up_url,
+      </if>
+      <if test="idCardImgBackUrl != null" >
+        id_card_img_back_url,
+      </if>
+      <if test="idCardImgHandheldUrl != null" >
+        id_card_img_handheld_url,
+      </if>
+      <if test="authStatus != null" >
+        auth_status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="contractNo != null" >
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgUpUrl != null" >
+        #{idCardImgUpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgBackUrl != null" >
+        #{idCardImgBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgHandheldUrl != null" >
+        #{idCardImgHandheldUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="authStatus != null" >
+        #{authStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPersonExample" resultType="java.lang.Integer" >
+    select count(*) from t_customer_auth_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_customer_auth_person
+    <set >
+      <if test="record.contractNo != null" >
+        contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCard != null" >
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profession != null" >
+        profession = #{record.profession,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardImgUpUrl != null" >
+        id_card_img_up_url = #{record.idCardImgUpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardImgBackUrl != null" >
+        id_card_img_back_url = #{record.idCardImgBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardImgHandheldUrl != null" >
+        id_card_img_handheld_url = #{record.idCardImgHandheldUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authStatus != null" >
+        auth_status = #{record.authStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null" >
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null" >
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedAt != null" >
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_customer_auth_person
+    set contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      profession = #{record.profession,jdbcType=VARCHAR},
+      id_card_img_up_url = #{record.idCardImgUpUrl,jdbcType=VARCHAR},
+      id_card_img_back_url = #{record.idCardImgBackUrl,jdbcType=VARCHAR},
+      id_card_img_handheld_url = #{record.idCardImgHandheldUrl,jdbcType=VARCHAR},
+      auth_status = #{record.authStatus,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPerson" >
+    update t_customer_auth_person
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        profession = #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgUpUrl != null" >
+        id_card_img_up_url = #{idCardImgUpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgBackUrl != null" >
+        id_card_img_back_url = #{idCardImgBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImgHandheldUrl != null" >
+        id_card_img_handheld_url = #{idCardImgHandheldUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="authStatus != null" >
+        auth_status = #{authStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAauthPerson" >
+    update t_customer_auth_person
+    set name = #{name,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      profession = #{profession,jdbcType=VARCHAR},
+      id_card_img_up_url = #{idCardImgUpUrl,jdbcType=VARCHAR},
+      id_card_img_back_url = #{idCardImgBackUrl,jdbcType=VARCHAR},
+      id_card_img_handheld_url = #{idCardImgHandheldUrl,jdbcType=VARCHAR},
+      auth_status = #{authStatus,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </update>
+</mapper>
