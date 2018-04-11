@@ -22,7 +22,7 @@ public class CustomerLoginInfoService {
 
     /**
      * 根据loginName查询
-     * */
+     */
     public CustomerLoginInfo findByLoginName(String loginName) {
         CustomerLoginInfoExample example = new CustomerLoginInfoExample();
         CustomerLoginInfoExample.Criteria criteria = example.createCriteria();
@@ -34,16 +34,29 @@ public class CustomerLoginInfoService {
         return customerLoginInfos.get(0);
     }
 
+    /**
+     * 插入记录（只插入参数非空字段）
+     */
     public int insertSelective(CustomerLoginInfo record) {
-        if(StringUtils.isEmpty(record.getContractNo())) {
+        if (StringUtils.isEmpty(record.getContractNo())) {
             record.setContractNo(SeqProducerUtil.getContractNo());
         }
         return customerLoginInfoMapper.insertSelective(record);
     }
 
 
-    public int updateByPrimaryKeySelective(CustomerLoginInfo record){
+    /**
+     * 根据id修改记录（只修改参数非空字段）
+     */
+    public int updateByPrimaryKeySelective(CustomerLoginInfo record) {
         return customerLoginInfoMapper.updateByPrimaryKeySelective(record);
+    }
+
+    /**
+     * 根据id查询记录
+     * */
+    public CustomerLoginInfo selectByPrimaryKey(String contractNo) {
+        return customerLoginInfoMapper.selectByPrimaryKey(contractNo);
     }
 
 
