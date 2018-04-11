@@ -1,18 +1,17 @@
 package com.mifa.cloud.voice.server.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
 
 /**
- * Created by Administrator on 2018/4/10.
+ * Created by Administrator on 2018/4/11.
  */
 @ApiModel("短信验证码校验实体类")
 @Data
-public class UserPwdMobileDTO {
+public class MobileAuthCodeVerifyDTO {
 
     @ApiModelProperty("手机号码")
     @NotEmpty(message = "手机号码不能为空")
@@ -23,3 +22,4 @@ public class UserPwdMobileDTO {
     @NotEmpty(message = "短信验证码不能为空")
     private String mobileVerficationCode;
 }
+
