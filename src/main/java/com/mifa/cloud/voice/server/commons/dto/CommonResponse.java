@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("通用响应实体信息")
-public class CommonResponse {
+public class CommonResponse{
 	public static final String TRUE 	= "true";
 	public static final String FALSE	= "false";
 
@@ -23,7 +23,8 @@ public class CommonResponse {
 	private String errCode;			//错误码
     @ApiModelProperty("提示信息")
 	private String errMsg;			//错误信息
-	private Object data;			//data
+	@ApiModelProperty("有效数据")
+    private Object data;			//data
 
 	public CommonResponse() {
 		setSuccess(TRUE);
@@ -40,7 +41,7 @@ public class CommonResponse {
         this.success = success;
         this.errCode = errorKeyEnums.getCode();
         this.errMsg = errorKeyEnums.getMsg();
-        this.body = body;
+        this.data = body;
     }
 
 

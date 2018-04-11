@@ -6,10 +6,10 @@ spring:
   session:
     store-type: none 
   rabbitmq:
-    host: 10.105.85.56
+    host: 127.0.0.1
     port: 5672
-    username: bmdb
-    password: bmdb
+    username: guest
+    password: guest
 
 
 #datasource config
