@@ -1,6 +1,5 @@
 package com.mifa.cloud.voice.server.controller.user;
 
-import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
@@ -15,10 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.MediaType;
@@ -41,7 +37,7 @@ public class RegisterController {
     @Autowired
     private VerficationService verficationService;
 
-    @PostMapping("/register")
+    @PostMapping("/user")
     @ApiOperation(value = "注册")
     @Loggable(descp = "用户注册")
     public CommonResponse<Void> register(@RequestBody @Valid UserRegisterDTO param) {
@@ -85,35 +81,5 @@ public class RegisterController {
         return CommonResponse.failCommonResponse("注册失败");
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

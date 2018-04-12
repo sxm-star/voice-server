@@ -41,7 +41,7 @@ public class UploadFileController {
     private UploadFileUtil uploadFileUtil;
 
 
-    @PostMapping(value = "/upload_file")
+    @PostMapping(value = "/file")
     @ApiOperation(value = "单个上传文件", notes = "单个上传文件")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")

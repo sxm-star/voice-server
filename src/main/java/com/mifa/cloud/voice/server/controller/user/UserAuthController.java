@@ -19,10 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.HttpHeaders;
@@ -46,7 +43,7 @@ public class UserAuthController {
     @Autowired
     private CustomerLoginInfoService infoService;
 
-    @PostMapping("/auth/person")
+    @PostMapping("/person")
     @ApiOperation(value = "个人认证")
     @ApiImplicitParams({
             @ApiImplicitParam(
@@ -78,7 +75,7 @@ public class UserAuthController {
 
     }
 
-    @PostMapping("/auth/company")
+    @PostMapping("/company")
     @ApiOperation(value = "企业认证")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
@@ -104,7 +101,7 @@ public class UserAuthController {
 
     }
 
-    @PostMapping("/auth/person_check")
+    @PutMapping("/person-check/")
     @ApiOperation(value = "个人认证审核")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
@@ -126,7 +123,7 @@ public class UserAuthController {
 
     }
 
-    @PostMapping("/auth/company_check")
+    @PutMapping("/company-check")
     @ApiOperation(value = "企业认证审核")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
