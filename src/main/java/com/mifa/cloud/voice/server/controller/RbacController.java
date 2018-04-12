@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @RestController
 @CrossOrigin
-@Api(value = "用户权限管理相关API.",tags = "RBAC用户权限管理相关API")
+@Api(value = "用户权限管理相关API.",tags = "RBAC用户权限管理相关API",description = "涉及用户角色 ,权限列表的操作")
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
 public class RbacController {
     @Autowired
