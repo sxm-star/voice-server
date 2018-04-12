@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,9 @@ public class SystemKeyValueController {
     @PostMapping(value = "/keyValue")
     @ApiOperation(value = "系统字典新增")
     @Loggable(descp = "系统字典新增")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
     public CommonResponse<Void> insertKeyValue(@RequestBody @Valid SystemKeyValueDTO param) {
 
         // 判断相同类型的key是否已经存在
@@ -58,6 +62,7 @@ public class SystemKeyValueController {
     @ApiOperation(value = "根据类型获得系统字典")
     @Loggable(descp = "根据类型获得系统字典")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, dataType = "string", value = "service token"),
             @ApiImplicitParam(paramType = "query", name = "keyValueType", required = true, dataType = "string", value = "系统功能类型,必填")
     })
     public CommonResponse<List<SystemkeyValueTypeVO>> getKeyValueListByType(String keyValueType) {
