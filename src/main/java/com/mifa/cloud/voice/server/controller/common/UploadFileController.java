@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.config.ConstConfig;
+import com.mifa.cloud.voice.server.dto.UploadFileVO;
 import com.mifa.cloud.voice.server.utils.UploadFileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +36,10 @@ import java.util.Map;
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
 public class UploadFileController {
 
-
-
     @Autowired
     private ConstConfig aconst;
     @Autowired
     private UploadFileUtil uploadFileUtil;
-
 
     @PostMapping(value = "/file")
     @ApiOperation(value = "单个上传文件", notes = "单个上传文件")
@@ -47,35 +47,24 @@ public class UploadFileController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "单个上传文件")
-    public String UploadFileCompress(@RequestParam("file") MultipartFile file) throws Exception{
-        Map json = new HashMap();
-        JSONObject json2 = uploadFileUtil.upload(file, aconst);
-        json.put("data", json2);
-        json.put("status", 0);
-        return JSONObject.toJSONString(json);
+    public CommonResponse<UploadFileVO> UploadFileCompress(@RequestParam("file") MultipartFile file) throws Exception {
+        return CommonResponse.successCommonResponse(uploadFileUtil.upload(file, aconst));
     }
 
     //@PostMapping(value = "/upload_files")
     //@ApiOperation(value = "多个上传文件", notes = "多个上传文件")
-    public String UploadFileCompressV2(MultipartHttpServletRequest multiRequest) throws Exception {
-        Map json = new HashMap();
-        JSONArray array = new JSONArray();
+    public CommonResponse<List<UploadFileVO>> UploadFileCompressV2(MultipartHttpServletRequest multiRequest) throws Exception {
+        List<UploadFileVO> voList = new ArrayList<>();
         List<MultipartFile> files = multiRequest.getFiles("file");
         if (!CollectionUtils.isEmpty(files)) {
             for (MultipartFile file : files) {
-                JSONObject json2 = uploadFileUtil.upload(file, aconst);
-                array.add(json2);
+                UploadFileVO vo = uploadFileUtil.upload(file, aconst);
+                voList.add(vo);
             }
-        }else {
+        } else {
             log.error("上传文件为空");
         }
-        json.put("data", array);
-        json.put("status", 0);
-        return JSONObject.toJSONString(json);
+        return CommonResponse.successCommonResponse(voList);
     }
-
-
-
-
 
 }

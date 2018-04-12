@@ -1,7 +1,7 @@
 package com.mifa.cloud.voice.server.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.config.ConstConfig;
+import com.mifa.cloud.voice.server.dto.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
@@ -23,8 +23,8 @@ public class UploadFileUtil {
     private static final int HEADERWIDTH = 1080;
     private static final int HEADERHEIGHT = 1920;
 
-    public JSONObject upload(MultipartFile file, ConstConfig aconst) throws Exception {
-        JSONObject json = new JSONObject();
+    public UploadFileVO upload(MultipartFile file, ConstConfig aconst) throws Exception {
+        UploadFileVO vo = null;
         if (!file.isEmpty()) {
             try {
                 Date date = new Date();
@@ -50,10 +50,12 @@ public class UploadFileUtil {
                 GmImageUtil.scaleImg(srcPath, desPath, HEADERWIDTH, HEADERHEIGHT);
                 //这里将上传得到的文件
                 FileUtils.copyInputStreamToFile(file.getInputStream(), new File(tempFilePath, pathname));
-                //json.addProperty("repath", initPath + "/" + pathname);
-                //json.addProperty("abpath", Const.H5_URL_PATH + initPath + "/" + pathname);
-                json.put("repath", initPath + "/" + pathname);
-                json.put("abpath", aconst.H5_URL_PATH + initPath + "/" + pathname);
+                //json.put("repath", initPath + "/" + pathname);
+                //json.put("abpath", aconst.H5_URL_PATH + initPath + "/" + pathname);
+                vo = UploadFileVO.builder()
+                        .fullPath(aconst.H5_URL_PATH + initPath + "/" + pathname)
+                        .halfPath(initPath + "/" + pathname)
+                        .build();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -62,7 +64,7 @@ public class UploadFileUtil {
             log.error("上传文件为空");
             throw new IOException("上传文件为空");
         }
-        return json;
+        return vo;
     }
 
 
