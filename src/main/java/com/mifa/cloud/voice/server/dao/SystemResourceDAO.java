@@ -16,6 +16,8 @@ public interface SystemResourceDAO {
 
     int insert(SystemResourceDO record);
 
+    int insertBatch(List<SystemResourceDO> list);
+
     int insertSelective(SystemResourceDO record);
 
     List<SystemResourceDO> selectByExample(SystemResourceDOExample example);

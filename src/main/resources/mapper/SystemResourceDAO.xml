@@ -122,6 +122,19 @@
       #{resourceOrder,jdbcType=INTEGER}, #{resourceStatus,jdbcType=INTEGER}, #{resourceGroup,jdbcType=INTEGER}
       )
   </insert>
+    <insert id="insertBatch" parameterType="List">
+        INSERT INTO t_system_resource (id, pid, resource_name,
+        resource_url, resource_type, resource_icon,
+        resource_order, resource_status, resource_group
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT}, #{item.pid,jdbcType=BIGINT}, #{item.resourceName,jdbcType=VARCHAR},
+            #{item.resourceUrl,jdbcType=VARCHAR}, #{item.resourceType,jdbcType=INTEGER}, #{item.resourceIcon,jdbcType=VARCHAR},
+            #{item.resourceOrder,jdbcType=INTEGER}, #{item.resourceStatus,jdbcType=INTEGER}, #{item.resourceGroup,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
   <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.SystemResourceDO">
     insert into t_system_resource
     <trim prefix="(" suffix=")" suffixOverrides=",">
