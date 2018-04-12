@@ -3,6 +3,7 @@ package com.mifa.cloud.voice.server.commons.dto;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -46,19 +47,19 @@ public class ResourceDto {
     /**
      * 排列顺序
      */
-    @NotEmpty
+    @NotNull
     private Integer resourceOrder;
 
     /**
      * 状态0-正常；1-已停用
      */
-    @NotEmpty
+    @NotNull
     private Integer resourceStatus;
 
     /**
      * 分组信息0-普通用户；1-管理员
      */
-    @NotEmpty
+    @NotNull
     private Integer resourceGroup;
 
     /**

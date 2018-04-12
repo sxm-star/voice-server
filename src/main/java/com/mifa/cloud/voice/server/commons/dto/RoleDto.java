@@ -33,13 +33,13 @@ public class RoleDto {
     /**
      * 状态0-正常；1-已停用
      */
-    @NotEmpty
+    @NotNull
     private Integer roleStatus;
 
     /**
      * 类型0-普通租户；1-系统管理员
      */
-    @NotEmpty
+    @NotNull
     private Integer roleType;
 
 }

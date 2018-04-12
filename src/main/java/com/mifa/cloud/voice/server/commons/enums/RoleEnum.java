@@ -12,10 +12,12 @@ import lombok.Getter;
 @ApiModel("角色类型")
 @Getter
 public enum RoleEnum {
-    @ApiModelProperty("正常启用")
-    ADMIN(1,"系统管理员"),
-    @ApiModelProperty("停止使用")
-    TENANT(0,"普通租户");
+
+    @ApiModelProperty("普通租户")
+    TENANT(0,"普通租户"),
+    @ApiModelProperty("系统管理员")
+    ADMIN(1,"系统管理员");
+
 
     Integer code;
     String  msg;
