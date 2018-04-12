@@ -9,6 +9,7 @@ import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.StaticConst;
 import com.mifa.cloud.voice.server.dto.MobileVerficationCodeDTO;
 import com.mifa.cloud.voice.server.dto.MobileAuthCodeVerifyDTO;
+import com.mifa.cloud.voice.server.dto.UserPwdImgCodeDTO;
 import com.mifa.cloud.voice.server.service.VerficationService;
 import com.mifa.cloud.voice.server.utils.ImageUtil;
 import io.swagger.annotations.Api;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class VerficationCodeController {
     @Autowired
     private VerficationService verficationService;
 
-    @GetMapping(value = "/auth_code/get_image_verfication_code")
+    @GetMapping(value = "/img-auth-code/")
     @ApiOperation(value = "图形验证码", notes = "图形验证码")
     @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query")})
     public void imageVerficationCode(HttpServletRequest request, HttpServletResponse response){
@@ -72,7 +74,7 @@ public class VerficationCodeController {
         }
     }
 
-    @PostMapping(value = "/auth_code/get_mobile_verfication_code")
+    @PostMapping(value = "/mobile-auth-code/")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
     public CommonResponse<Void> mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
         String code = String.valueOf(RandomSort.generateRandomNum(6));
@@ -88,7 +90,7 @@ public class VerficationCodeController {
         return CommonResponse.successCommonResponse();
     }
 
-    @PostMapping("/auth_code/verify_mobile_code")
+    @PostMapping("/auth-code/mobile")
     @ApiOperation(value = "校验手机验证码")
     @Loggable(descp = "校验手机验证码")
     public CommonResponse<Void> verifyMobileCode(@RequestBody @Valid MobileAuthCodeVerifyDTO param) {
@@ -105,6 +107,26 @@ public class VerficationCodeController {
 
     }
 
+    @PostMapping("/auth-code/img")
+    @ApiOperation(value = "校验图片验证码")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    /*@RequestHeader(HttpHeaders.AUTHORIZATION) String token*/
+    @Loggable(descp = "校验图片验证码")
+    public CommonResponse<Void> retrievePasswordVerifyImgCode(@RequestBody @Valid UserPwdImgCodeDTO param) {
+
+        // 根据手机号获取缓存中的图片验证码
+        String imgIdentifyCode = (String) keyValueDao.get(StaticConst.IMG_IDENTIFY_CODE + param.getMobile());
+        if(StringUtils.isEmpty(imgIdentifyCode)) {
+            return CommonResponse.failCommonResponse("图片验证码已过期，请重新获取");
+        }
+        if(!param.getImageVerficationCode().equalsIgnoreCase(imgIdentifyCode)) {
+            return CommonResponse.failCommonResponse("验证码错误");
+        }
+        return CommonResponse.successCommonResponse();
+
+    }
 
 
 }

@@ -50,14 +50,13 @@ public class UserInfoController {
     private CustomerAuthCompanyService customerAuthCompanyService;
 
 
-    @PostMapping("/user_info/get_user_info/{contractNo}")
+    @GetMapping("/user/{contractNo}")
     @ApiOperation(value = "获得用户信息")
-    /*@ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
-    })*/
+    })
     @Loggable(descp = "获得用户信息")
     public CommonResponse<UserInfoVO> getUserInfo(@PathVariable("contractNo") String contractNo) {
-
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(contractNo);
         if(customerInfo == null) {
             return CommonResponse.failCommonResponse("用户不存在");
@@ -82,7 +81,7 @@ public class UserInfoController {
         return CommonResponse.successCommonResponse(vo);
     }
 
-    @PostMapping("/user_info/edit_avatar")
+    @PutMapping("/user-avatar")
     @ApiOperation(value = "修改头像")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
@@ -104,7 +103,7 @@ public class UserInfoController {
 
     }
 
-    @PostMapping("/user_info/edit_mobile")
+    @PutMapping("/user-mobile")
     @ApiOperation(value = "修改手机号码")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
@@ -133,30 +132,5 @@ public class UserInfoController {
         return CommonResponse.failCommonResponse("修改手机号失败");
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

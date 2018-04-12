@@ -1,12 +1,13 @@
 package com.mifa.cloud.voice.server.controller.user;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.StaticConst;
-import com.mifa.cloud.voice.server.dto.*;
+import com.mifa.cloud.voice.server.dto.UserEditPwdDTO;
+import com.mifa.cloud.voice.server.dto.UserPwdImgCodeDTO;
+import com.mifa.cloud.voice.server.dto.UserRetrievePasswordDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.service.VerficationService;
@@ -18,10 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.HttpHeaders;
@@ -54,30 +52,7 @@ public class UserPwdController {
     private CustomerLoginInfoService infoService;
 
 
-
-    @PostMapping("/retrieve_password/verify_img_code")
-    @ApiOperation(value = "校验图片验证码")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
-            required = true, value = "service token", dataType = "string")
-    })
-    /*@RequestHeader(HttpHeaders.AUTHORIZATION) String token*/
-    @Loggable(descp = "找回密码校验图片验证码")
-    public CommonResponse<Void> retrievePasswordVerifyImgCode(@RequestBody @Valid UserPwdImgCodeDTO param) {
-
-        // 根据手机号获取缓存中的图片验证码
-        String imgIdentifyCode = (String) keyValueDao.get(StaticConst.IMG_IDENTIFY_CODE + param.getMobile());
-        if(StringUtils.isEmpty(imgIdentifyCode)) {
-            return CommonResponse.failCommonResponse("图片验证码已过期，请重新获取");
-        }
-        if(!param.getImageVerficationCode().equalsIgnoreCase(imgIdentifyCode)) {
-            return CommonResponse.failCommonResponse("验证码错误");
-        }
-        return CommonResponse.successCommonResponse();
-
-    }
-
-
-    @PostMapping("/retrieve_password/modify_password")
+    @PutMapping("/user-retrieve-password")
     @ApiOperation(value = "找回密码修改登陆密码")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
@@ -109,7 +84,7 @@ public class UserPwdController {
     }
 
 
-    @PostMapping("/password/edit_password")
+    @PutMapping("/user-edit-password")
     @ApiOperation(value = "修改登陆密码")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
