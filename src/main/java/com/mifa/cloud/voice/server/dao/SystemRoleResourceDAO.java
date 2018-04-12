@@ -3,8 +3,10 @@ package com.mifa.cloud.voice.server.dao;
 import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDO;
 import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDOExample;
 import org.apache.ibatis.annotations.Param;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+@Repository
 public interface SystemRoleResourceDAO {
     long countByExample(SystemRoleResourceDOExample example);
 
