@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,50 +29,54 @@ public class SystemRoleService {
 
     /**
      * 获取当前角色信息
+     *
      * @param id
      * @return
      */
-    public RoleDto getRoleById(Long id){
-        return BaseBeanUtils.convert(systemRoleInfoDAO.selectByPrimaryKey(id),RoleDto.class) ;
+    public RoleDto getRoleById(Long id) {
+        return BaseBeanUtils.convert(systemRoleInfoDAO.selectByPrimaryKey(id), RoleDto.class);
     }
 
-    public List<RoleDto> getRoleList(String roleName, RoleEnum roleEnum, StatusEnum statusEnum){
+    public List<RoleDto> getRoleList(String roleName, RoleEnum roleEnum, StatusEnum statusEnum) {
         SystemRoleInfoDOExample roleInfoDOExample = new SystemRoleInfoDOExample();
         SystemRoleInfoDOExample.Criteria criteria = roleInfoDOExample.createCriteria();
-        if (StringUtils.isNotEmpty(roleName)){
+        if (StringUtils.isNotEmpty(roleName)) {
             criteria.andRoleNameLike(roleName);
         }
-        if(roleEnum!=null){
+        if (roleEnum != null) {
             criteria.andRoleTypeEqualTo(roleEnum.getCode());
         }
-        if(statusEnum!=null){
+        if (statusEnum != null) {
             criteria.andRoleStatusEqualTo(statusEnum.getCode());
         }
         roleInfoDOExample.setOrderByClause(" id asc ");
         List<SystemRoleInfoDO> list = systemRoleInfoDAO.selectByExample(roleInfoDOExample);
-        if (CollectionUtils.isNotEmpty(list)){
+        if (CollectionUtils.isNotEmpty(list)) {
             List<RoleDto> result = new ArrayList<>();
-            list.forEach(systemRoleInfoDO -> result.add(BaseBeanUtils.convert(systemRoleInfoDO,RoleDto.class)));
-            return  result;
+            list.forEach(systemRoleInfoDO -> result.add(BaseBeanUtils.convert(systemRoleInfoDO, RoleDto.class)));
+            return result;
         }
         return Collections.EMPTY_LIST;
     }
 
-    public boolean insertRole(RoleDto roleDto){
-        int cnt = systemRoleInfoDAO.insertSelective(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
-        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    @Transactional(rollbackFor = Exception.class)
+    public boolean insertRole(RoleDto roleDto) {
+        int cnt = systemRoleInfoDAO.insertSelective(BaseBeanUtils.convert(roleDto, SystemRoleInfoDO.class));
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public boolean updateRole(RoleDto roleDto){
-        int cnt = systemRoleInfoDAO.updateByPrimaryKeySelective(BaseBeanUtils.convert(roleDto,SystemRoleInfoDO.class));
-        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateRole(RoleDto roleDto) {
+        int cnt = systemRoleInfoDAO.updateByPrimaryKeySelective(BaseBeanUtils.convert(roleDto, SystemRoleInfoDO.class));
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public boolean delRoles(List<Long> roleIds){
+    @Transactional(rollbackFor = Exception.class)
+    public boolean delRoles(List<Long> roleIds) {
         SystemRoleInfoDOExample roleInfoDOExample = new SystemRoleInfoDOExample();
         SystemRoleInfoDOExample.Criteria criteria = roleInfoDOExample.createCriteria();
         criteria.andIdIn(roleIds);
         int cnt = systemRoleInfoDAO.deleteByExample(roleInfoDOExample);
-        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 }
