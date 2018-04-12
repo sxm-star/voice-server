@@ -9,6 +9,7 @@ import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDOExample;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -53,6 +54,22 @@ public class SystemRoleResourceService {
             }
         }
         return Collections.EMPTY_MAP;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRoleResource(Long roleId,Map<Long, RoleResourceDto> map, Long[] ids) {
+        for (Long resourceId : ids) {
+            RoleResourceDto newRoleResource= map.remove(resourceId);
+            if (newRoleResource==null) {
+                SystemRoleResourceDO roleResourceDO = new SystemRoleResourceDO();
+                roleResourceDO.setRoleId(roleId);
+                roleResourceDO.setResourceId(resourceId);
+                systemRoleResourceDAO.insert(roleResourceDO);
+            }
+        }
+        for (RoleResourceDto removeResource : map.values()) {
+            systemRoleResourceDAO.deleteByPrimaryKey(removeResource.getId());
+        }
     }
 
 
