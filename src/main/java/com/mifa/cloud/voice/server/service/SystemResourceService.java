@@ -10,6 +10,7 @@ import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,6 +79,7 @@ public class SystemResourceService {
      * @param resourceDtos
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public Boolean addMenu(List<ResourceDto> resourceDtos) {
         if (CollectionUtils.isNotEmpty(resourceDtos)) {
             List<SystemResourceDO> resourceDOs = new ArrayList<>();
@@ -85,6 +87,25 @@ public class SystemResourceService {
                 resourceDOs.add(BaseBeanUtils.convert(resourceDto, SystemResourceDO.class));
             });
             int cnt = systemResourceDAO.insertBatch(resourceDOs);
+            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 菜单更新状态 地址栏操作
+     * @param resourceDtos
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean alterMenu(List<ResourceDto> resourceDtos) {
+        if (CollectionUtils.isNotEmpty(resourceDtos)) {
+            int cnt = 0;
+            for (ResourceDto resourceDto:resourceDtos) {
+                SystemResourceDO resourceDO =  BaseBeanUtils.convert(resourceDto, SystemResourceDO.class);
+                int tmpCnt = systemResourceDAO.updateByPrimaryKeySelective(resourceDO);
+                cnt += tmpCnt;
+            }
             return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
         }
         return Boolean.FALSE;

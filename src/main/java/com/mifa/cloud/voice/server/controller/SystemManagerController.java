@@ -58,6 +58,22 @@ public class SystemManagerController {
         return CommonResponse.successCommonResponse(resourceService.addMenu(resourceDtos));
     }
 
+    @ApiOperation("批量修改菜单")
+    @RequestMapping(value = "/menu", method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "修改系统菜单,支持单条修改和批量修改")
+    public CommonResponse<Boolean> alterMenu(@RequestBody @Valid List<MenuDto> menuDtos) {
+        if (CollectionUtils.isEmpty(menuDtos)){
+            return CommonResponse.failCommonResponse();
+        }
+        List<ResourceDto> resourceDtos = new ArrayList<>();
+        menuDtos.forEach(resourceFunctionModelDto -> {
+            ResourceDto resourceDto = BaseBeanUtils.convert(resourceFunctionModelDto, ResourceDto.class);
+            resourceDtos.add(resourceDto);
+        });
+        return CommonResponse.successCommonResponse(resourceService.alterMenu(resourceDtos));
+    }
 
     @ApiOperation("获取同一层级菜单列表")
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
@@ -75,4 +91,6 @@ public class SystemManagerController {
         }
         return CommonResponse.successCommonResponse(Collections.EMPTY_LIST);
     }
+
+
 }

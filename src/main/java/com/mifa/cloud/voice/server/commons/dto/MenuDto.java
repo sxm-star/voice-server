@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author: sxm
  * @date: 2018/4/12 10:33
@@ -13,6 +15,7 @@ import lombok.Data;
 @Data
 public class MenuDto {
     @ApiModelProperty("菜单的ID号")
+    @NotNull(message = "菜单ID号不能为空")
     private Long id;
 
     /**
@@ -32,6 +35,9 @@ public class MenuDto {
      */
     @ApiModelProperty("链接地址")
     private String resourceUrl;
+
+    @ApiModelProperty("菜单顺序")
+    private Integer resourceOrder;
 
     /**
      * 类型0-模块;1-菜单
