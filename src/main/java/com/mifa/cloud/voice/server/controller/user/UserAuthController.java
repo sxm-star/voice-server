@@ -57,7 +57,7 @@ public class UserAuthController {
                     dataType = "string")
     })
     @Loggable(descp = "个人认证")
-    public CommonResponse authPersion(@RequestBody @Valid AuthPersionDTO param) {
+    public CommonResponse<Void> authPersion(@RequestBody @Valid AuthPersionDTO param) {
 
         CustomerAauthPerson customerAauthPerson = customerAauthPersonService.selectByPrimaryKey(param.getContractNo());
         if (customerAauthPerson != null) {
@@ -84,7 +84,7 @@ public class UserAuthController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "企业认证")
-    public CommonResponse authCompany(@RequestBody @Valid AuthCompanyDTO param) {
+    public CommonResponse<Void> authCompany(@RequestBody @Valid AuthCompanyDTO param) {
         CustomerAuthCompany customerAuthCompany = customerAuthCompanyService.selectByPrimaryKey(param.getContractNo());
         if(customerAuthCompany != null) {
             return CommonResponse.failCommonResponse("认证信息已经存在");
@@ -110,7 +110,7 @@ public class UserAuthController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "个人认证审核")
-    public CommonResponse authPersonCheck(@RequestBody @Valid AuthCheckDTO param) {
+    public CommonResponse<Void> authPersonCheck(@RequestBody @Valid AuthCheckDTO param) {
 
         CustomerAauthPerson customerAauthPerson = customerAauthPersonService.selectByPrimaryKey(param.getContractNo());
         if (customerAauthPerson == null) {
@@ -132,7 +132,7 @@ public class UserAuthController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "企业认证审核")
-    public CommonResponse authCompanyCheck(@RequestBody @Valid AuthCheckDTO param) {
+    public CommonResponse<Void> authCompanyCheck(@RequestBody @Valid AuthCheckDTO param) {
 
         CustomerAuthCompany customerAuthCompany = customerAuthCompanyService.selectByPrimaryKey(param.getContractNo());
         if (customerAuthCompany == null) {

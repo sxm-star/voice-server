@@ -1,6 +1,5 @@
 package com.mifa.cloud.voice.server.controller.user;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
@@ -12,8 +11,6 @@ import com.mifa.cloud.voice.server.utils.JwtTokenUtil;
 import com.mifa.cloud.voice.server.utils.PasswordUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +37,10 @@ public class LoginController {
     @Autowired
     private PasswordUtil passwordUtil;
 
-    @PostMapping("/login")
-    @ApiOperation(value = "登陆",response = UserLoginVO.class)
-    @Loggable(descp = "用户登录")
-    public CommonResponse login(@RequestBody @Valid UserLoginDTO param) {
+    @PostMapping("/user-login")
+    @ApiOperation(value = "登陆")
+    @Loggable(descp = "用户登陆")
+    public CommonResponse<UserLoginVO> login(@RequestBody @Valid UserLoginDTO param) {
 
         // 校验用户是否存在
         CustomerLoginInfo loginInfo = loginInfoService.findByLoginName(param.getLoginName());
