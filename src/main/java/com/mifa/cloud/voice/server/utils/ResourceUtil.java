@@ -2,6 +2,7 @@ package com.mifa.cloud.voice.server.utils;
 
 import com.mifa.cloud.voice.server.commons.dto.ResourceDto;
 import com.mifa.cloud.voice.server.commons.dto.RoleResourceDto;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.Map;
 public class ResourceUtil {
 
 	/**
-	 * 只获取拥有的权限
+	 * 获取资源树
 	 * @return
 	 */
 	public static List<ResourceDto> getResource(List<ResourceDto> parentResourceList, Map<Long, RoleResourceDto> map){
 		List<ResourceDto> resources=new ArrayList<ResourceDto>();
-		if (parentResourceList!=null&&map!=null) {
+		if (CollectionUtils.isNotEmpty(parentResourceList)&& !CollectionUtils.sizeIsEmpty(map)) {
             ResourceDto hasResourceParent=null;
 			for (ResourceDto resource : parentResourceList) {
 				if (map.get(resource.getId()) != null) {
@@ -41,7 +42,7 @@ public class ResourceUtil {
 			}
 			return resources;		
 		}
-		return resources;		
+		return parentResourceList;
 	}
 	/**
 	 * 在权限列表上标记拥有的权限

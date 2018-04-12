@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @RestController
 @CrossOrigin
-@Api(value = "用户权限管理相关API.",tags = "RBAC用户权限管理相关API",description = "涉及用户角色 ,权限列表的操作")
+@Api(value = "用户权限管理相关API.", tags = "RBAC用户权限管理相关API", description = "涉及用户角色 ,权限列表的操作")
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
 public class RbacController {
     @Autowired
@@ -45,44 +45,57 @@ public class RbacController {
     @Autowired
     public CustomerLoginInfoService customerLoginInfoService;
 
-    @ApiOperation("获取用户的角色对应的资源列表")
-    @RequestMapping(value = "/role-resource-list",method = RequestMethod.GET)
+    @ApiOperation("修改用户的角色对应的资源列表")
+    @RequestMapping(value = "/role-resource-list", method = RequestMethod.PUT)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string"),
-            @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string",value = "角色ID,选填")
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = false, dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string", value = "角色ID,选填")
+    })
+    @Loggable(descp = "修改用户权限列表获取操作")
+    public CommonResponse alterfindRoleResourceList(@RequestBody @Valid  RoleResourcePostDto roleResourcePostDto) {
+        RoleDto role = roleService.getRoleById(roleResourcePostDto.getRoleId());
+        Map<Long, RoleResourceDto> map = roleResourceService
+                .findRoleResourceList(role);
+        roleResourceService.updateRoleResource(roleResourcePostDto.getRoleId(),map,roleResourcePostDto.getResourceIds());
+        return CommonResponse.successCommonResponse();
+    }
+
+    @ApiOperation("获取用户的角色对应的资源列表")
+    @RequestMapping(value = "/role-resource-list", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = false, dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string", value = "角色ID,选填")
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<List<ResourceDto>> findRoleResourceList(String contractNo, String roleId){
-        Preconditions.checkArgument(StringUtils.isNotEmpty(contractNo), "客户号不能为空");
-        RoleDto role = roleService.getRoleById(roleId==null?customerLoginInfoService.selectByPrimaryKey(contractNo).getContractNoRoleId():Long.parseLong(roleId));
+    public CommonResponse<List<ResourceDto>> findRoleResourceList(String contractNo, String roleId) {
+        Preconditions.checkArgument(StringUtils.isNotEmpty(contractNo) || StringUtils.isNotEmpty(roleId), "客户号和角色ID不能同时为空");
+        RoleDto role = roleService.getRoleById(roleId == null ? customerLoginInfoService.selectByPrimaryKey(contractNo).getContractNoRoleId() : Long.parseLong(roleId));
         Map<Long, RoleResourceDto> map = roleResourceService
                 .findRoleResourceList(role);
         List<ResourceDto> parentResourceList = resourceService
                 .findResourceList(0L, null, StatusEnum.NORMAL);
         resourceService.findAllResourceList(parentResourceList, StatusEnum.NORMAL);
-        List<ResourceDto> resourceList = ResourceUtil.getResource(
-                parentResourceList, map);
-        return CommonResponse.successCommonResponse(resourceList);
+        ResourceUtil.markResource(parentResourceList, map);
+        return CommonResponse.successCommonResponse(parentResourceList);
     }
 
-
     @ApiOperation("获取系统角色列表")
-    @RequestMapping(value = "/role-list",method = RequestMethod.GET)
+    @RequestMapping(value = "/role-list", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取系统角色列表操作")
-    public CommonResponse<List<RoleDto>> findRoleList(@RequestParam(value = "roleName",required = false) String roleName,@RequestParam(value = "roleEnum",required = false) RoleEnum roleEnum,@RequestParam(value = "roleStatus",required = false) StatusEnum roleStatus){
+    public CommonResponse<List<RoleDto>> findRoleList(@RequestParam(value = "roleName", required = false) String roleName, @RequestParam(value = "roleEnum", required = false) RoleEnum roleEnum, @RequestParam(value = "roleStatus", required = false) StatusEnum roleStatus) {
 
-        return CommonResponse.successCommonResponse(roleService.getRoleList(roleName,roleEnum,roleStatus));
+        return CommonResponse.successCommonResponse(roleService.getRoleList(roleName, roleEnum, roleStatus));
     }
 
     @ApiOperation("新增系统角色")
-    @RequestMapping(value = "/role",method = RequestMethod.POST)
+    @RequestMapping(value = "/role", method = RequestMethod.POST)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<Boolean> insertRole(@RequestBody @Valid  RolePostDto rolePostDto){
-        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
+    public CommonResponse<Boolean> insertRole(@RequestBody @Valid RolePostDto rolePostDto) {
+        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto, RoleDto.class);
         roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
         //安全考虑,新增操作不需要传id
@@ -91,23 +104,23 @@ public class RbacController {
     }
 
     @ApiOperation("修改系统角色")
-    @RequestMapping(value = "/role",method = RequestMethod.PUT)
+    @RequestMapping(value = "/role", method = RequestMethod.PUT)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<Boolean> alterRole(@RequestBody @Valid  RolePostDto rolePostDto){
-        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto,RoleDto.class);
+    public CommonResponse<Boolean> alterRole(@RequestBody @Valid RolePostDto rolePostDto) {
+        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto, RoleDto.class);
         roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
         roleDto.setRoleType(rolePostDto.getRoleType().getCode());
         return CommonResponse.successCommonResponse(roleService.updateRole(roleDto));
     }
 
     @ApiOperation("批量删除系统角色")
-    @RequestMapping(value = "/role",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/role", method = RequestMethod.DELETE)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<Boolean> delRoles(@RequestBody List<Long> roleIds){
+    public CommonResponse<Boolean> delRoles(@RequestBody List<Long> roleIds) {
         Preconditions.checkArgument(CollectionUtils.isNotEmpty(roleIds), "角色ID号不能为空");
         return CommonResponse.successCommonResponse(roleService.delRoles(roleIds));
     }
