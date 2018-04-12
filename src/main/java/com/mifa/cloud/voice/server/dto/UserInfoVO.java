@@ -50,7 +50,7 @@ public class UserInfoVO {
     /**
      * 认证类型
      */
-    @ApiModelProperty("认证类型；0-个人，1-企业")
+    @ApiModelProperty("认证类型；0-个人，1-企业，-1-未认证")
     private String authType;
 
 }

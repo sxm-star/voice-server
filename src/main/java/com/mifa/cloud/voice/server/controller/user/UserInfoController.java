@@ -6,7 +6,11 @@ import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.dto.UserEditAvatarDTO;
 import com.mifa.cloud.voice.server.dto.UserEditMobileDTO;
 import com.mifa.cloud.voice.server.dto.UserInfoVO;
+import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
+import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
+import com.mifa.cloud.voice.server.service.CustomerAauthPersonService;
+import com.mifa.cloud.voice.server.service.CustomerAuthCompanyService;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.service.VerficationService;
 import io.swagger.annotations.Api;
@@ -39,14 +43,20 @@ public class UserInfoController {
     @Autowired
     private VerficationService verficationService;
 
+    @Autowired
+    private CustomerAauthPersonService customerAauthPersonService;
+
+    @Autowired
+    private CustomerAuthCompanyService customerAuthCompanyService;
+
 
     @PostMapping("/user_info/get_user_info/{contractNo}")
     @ApiOperation(value = "获得用户信息")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+    /*@ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
-    })
+    })*/
     @Loggable(descp = "获得用户信息")
-    public CommonResponse getUserInfo(@PathVariable("contractNo") String contractNo) {
+    public CommonResponse<UserInfoVO> getUserInfo(@PathVariable("contractNo") String contractNo) {
 
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(contractNo);
         if(customerInfo == null) {
@@ -57,8 +67,18 @@ public class UserInfoController {
         BeanUtils.copyProperties(customerInfo, vo);
 
         /** TODO 获取用户认证信息*/
-
-
+        CustomerAauthPerson customerAauthPerson = customerAauthPersonService.selectByPrimaryKey(contractNo);
+        CustomerAuthCompany customerAuthCompany = customerAuthCompanyService.selectByPrimaryKey(contractNo);
+        // 认证类型；0-个人，1-企业，-1-未认证
+        if (customerAauthPerson == null && customerAuthCompany == null) {
+            vo.setAuthType("-1");
+        }
+        if (customerAauthPerson != null && customerAuthCompany == null) {
+            vo.setAuthType("0");
+        }
+        if (customerAauthPerson == null && customerAuthCompany != null) {
+            vo.setAuthType("1");
+        }
         return CommonResponse.successCommonResponse(vo);
     }
 
@@ -68,7 +88,7 @@ public class UserInfoController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "修改头像")
-    public CommonResponse editAvatar(@RequestBody @Valid UserEditAvatarDTO param) {
+    public CommonResponse<Void> editAvatar(@RequestBody @Valid UserEditAvatarDTO param) {
 
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(param.getContractNo());
         if(customerInfo == null) {
@@ -90,7 +110,7 @@ public class UserInfoController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "修改手机号码")
-    public CommonResponse editMobileVerify(@RequestBody @Valid UserEditMobileDTO param){
+    public CommonResponse<Void> editMobileVerify(@RequestBody @Valid UserEditMobileDTO param){
 
         // 校验短信验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getNewMobile());

@@ -74,7 +74,7 @@ public class VerficationCodeController {
 
     @PostMapping(value = "/auth_code/get_mobile_verfication_code")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
-    public CommonResponse mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
+    public CommonResponse<Void> mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
         String code = String.valueOf(RandomSort.generateRandomNum(6));
         keyValueDao.set(StaticConst.MOBILE_SMS_KEY + param.getMobile(), code, 60 * 3);
         Map<String, String> map = new HashMap<String, String>();
@@ -91,7 +91,7 @@ public class VerficationCodeController {
     @PostMapping("/auth_code/verify_mobile_code")
     @ApiOperation(value = "校验手机验证码")
     @Loggable(descp = "校验手机验证码")
-    public CommonResponse verifyMobileCode(@RequestBody @Valid MobileAuthCodeVerifyDTO param) {
+    public CommonResponse<Void> verifyMobileCode(@RequestBody @Valid MobileAuthCodeVerifyDTO param) {
 
         // 校验短信验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());

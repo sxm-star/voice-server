@@ -62,7 +62,7 @@ public class UserPwdController {
     })
     /*@RequestHeader(HttpHeaders.AUTHORIZATION) String token*/
     @Loggable(descp = "找回密码校验图片验证码")
-    public CommonResponse retrievePasswordVerifyImgCode(@RequestBody @Valid UserPwdImgCodeDTO param) {
+    public CommonResponse<Void> retrievePasswordVerifyImgCode(@RequestBody @Valid UserPwdImgCodeDTO param) {
 
         // 根据手机号获取缓存中的图片验证码
         String imgIdentifyCode = (String) keyValueDao.get(StaticConst.IMG_IDENTIFY_CODE + param.getMobile());
@@ -83,7 +83,7 @@ public class UserPwdController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "找回密码修改登陆密码")
-    public CommonResponse retrievePasswordModify(@RequestBody @Valid UserRetrievePasswordDTO param) {
+    public CommonResponse<Void> retrievePasswordModify(@RequestBody @Valid UserRetrievePasswordDTO param) {
 
         if(!param.getLoginPasswd().equals(param.getLoginPasswdSecond())) {
             return CommonResponse.failCommonResponse("两次密码输入不一致");
@@ -115,7 +115,7 @@ public class UserPwdController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "修改登陆密码")
-    public CommonResponse editPassword(@RequestBody @Valid UserEditPwdDTO param) {
+    public CommonResponse<Void> editPassword(@RequestBody @Valid UserEditPwdDTO param) {
 
         // 校验短信验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
@@ -154,22 +154,6 @@ public class UserPwdController {
         return CommonResponse.failCommonResponse("修改密码失败，请稍后重试");
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

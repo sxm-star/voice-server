@@ -44,7 +44,7 @@ public class RegisterController {
     @PostMapping("/register")
     @ApiOperation(value = "注册")
     @Loggable(descp = "用户注册")
-    public CommonResponse register(@RequestBody @Valid UserRegisterDTO param) {
+    public CommonResponse<Void> register(@RequestBody @Valid UserRegisterDTO param) {
 
         // 校验验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
