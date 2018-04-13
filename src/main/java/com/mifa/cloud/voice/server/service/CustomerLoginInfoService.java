@@ -7,6 +7,7 @@ import com.mifa.cloud.voice.server.utils.SeqProducerUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class CustomerLoginInfoService {
     /**
      * 插入记录（只插入参数非空字段）
      */
+    @Transactional(rollbackFor = Exception.class)
     public int insertSelective(CustomerLoginInfo record) {
         if (StringUtils.isEmpty(record.getContractNo())) {
             record.setContractNo(SeqProducerUtil.getContractNo());
@@ -55,6 +57,7 @@ public class CustomerLoginInfoService {
     /**
      * 根据id查询记录
      * */
+    @Transactional(rollbackFor = Exception.class)
     public CustomerLoginInfo selectByPrimaryKey(String contractNo) {
         return customerLoginInfoMapper.selectByPrimaryKey(contractNo);
     }
