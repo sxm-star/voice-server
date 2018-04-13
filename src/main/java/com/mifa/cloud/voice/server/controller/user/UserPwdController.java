@@ -1,10 +1,13 @@
 package com.mifa.cloud.voice.server.controller.user;
 
-import com.alibaba.fastjson.JSONObject;
+import com.mifa.cloud.voice.server.annotation.Loggable;
+import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.StaticConst;
-import com.mifa.cloud.voice.server.dto.*;
+import com.mifa.cloud.voice.server.dto.UserEditPwdDTO;
+import com.mifa.cloud.voice.server.dto.UserPwdImgCodeDTO;
+import com.mifa.cloud.voice.server.dto.UserRetrievePasswordDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.service.VerficationService;
@@ -16,9 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.HttpHeaders;
@@ -32,6 +33,7 @@ import java.util.Map;
 @RestController
 @Api(value = "用户密码管理", description = "用户密码管理", produces = MediaType.APPLICATION_JSON)
 @Slf4j
+@RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
 public class UserPwdController {
 
     @Autowired
@@ -46,72 +48,25 @@ public class UserPwdController {
     @Autowired
     private VerficationService verficationService;
 
+    @Autowired
+    private CustomerLoginInfoService infoService;
 
 
-    @PostMapping("/retrieve_password/verify_img_code")
-    @ApiOperation(value = "校验图片验证码")
+    @PutMapping("/user-retrieve-password")
+    @ApiOperation(value = "找回密码修改登陆密码")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
     })
-    /*@RequestHeader(HttpHeaders.AUTHORIZATION) String token*/
-    public CommonResponse retrievePasswordVerifyImgCode(@RequestBody @Valid UserPwdImgCodeDTO param) {
-
-        log.info("找回密码校验图片验证码接口入参：[{}]", JSONObject.toJSONString(param));
-
-        // 根据手机号获取缓存中的图片验证码
-        String imgIdentifyCode = (String) keyValueDao.get(StaticConst.IMG_IDENTIFY_CODE + param.getMobile());
-        if(StringUtils.isEmpty(imgIdentifyCode)) {
-            log.info("找回密码校验图片验证码接口：[图片验证码已过期]");
-            return CommonResponse.failCommonResponse("图片验证码已过期，请重新获取");
-        }
-        if(!param.getImageVerficationCode().equalsIgnoreCase(imgIdentifyCode)) {
-            log.info("找回密码校验图片验证码接口：[验证码错误]");
-            return CommonResponse.failCommonResponse("验证码错误");
-        }
-        return CommonResponse.successCommonResponse();
-
-    }
-
-    @PostMapping("/retrieve_password/verify_mobile_code")
-    @ApiOperation(value = "校验手机验证码")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
-            required = true, value = "service token", dataType = "string")
-    })
-    public CommonResponse retrievePasswordVerifyMobileCode(@RequestBody @Valid UserPwdMobileDTO param) {
-
-        log.info("找回密码校验手机验证码接口入参：[{}]", JSONObject.toJSONString(param));
-        // 校验短信验证码
-        String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
-        if(StringUtils.isEmpty(mobileAuthCode)) {
-            log.info("找回密码校验手机验证码接口：[手机验证码已过期]");
-            return CommonResponse.failCommonResponse("手机验证码已过期，请重新获取");
-        }
-        if(!mobileAuthCode.equals(param.getMobileVerficationCode())) {
-            log.info("找回密码校验手机验证码接口：[验证码错误]");
-            return CommonResponse.failCommonResponse("验证码错误");
-        }
-        return CommonResponse.successCommonResponse();
-
-    }
-
-    @PostMapping("/retrieve_password/modify_password")
-    @ApiOperation(value = "修改登陆密码")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
-            required = true, value = "service token", dataType = "string")
-    })
-    public CommonResponse retrievePasswordModify(@RequestBody @Valid UserRetrievePasswordDTO param) {
-
-        log.info("找回密码修改登陆密码接口入参：[{}]", JSONObject.toJSONString(param));
+    @Loggable(descp = "找回密码修改登陆密码")
+    public CommonResponse<Void> retrievePasswordModify(@RequestBody @Valid UserRetrievePasswordDTO param) {
 
         if(!param.getLoginPasswd().equals(param.getLoginPasswdSecond())) {
-            log.info("找回密码修改登陆密码接口：[两次密码输入不一致]");
             return CommonResponse.failCommonResponse("两次密码输入不一致");
         }
 
         CustomerLoginInfo customerLoginInfo = loginInfoService.selectByPrimaryKey(param.getContractNo());
 
         if(customerLoginInfo == null) {
-            log.info("找回密码修改登陆密码接口：[用户不存在]");
             return CommonResponse.failCommonResponse("用户不存在");
         }
 
@@ -122,12 +77,60 @@ public class UserPwdController {
 
         int count = loginInfoService.updateByPrimaryKeySelective(customerLoginInfo);
         if (count > 0) {
-            log.info("找回密码修改登陆密码接口：[找回密码成功]");
             return CommonResponse.successCommonResponse("找回密码成功",null);
         }
 
         return CommonResponse.failCommonResponse("找回密码失败，请稍后重试");
     }
+
+
+    @PutMapping("/user-edit-password")
+    @ApiOperation(value = "修改登陆密码")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    @Loggable(descp = "修改登陆密码")
+    public CommonResponse<Void> editPassword(@RequestBody @Valid UserEditPwdDTO param) {
+
+        // 校验短信验证码
+        String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
+        if(StringUtils.isEmpty(mobileAuthCode)) {
+            return CommonResponse.failCommonResponse("手机验证码已过期，请重新获取");
+        }
+        if(!mobileAuthCode.equals(param.getMobieAuthCode())) {
+            return CommonResponse.failCommonResponse("验证码错误");
+        }
+
+        // 校验原始密码
+        CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(param.getContractNo());
+        if(customerInfo == null) {
+            return CommonResponse.failCommonResponse("用户不存在");
+        }
+        boolean verifyFlag = passwordUtil.verify(param.getOldPassword(), customerInfo.getLoginPasswd(), customerInfo.getSalt());
+        if(!verifyFlag) {
+            return CommonResponse.failCommonResponse("原始密码错误");
+        }
+
+        // 校验新密码
+        if(!param.getNewPassword().equals(param.getNewPasswordSecond())) {
+            return CommonResponse.failCommonResponse("两次密码输入不一致");
+        }
+
+        // 密码加密处理
+        Map<String, String> generateMap = passwordUtil.generate(param.getNewPassword());
+        customerInfo.setSalt(generateMap.get("salt"));
+        customerInfo.setLoginPasswd(generateMap.get("encryptPassword"));
+
+        int count = loginInfoService.updateByPrimaryKeySelective(customerInfo);
+        if (count > 0) {
+            return CommonResponse.successCommonResponse("修改密码成功",null);
+        }
+
+        return CommonResponse.failCommonResponse("修改密码失败，请稍后重试");
+
+    }
+
+
 
 
 }

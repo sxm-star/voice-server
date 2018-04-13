@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * Created by Administrator on 2018/4/10.
  */
 @Component
-@Profile({"dev"})
+@Profile({"dev", "test"})
 public class VerficationServiceImplDev implements VerficationService{
 
     @Override

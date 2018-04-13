@@ -74,4 +74,10 @@ hystrix:
           thread:
             timeoutInMilliseconds: 30000  #Feign超时时间
 
-  
+#pagehelper分页插件配置
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: countSql
+

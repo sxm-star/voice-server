@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
  * Created by Administrator on 2018/4/10.
  */
 @Data
-@ApiModel("验证码实体类")
+@ApiModel("获取验证码参数实体类")
 public class MobileVerficationCodeDTO {
 
     @ApiModelProperty
