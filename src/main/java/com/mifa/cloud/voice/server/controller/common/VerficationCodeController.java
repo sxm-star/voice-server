@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mifa.cloud.voice.server.LocalCache;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
@@ -77,6 +78,10 @@ public class VerficationCodeController {
     @PostMapping(value = "/mobile-auth-code/")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
     public CommonResponse<Void> mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
+        // 判断是否符合发送条件
+        if(LocalCache.hasRegisterRequest(param.getMobile())) {
+            return CommonResponse.failCommonResponse();
+        }
         String code = String.valueOf(RandomSort.generateRandomNum(6));
         keyValueDao.set(StaticConst.MOBILE_SMS_KEY + param.getMobile(), code, 60 * 3);
         Map<String, String> map = new HashMap<String, String>();
