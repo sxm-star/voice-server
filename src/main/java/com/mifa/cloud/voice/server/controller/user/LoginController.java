@@ -42,8 +42,16 @@ public class LoginController {
     @Loggable(descp = "用户登陆")
     public CommonResponse<UserLoginVO> login(@RequestBody @Valid UserLoginDTO param) {
 
+        CustomerLoginInfo loginInfo = null;
+        // 判断登陆类型，手机号登陆或用户名登陆
+        String mobileReg = "^((13[0-9])|(14[0-9])|(15[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\\d{8}$";
+        if(param.getLoginName().matches(mobileReg)) {
+            loginInfo = loginInfoService.findByLoginMobile(param.getLoginName());
+        }else {
+            // 用户名登陆
+            loginInfo = loginInfoService.findByLoginName(param.getLoginName());
+        }
         // 校验用户是否存在
-        CustomerLoginInfo loginInfo = loginInfoService.findByLoginName(param.getLoginName());
         if(loginInfo == null) {
             return CommonResponse.failCommonResponse("用户名不存在");
         }
@@ -67,17 +75,6 @@ public class LoginController {
 
         return CommonResponse.successCommonResponse(userLoginVO);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
