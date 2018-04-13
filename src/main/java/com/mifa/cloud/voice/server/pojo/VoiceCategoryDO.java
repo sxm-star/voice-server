@@ -30,10 +30,10 @@ public class VoiceCategoryDO extends BaseDataDo {
     private String name;
 
     /**
-     * 状态。可选值:1(正常),2(删除)
+     * 状态。可选值:0(正常),1(停用,删除)
      */
     @Column(name = "status")
-    private String status;
+    private Integer status;
 
     /**
      * 排列序号，表示同级类目的展现次序，如数值相等则按名称次序排列。取值范围:大于零的整数
