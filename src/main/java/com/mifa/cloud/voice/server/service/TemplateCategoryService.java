@@ -33,7 +33,7 @@ public class TemplateCategoryService extends BaseService<VoiceCategoryDO>{
      * @param parentId
      * @return
      */
-    public CommonResponse<PageDto<VoiceCategoryDO>> queryVoiceCategoryList(Integer parentId, String contractNo ,Integer pageNum,Integer pageSize) {
+    public CommonResponse<PageDto<VoiceCategoryDto>> queryVoiceCategoryList(Integer parentId, String contractNo ,Integer pageNum,Integer pageSize) {
         VoiceCategoryDO voiceCategoryDO = new VoiceCategoryDO();
         voiceCategoryDO.setParentId(parentId);
         if (StringUtils.isNotEmpty(contractNo)) {
@@ -44,8 +44,9 @@ public class TemplateCategoryService extends BaseService<VoiceCategoryDO>{
             if (pageInfo!=null&& CollectionUtils.isNotEmpty(pageInfo.getList())){
                 List<VoiceCategoryDto> voiceCategoryDtos = new ArrayList<>();
                 pageInfo.getList().stream().forEach(catrgoryItem->voiceCategoryDtos.add(BaseBeanUtils.convert(catrgoryItem,VoiceCategoryDto.class)));
-                BaseBeanUtils.convert(pageInfo,PageDto.class).setList(voiceCategoryDtos);
-                return CommonResponse.successCommonResponse(voiceCategoryDtos);
+                PageDto<VoiceCategoryDto> pageResult =  BaseBeanUtils.convert(pageInfo,PageDto.class);
+                pageResult.setList(voiceCategoryDtos);
+                return CommonResponse.successCommonResponse(pageResult);
             }
         }catch (Exception e){
             log.error("查询异常:{}",e);

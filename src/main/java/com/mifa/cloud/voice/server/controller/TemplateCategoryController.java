@@ -3,6 +3,9 @@ package com.mifa.cloud.voice.server.controller;
 import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
+import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryDto;
 import com.mifa.cloud.voice.server.service.TemplateCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,7 +33,7 @@ public class TemplateCategoryController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "查询模板类目列表")
-    public Object findTemplateCategory(@RequestParam(required = false, defaultValue = "0") Integer pid, @RequestParam(required = false) String contanctNo, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize) {
+    public CommonResponse<PageDto<VoiceCategoryDto>> findTemplateCategory(@RequestParam(required = false, defaultValue = "0") Integer pid, @RequestParam(required = false) String contanctNo, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize) {
         return templateCategoryService.queryVoiceCategoryList(pid, contanctNo,pageNum,pageSize);
     }
 }
