@@ -10,7 +10,9 @@ spring:
     port: 5672
     username: guest
     password: guest
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 #datasource config
 ds:
