@@ -6,6 +6,7 @@ import com.mifa.cloud.voice.server.pojo.SystemKeyValueExample;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class SystemKeyValueService {
     /**
      * 插入记录（只插入参数非空字段）
      */
+    @Transactional(rollbackFor = Exception.class)
     public int insert(SystemKeyValue record) {
         return mapper.insert(record);
     }
