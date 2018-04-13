@@ -36,6 +36,20 @@ public class CustomerLoginInfoService {
     }
 
     /**
+     * 根据手机号查询
+     */
+    public CustomerLoginInfo findByLoginMobile(String mobile) {
+        CustomerLoginInfoExample example = new CustomerLoginInfoExample();
+        CustomerLoginInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andMobileEqualTo(mobile);
+        List<CustomerLoginInfo> customerLoginInfos = customerLoginInfoMapper.selectByExample(example);
+        if (customerLoginInfos.isEmpty()) {
+            return null;
+        }
+        return customerLoginInfos.get(0);
+    }
+
+    /**
      * 插入记录（只插入参数非空字段）
      */
     @Transactional(rollbackFor = Exception.class)
