@@ -30,7 +30,7 @@ public class TemplateCategoryController {
     TemplateCategoryService templateCategoryService;
 
     @ApiOperation("查询模板类目列表")
-    @RequestMapping(value = "/template/voice/category-list", method = RequestMethod.GET)
+    @RequestMapping(value = "/template-voice-category-list", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "查询模板类目列表")
@@ -40,7 +40,7 @@ public class TemplateCategoryController {
     }
 
     @ApiOperation("新增模板类目")
-    @RequestMapping(value = "/template/voice/category", method = RequestMethod.POST)
+    @RequestMapping(value = "/template-voice-category", method = RequestMethod.POST)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "新增模板类目")
@@ -49,7 +49,7 @@ public class TemplateCategoryController {
     }
 
     @ApiOperation("修改模板类目")
-    @RequestMapping(value = "/template/voice/category/{categoryId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/template-voice-category/{categoryId}", method = RequestMethod.PUT)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "修改模板类目")
@@ -58,7 +58,7 @@ public class TemplateCategoryController {
     }
 
     @ApiOperation("删除模板类目")
-    @RequestMapping(value = "/template/voice/category/{categoryId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/template-voice-category/{categoryId}", method = RequestMethod.DELETE)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "删除模板类目")
