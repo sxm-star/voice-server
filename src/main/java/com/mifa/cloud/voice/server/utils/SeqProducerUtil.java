@@ -127,14 +127,7 @@ public final class SeqProducerUtil {
         return bf.append(Constant.LUCKY_ACCOUNT_NO).append(seq).toString();
     }
     public static void main(String[] args){
-        System.out.println(getContractNo());
-        System.out.println(getContractNo());
-        System.out.println(getContractNo());
-
-        System.out.println("-------------------------------------------------------");
-        System.out.println(getAccountNo());
-        System.out.println(getAccountNo());
-        System.out.println(getAccountNo());
+        System.out.println(getID());
     }
 
 }

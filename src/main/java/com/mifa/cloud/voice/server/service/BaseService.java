@@ -46,7 +46,7 @@ public abstract class BaseService<T extends BaseDataDo> {
 	 * @param id
 	 * @return
 	 */
-	public T queryById(Long id){
+	public T queryById(Object id){
 		return this.getMapper().selectByPrimaryKey(id);
 	}
 	

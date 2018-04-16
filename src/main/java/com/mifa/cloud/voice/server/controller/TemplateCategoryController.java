@@ -6,6 +6,7 @@ import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryDto;
+import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryQueryDto;
 import com.mifa.cloud.voice.server.service.TemplateCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,11 +30,39 @@ public class TemplateCategoryController {
     TemplateCategoryService templateCategoryService;
 
     @ApiOperation("查询模板类目列表")
-    @RequestMapping(value = "/template/category-list", method = RequestMethod.POST)
+    @RequestMapping(value = "/template-voice-category-list", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "查询模板类目列表")
-    public CommonResponse<PageDto<VoiceCategoryDto>> findTemplateCategory(@RequestParam(required = false, defaultValue = "0") Integer pid, @RequestParam(required = false) String contanctNo, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize) {
-        return templateCategoryService.queryVoiceCategoryList(pid, contanctNo,pageNum,pageSize);
+    public CommonResponse<PageDto<VoiceCategoryDto>> findTemplateCategory(@ModelAttribute VoiceCategoryQueryDto voiceCategoryQueryDto,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize) {
+
+        return CommonResponse.successCommonResponse(templateCategoryService.queryVoiceCategoryList(voiceCategoryQueryDto,pageNum,pageSize)) ;
+    }
+
+    @ApiOperation("新增模板类目")
+    @RequestMapping(value = "/template-voice-category", method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "新增模板类目")
+    public CommonResponse<Boolean> addTemplateCategory(@RequestBody VoiceCategoryQueryDto voiceCategoryQueryDto) {
+        return CommonResponse.successCommonResponse(templateCategoryService.insertVoiceCategory(voiceCategoryQueryDto));
+    }
+
+    @ApiOperation("修改模板类目")
+    @RequestMapping(value = "/template-voice-category/{categoryId}", method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "修改模板类目")
+    public CommonResponse<Boolean> alterTemplateCategory(@PathVariable(value = "categoryId",required = true) Integer categoryId, @RequestBody VoiceCategoryQueryDto voiceCategoryQueryDto) {
+        return CommonResponse.successCommonResponse(templateCategoryService.alterVoiceCategory(categoryId,voiceCategoryQueryDto));
+    }
+
+    @ApiOperation("删除模板类目")
+    @RequestMapping(value = "/template-voice-category/{categoryId}", method = RequestMethod.DELETE)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "删除模板类目")
+    public CommonResponse<Boolean> emplateCategory(@PathVariable(value = "categoryId",required = true) Integer categoryId, @RequestParam(value = "contanctNo" ,required = true) String contanctNo) {
+        return CommonResponse.successCommonResponse(templateCategoryService.deleteVoiceCategory(categoryId,contanctNo));
     }
 }
