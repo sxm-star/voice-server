@@ -40,10 +40,11 @@ public class CustomerRechargeController {
     })
     public CommonResponse<PageDto<CustomerRechargeVO>> getRechargeList(
             @RequestParam(required = false, value = "用户名") String rechargeName,
+            @RequestParam(required = false, value = "用户ID") String contractNo,
             @RequestParam(defaultValue = "1", value = "页数") Integer pageNum,
             @RequestParam(defaultValue = "10", value = "每页条数") Integer pageSize) {
 
-        return CommonResponse.successCommonResponse(customerRechargeService.selectRechargeList(rechargeName, pageNum, pageSize));
+        return CommonResponse.successCommonResponse(customerRechargeService.selectRechargeList(rechargeName, contractNo, pageNum, pageSize));
     }
 
 }
