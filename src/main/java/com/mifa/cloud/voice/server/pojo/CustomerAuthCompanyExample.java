@@ -20,76 +20,40 @@ public class CustomerAuthCompanyExample {
      */
     protected List<Criteria> oredCriteria;
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public CustomerAuthCompanyExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public String getOrderByClause() {
         return orderByClause;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public boolean isDistinct() {
         return distinct;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -98,19 +62,11 @@ public class CustomerAuthCompanyExample {
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-11
-     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
@@ -118,7 +74,7 @@ public class CustomerAuthCompanyExample {
     }
 
     /**
-     * t_customer_auth_company 2018-04-11
+     * t_customer_auth_company 2018-04-16
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -368,6 +324,76 @@ public class CustomerAuthCompanyExample {
 
         public Criteria andCompanyAddressNotBetween(String value1, String value2) {
             addCriterion("company_address not between", value1, value2, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleIsNull() {
+            addCriterion("scale is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleIsNotNull() {
+            addCriterion("scale is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleEqualTo(String value) {
+            addCriterion("scale =", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleNotEqualTo(String value) {
+            addCriterion("scale <>", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleGreaterThan(String value) {
+            addCriterion("scale >", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleGreaterThanOrEqualTo(String value) {
+            addCriterion("scale >=", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleLessThan(String value) {
+            addCriterion("scale <", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleLessThanOrEqualTo(String value) {
+            addCriterion("scale <=", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleLike(String value) {
+            addCriterion("scale like", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleNotLike(String value) {
+            addCriterion("scale not like", value, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleIn(List<String> values) {
+            addCriterion("scale in", values, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleNotIn(List<String> values) {
+            addCriterion("scale not in", values, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleBetween(String value1, String value2) {
+            addCriterion("scale between", value1, value2, "scale");
+            return (Criteria) this;
+        }
+
+        public Criteria andScaleNotBetween(String value1, String value2) {
+            addCriterion("scale not between", value1, value2, "scale");
             return (Criteria) this;
         }
 
@@ -1122,9 +1148,6 @@ public class CustomerAuthCompanyExample {
         }
     }
 
-    /**
-     * t_customer_auth_company
-     */
     public static class Criteria extends GeneratedCriteria {
 
         protected Criteria() {
@@ -1133,7 +1156,7 @@ public class CustomerAuthCompanyExample {
     }
 
     /**
-     * t_customer_auth_company 2018-04-11
+     * t_customer_auth_company 2018-04-16
      */
     public static class Criterion {
         private String condition;
