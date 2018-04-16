@@ -27,13 +27,16 @@ public class CustomerRechargeService {
     /**
      * 充值记录列表
      */
-    public PageDto<CustomerRechargeVO> selectRechargeList(String rechargeName, Integer pageNum, Integer pageSize) {
+    public PageDto<CustomerRechargeVO> selectRechargeList(String rechargeName, String contractNo, Integer pageNum, Integer pageSize) {
 
         PageHelper.startPage(pageNum, pageSize);
         CustomerRechargeExample example = new CustomerRechargeExample();
         CustomerRechargeExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(rechargeName)) {
             criteria.andRechargeNameLike("%" + rechargeName + "%");
+        }
+        if(StringUtils.isNotEmpty(contractNo)) {
+            criteria.andContractNoEqualTo(contractNo);
         }
         example.setOrderByClause("recharge_time DESC");
         List<CustomerRecharge> list = customerRechargeMapper.selectByExample(example);

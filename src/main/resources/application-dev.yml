@@ -38,7 +38,7 @@ jedis:
 
 #文件上传
 upload:
-  path: D:/uploadfile
+  path: D:/uploadfiles
 
 #h5地址
 h5:
