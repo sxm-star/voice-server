@@ -2,6 +2,7 @@ package com.mifa.cloud.voice.server.controller.user;
 
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.dto.CustomerRechargeVO;
 import com.mifa.cloud.voice.server.service.CustomerRechargeService;
@@ -37,12 +38,12 @@ public class CustomerRechargeController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
             required = true, value = "service token", dataType = "string")
     })
-    public PageDto<CustomerRechargeVO> getRechargeList(
+    public CommonResponse<PageDto<CustomerRechargeVO>> getRechargeList(
             @RequestParam(required = false, value = "用户名") String rechargeName,
             @RequestParam(defaultValue = "1", value = "页数") Integer pageNum,
             @RequestParam(defaultValue = "10", value = "每页条数") Integer pageSize) {
 
-        return customerRechargeService.selectRechargeList(rechargeName, pageNum, pageSize);
+        return CommonResponse.successCommonResponse(customerRechargeService.selectRechargeList(rechargeName, pageNum, pageSize));
     }
 
 }
