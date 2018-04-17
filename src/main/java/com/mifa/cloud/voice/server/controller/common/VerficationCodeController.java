@@ -54,6 +54,7 @@ public class VerficationCodeController {
     @GetMapping(value = "/img-auth-code/")
     @ApiOperation(value = "图形验证码", notes = "图形验证码")
     @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query")})
+    @Loggable(descp = "获得图形验证码")
     public void imageVerficationCode(HttpServletRequest request, HttpServletResponse response){
         String mobilePhone = request.getParameter("mobile");
         if(StringUtils.isEmpty(mobilePhone)){
@@ -77,6 +78,7 @@ public class VerficationCodeController {
 
     @PostMapping(value = "/mobile-auth-code/")
     @ApiOperation(value = "短信验证码", notes = "短信验证码")
+    @Loggable(descp = "获得短信验证码")
     public CommonResponse<Void> mobileVerficationCode(@RequestBody @Valid MobileVerficationCodeDTO param) {
         // 判断是否符合发送条件
         if(LocalCache.hasRegisterRequest(param.getMobile())) {
