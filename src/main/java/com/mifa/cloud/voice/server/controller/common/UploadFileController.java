@@ -1,8 +1,6 @@
 package com.mifa.cloud.voice.server.controller.common;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
@@ -26,9 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Api(value = "上传文件", description = "上传文件", produces = MediaType.APPLICATION_JSON)
