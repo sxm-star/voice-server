@@ -27,11 +27,12 @@ public class UploadFileLogService {
     }
 
 
-    public UploadFileLog selectByFileTypeAndBizType(String fileType, String bizType) {
+    public UploadFileLog selectByFileTypeAndBizType(String fileType, String bizType, String status) {
         UploadFileLogExample example = new UploadFileLogExample();
         UploadFileLogExample.Criteria criteria = example.createCriteria();
         criteria.andFileTypeEqualTo(fileType);
         criteria.andBizTypeEqualTo(bizType);
+        criteria.andFileStatusEqualTo(status);
         List<UploadFileLog> fileLogs = mapper.selectByExample(example);
         if(fileLogs.isEmpty()) {
             return null;
