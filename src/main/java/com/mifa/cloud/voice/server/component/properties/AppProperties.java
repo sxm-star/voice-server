@@ -18,6 +18,8 @@ public class AppProperties {
     private JixinVoice jixinVoice;
 
     private MontnetsVoice montnetsVoice;
+
+    private String salt;
 	@Data
 	public static class AliyunVoice{
 		private String accessId;

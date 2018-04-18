@@ -6,10 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OperExcel {
     /**
@@ -21,6 +18,7 @@ public class OperExcel {
         try {
             //同时支持Excel 2003、2007
             File excelFile = new File(filePath);
+            if (!excelFile.exists()) return Collections.emptyList();
             FileInputStream is = new FileInputStream(excelFile);
             //这种方式 Excel 2003/2007/2010 都是可以处理的
             Workbook workbook = WorkbookFactory.create(is);

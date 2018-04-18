@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
-
+@Slf4j
 public class EncodesUtils {
     private static SecureRandom random = new SecureRandom();
 
@@ -159,6 +160,23 @@ public class EncodesUtils {
         return aesDecrypt(decodeBase64(pwd), decodeBase64(secretKey));
     }
 
+    public static String getSalt(){
+       return encodeBase64(generateAesKey());
+    }
+
+    public static String selfEncrypt(String metaContent,String salt){
+        String secureContent  = null;
+        try {
+            secureContent = encodeBase64 (aesEncrypt(metaContent.getBytes("UTF-8"), decodeBase64(salt)));
+        }catch (Exception e){
+            log.error("加密失败:{}",e);
+        }
+            return  secureContent;
+    }
+
+    public static String selfDecrypt(String secureContent,String salt){
+       return aesDecrypt(decodeBase64(secureContent), decodeBase64(salt));
+    }
     public static void main(String[] args) throws IOException {
         String phone = "18720987043";
 
