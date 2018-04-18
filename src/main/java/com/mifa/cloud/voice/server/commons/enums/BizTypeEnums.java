@@ -21,6 +21,9 @@ public enum BizTypeEnums {
     ID_CARD_IMG,
 
     @ApiModelProperty("语音模板")
-    VOICE_TEMPLATE
+    VOICE_TEMPLATE,
+
+    @ApiModelProperty("电话号码列表")
+    MOBILE_LIST
 
 }
