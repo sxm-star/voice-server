@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.service.ContactsService;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.EncodesUtils;

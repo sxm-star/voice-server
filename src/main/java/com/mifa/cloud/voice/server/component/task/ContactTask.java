@@ -47,7 +47,7 @@ public class ContactTask {
                 public void run() {
                     String filePath =   uploadFileLog.getFileRealPath();
                     List<Map<String,Object>> list = OperExcel.readExcel(filePath, AppConst.VOICE_TEMPLATE_METAS);
-                    contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),encodeBase64(generateAesKey()));
+                    contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),encodeBase64(generateAesKey()),uploadFileLog.getId());
                 }
             });
         }

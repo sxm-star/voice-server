@@ -1,18 +1,25 @@
 package com.mifa.cloud.voice.server.service;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.ContactDto;
 import com.mifa.cloud.voice.server.commons.dto.ContactQueryDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
+import com.mifa.cloud.voice.server.dao.UploadFileLogMapper;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
+import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
+import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.EncodesUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +33,11 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
+public class ContactsService {
     @Autowired
     CustomerTaskUserContactsDAO contactsDAO;
+    @Autowired
+    UploadFileLogMapper uploadFileLogMapper;
     /**
      * 查询号码
      *
@@ -38,7 +47,22 @@ public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactQueryDto,CustomerTaskUserContactsDO.class);
 
         try {
-            PageInfo<CustomerTaskUserContactsDO> pageInfo = this.queryListByPageAndOrder(contactDo, pageNum, pageSize, "created_at desc");
+            CustomerTaskUserContactsDOExample example = new CustomerTaskUserContactsDOExample();
+            CustomerTaskUserContactsDOExample.Criteria criteria = example.createCriteria();
+            criteria.andContractNoEqualTo(contactQueryDto.getContractNo());
+            if(StringUtils.isNotEmpty(contactQueryDto.getUserName())){
+                criteria.andUserNameEqualTo(contactQueryDto.getUserName());
+            }
+            if(StringUtils.isNotEmpty(contactQueryDto.getUserPhone())){
+                criteria.andUserPhoneEqualTo(contactQueryDto.getUserPhone());
+            }
+            if (StringUtils.isNotEmpty(contactQueryDto.getOrgName())){
+                criteria.andOrgNameEqualTo(contactQueryDto.getOrgName());
+            }
+            example.setOrderByClause("created_at desc");
+            PageHelper.startPage(pageNum,pageSize);
+            List<CustomerTaskUserContactsDO> contactListDOs = contactsDAO.selectByExample(example);
+            PageInfo<CustomerTaskUserContactsDO> pageInfo = new PageInfo<CustomerTaskUserContactsDO>(contactListDOs);
             if (pageInfo != null && CollectionUtils.isNotEmpty(pageInfo.getList())) {
                 List<ContactDto> contactDtos = new ArrayList<>();
                 pageInfo.getList().stream().forEach(contact -> contactDtos.add(BaseBeanUtils.convert(contact, ContactDto.class)));
@@ -68,8 +92,8 @@ public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
      * 号码修改
      * @return
      */
-    public Boolean alterContact(String taskId , ContactQueryDto contactQueryDto) {
-        CustomerTaskUserContactsDO pre_ContactsDo = this.queryById(taskId);
+    public Boolean alterContact(Long id , ContactQueryDto contactQueryDto) {
+        CustomerTaskUserContactsDO pre_ContactsDo = contactsDAO.selectByPrimaryKey(id);
         BaseBeanUtils.copyNoneNullProperties(contactQueryDto,pre_ContactsDo);
         pre_ContactsDo.setUpdatedBy(contactQueryDto.getContractNo());
         int cnt = contactsDAO.updateByPrimaryKeySelective(pre_ContactsDo);
@@ -83,9 +107,11 @@ public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
      * @param taskId
      * @param salt
      */
-    public void addContancts(List<Map<String, Object>> list, String contractNo, String taskId, String salt) {
+    @Transactional(rollbackFor = Exception.class)
+    public void addContancts(List<Map<String, Object>> list, String contractNo, String taskId, String salt,Long fileId) {
         log.info("list size:{},contractNo:{},taskId:{},salt:{}",list.size(),contractNo,taskId,salt);
         if (CollectionUtils.isNotEmpty(list)) {
+            List<CustomerTaskUserContactsDO> contactsDOs = new ArrayList<>();
             list.forEach(map -> {
                 CustomerTaskUserContactsDO taskUserContactsDO = BaseBeanUtils.convert(map, CustomerTaskUserContactsDO.class);
                 taskUserContactsDO.setTaskId(taskId);
@@ -99,9 +125,18 @@ public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
                 }
                 taskUserContactsDO.setCreatedAt(new Date());
                 taskUserContactsDO.setCreatedBy(contractNo);
-                this.save(taskUserContactsDO);
-                log.info("保存成功");
+                contactsDOs.add(taskUserContactsDO);
+                log.info("批量保存 size: {}",contactsDOs.size());
             });
+           int cnt =  contactsDAO.insertBatch(contactsDOs);
+            if (cnt>0){
+                UploadFileLog uploadFileLog = uploadFileLogMapper.selectByPrimaryKey(fileId);
+                uploadFileLog.setFileStatus(StatusEnum.BLOCK.getCode().toString());
+                uploadFileLog.setUpdateBy("system");
+                uploadFileLog.setUpdateAt(new Date());
+                uploadFileLogMapper.updateByPrimaryKeySelective(uploadFileLog);
+            }
+
         }
     }
 
