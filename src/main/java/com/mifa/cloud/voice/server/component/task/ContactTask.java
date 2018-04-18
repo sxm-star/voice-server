@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.component.task;
 
 import com.mifa.cloud.voice.server.service.ContactTaskService;
+import com.mifa.cloud.voice.server.service.UploadFileLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,10 +18,13 @@ public class ContactTask {
 
     @Autowired
     ContactTaskService contactTaskService;
+    @Autowired
+    UploadFileLogService uploadFileLogService;
 
     @Scheduled(initialDelay = 30*1000, fixedDelay = 1*60*1000)
     public void parseContact(){
         log.info("后台解析通讯录模板开始");
-
+       // UploadFileLog uploadFileLog = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.getDesc(), BizTypeEnums.VOICE_TEMPLATE.name());
+       // if (uploadFileLog)
     }
 }
