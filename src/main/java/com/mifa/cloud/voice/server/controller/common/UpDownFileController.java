@@ -58,10 +58,13 @@ public class UpDownFileController {
     @ApiOperation(value = "下载文件", notes = "下载文件")
     @Loggable(descp = "下载文件")
     public CommonResponse<DownLoadFileVO> downLoadFile(
-            @RequestParam(name = "fileType") FileTypeEnums fileType,
-            @RequestParam(name = "bizType") BizTypeEnums bizType) {
+            @RequestParam("fileType") FileTypeEnums fileType,
+            @RequestParam("bizType") BizTypeEnums bizType) {
 
         List<UploadFileLog> uploadFileLogs = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
+        if(uploadFileLogs.isEmpty()) {
+            return CommonResponse.failCommonResponse("文件不存在");
+        }
         DownLoadFileVO vo = DownLoadFileVO.builder()
                 .fileUrl(uploadFileLogs.get(0)!=null ? aconst.H5_URL_PATH + uploadFileLogs.get(0).getFileUrl() : "")
                 .build();
