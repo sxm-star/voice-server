@@ -1,15 +1,21 @@
 package com.mifa.cloud.voice.server.utils;
 
+import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dto.UploadFileVO;
+import com.mifa.cloud.voice.server.pojo.UploadFileLog;
+import com.mifa.cloud.voice.server.service.UploadFileLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Random;
 
@@ -22,17 +28,19 @@ public class UploadFileUtil {
 
     private static final int HEADERWIDTH = 1080;
     private static final int HEADERHEIGHT = 1920;
+    @Autowired
+    private UploadFileLogService uploadFileLogService;
 
-    public UploadFileVO upload(MultipartFile file, ConstConfig aconst) throws Exception {
+    public UploadFileVO upload(MultipartFile file, FileTypeEnums fileType, BizTypeEnums bizType, String contractNo, ConstConfig aconst) throws Exception {
         UploadFileVO vo = null;
         if (!file.isEmpty()) {
             try {
                 Date date = new Date();
-                String initPath = "/uploadfiles/"+ new SimpleDateFormat("yyyy").format(date)
+
+                String initPath = "/uploadfiles/" + fileType.getDesc() + "/" + new SimpleDateFormat("yyyy").format(date)
                         + "/" + new SimpleDateFormat("MMdd").format(date) + "/" + new SimpleDateFormat("HH").format(date);
 
-                String path = aconst.UPLOAD_PATH +"/"+ new SimpleDateFormat("yyyy").format(date)
-                        + "/" + new SimpleDateFormat("MMdd").format(date) + "/" + new SimpleDateFormat("HH").format(date);
+                String path = aconst.UPLOAD_PATH + initPath;
                 File tempFilePath = new File(path);
                 if (!tempFilePath.exists()) {
                     tempFilePath.mkdirs();
@@ -42,20 +50,31 @@ public class UploadFileUtil {
                 int start = fileName.lastIndexOf("\\");
                 //截取 上传文件的 字符串名字，加1是 去掉反斜杠，
                 String filename = fileName.substring(start+1);
-                String fileType = filename.substring(filename.lastIndexOf(".") + 1);
-                String newFileName = getRandomChar()+"."+fileType;
+                String fileEnd = filename.substring(filename.lastIndexOf(".") + 1);
+                String newFileName = getRandomChar()+"."+fileEnd;
                 String pathname = getRandomString(4) + newFileName;
                 String srcPath = path+"/" + newFileName;
                 String desPath = path +"/"+ pathname;
                 GmImageUtil.scaleImg(srcPath, desPath, HEADERWIDTH, HEADERHEIGHT);
                 //这里将上传得到的文件
                 FileUtils.copyInputStreamToFile(file.getInputStream(), new File(tempFilePath, pathname));
-                //json.put("repath", initPath + "/" + pathname);
-                //json.put("abpath", aconst.H5_URL_PATH + initPath + "/" + pathname);
                 vo = UploadFileVO.builder()
-                        .fullPath(aconst.H5_URL_PATH + initPath + "/" + pathname)
+                        //.fullPath(aconst.H5_URL_PATH + initPath + "/" + pathname)
                         .halfPath(initPath + "/" + pathname)
                         .build();
+
+                // 插入上传记录表
+                UploadFileLog uploadFileLog = UploadFileLog.builder()
+                        .fileName(newFileName)
+                        .fileStatus("0")
+                        .fileType(fileType.name())
+                        .bizType(bizType.name())
+                        .fileUrl(initPath + "/" + pathname)
+                        .fileRealPath(path + "/" + pathname)
+                        .createAt(new Date())
+                        .createBy(contractNo)
+                        .build();
+                uploadFileLogService.insert(uploadFileLog);
 
             } catch (IOException e) {
                 e.printStackTrace();

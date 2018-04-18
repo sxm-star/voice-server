@@ -38,13 +38,13 @@ jedis:
 
 #文件上传
 upload:
-  path: D:/uploadfiles
+  path: /usr/local/nginx/html
 
 #h5地址
 h5:
  app:
   url:
-   path: http://127.0.0.1/h5-app
+   path: http://127.0.0.1
 
 
 server:

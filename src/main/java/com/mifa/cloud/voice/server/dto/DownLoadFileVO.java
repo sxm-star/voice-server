@@ -8,20 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Created by Administrator on 2018/4/12.
+ * Created by Administrator on 2018/4/18.
  */
 @Data
-@ApiModel("文件上传返回实体类")
+@ApiModel("文件下载返回实体类")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadFileVO {
+public class DownLoadFileVO {
 
-    //@ApiModelProperty("文件完整路径")
-    //private String fullPath;
-
-    @ApiModelProperty("去除域名后的文件路径")
-    private String halfPath;
-
-
+    @ApiModelProperty("文件路径")
+    private String fileUrl;
 }
