@@ -63,7 +63,7 @@ public class UpDownFileController {
             @RequestParam("文件类型") FileTypeEnums fileType,
             @RequestParam("业务类型") BizTypeEnums bizType) {
 
-        UploadFileLog fileLog = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name());
+        UploadFileLog fileLog = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
         DownLoadFileVO vo = DownLoadFileVO.builder()
                 .fileUrl(fileLog!=null ? aconst.H5_URL_PATH + fileLog.getFileUrl() : "")
                 .build();
