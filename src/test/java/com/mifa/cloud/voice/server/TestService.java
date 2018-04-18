@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
+import com.mifa.cloud.voice.server.service.ContactsService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @Slf4j
+@ActiveProfiles("dev")
 public class TestService {
 
     @Autowired
@@ -31,6 +34,8 @@ public class TestService {
 
     @Autowired
     private ConstConfig constConfig;
+    @Autowired
+    private ContactsService contactsService;
 
     @Test
     public void testRedis() {
@@ -55,6 +60,7 @@ public class TestService {
     public void testConst() {
         System.out.println(constConfig.H5_URL_PATH);
     }
+
 
 
 

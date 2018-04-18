@@ -12,4 +12,10 @@ public interface AppConst {
     String DOWNLOAD_PATH = "/home/dpwnload/";
     String DOWNLOAD_FILE_NAME = "test.xls";
 
+    /**
+     * 语音模板的meta
+     */
+    String[] VOICE_TEMPLATE_METAS = new String[]{"userName","userPhone","orgName","userJob","userSex","userAddress"};
+
+
 }

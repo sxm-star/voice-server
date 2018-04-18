@@ -42,9 +42,9 @@ public class ContactsController {
     }
 
     @ApiOperation("号码修改")
-    @RequestMapping(value = "/contact/{task-id}",method = RequestMethod.PUT)
-    public CommonResponse<PageDto<ContactDto>> addContact(@PathVariable("task-id") String taskId,@RequestBody @Valid ContactQueryDto contactDto){
-        return CommonResponse.successCommonResponse(contactsService.alterContact(taskId,contactDto));
+    @RequestMapping(value = "/contact/{id}",method = RequestMethod.PUT)
+    public CommonResponse<PageDto<ContactDto>> addContact(@PathVariable("id") Long id,@RequestBody @Valid ContactQueryDto contactDto){
+        return CommonResponse.successCommonResponse(contactsService.alterContact(id,contactDto));
     }
 
 }

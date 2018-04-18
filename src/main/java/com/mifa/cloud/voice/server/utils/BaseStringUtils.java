@@ -131,7 +131,7 @@ public class BaseStringUtils {
         }).sum();
     }
     public static String uuid() {
-        return TimeUUIDUtils.getUniqueTimeUUIDinMillis().toString();
+        return TimeUUIDUtils.getUniqueTimeUUIDinMillis().toString().replace("-","");
     }
     public static Date timeFromDigitalUUID(String uuid) {
         Preconditions.checkArgument(StringUtils.isNotBlank(uuid), "uuid不能为空");
