@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,17 +15,23 @@ import javax.persistence.Table;
 @Data
 public class CustomerTaskUserContactsDO extends BaseDataDo {
     /**
-     * 批次上传生成的task_id
+     * ID号
      */
     @Id
-    @GeneratedValue
-    private String taskId;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     /**
      * 租户号
      */
     @NotEmpty
     private String contractNo;
+
+    /**
+     * 批次上传生成的task_id
+     */
+    @NotEmpty
+    private String taskId;
 
     /**
      * 用户手机号加密处理
@@ -69,5 +76,6 @@ public class CustomerTaskUserContactsDO extends BaseDataDo {
      * 批次下拨通状态1:已拨 2：未拨
      */
     private String callStatus;
+
 
 }

@@ -1,11 +1,25 @@
 package com.mifa.cloud.voice.server.component.task;
 
-import com.mifa.cloud.voice.server.service.ContactTaskService;
+import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.pojo.UploadFileLog;
+import com.mifa.cloud.voice.server.service.ContactsService;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
+import com.mifa.cloud.voice.server.utils.BaseStringUtils;
+import com.mifa.cloud.voice.server.utils.OperExcel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.mifa.cloud.voice.server.utils.EncodesUtils.encodeBase64;
+import static com.mifa.cloud.voice.server.utils.EncodesUtils.generateAesKey;
 
 /**
  * @author: songxm
@@ -17,14 +31,25 @@ import org.springframework.stereotype.Component;
 public class ContactTask {
 
     @Autowired
-    ContactTaskService contactTaskService;
+    ContactsService contactTaskService;
     @Autowired
     UploadFileLogService uploadFileLogService;
+    @Autowired
+    AsyncTaskExecutor asyncTaskExecutor;
 
-    @Scheduled(initialDelay = 30*1000, fixedDelay = 1*60*1000)
+    @Scheduled(initialDelay = 1000, fixedDelay = 1*60*1000)
     public void parseContact(){
         log.info("后台解析通讯录模板开始");
-       // UploadFileLog uploadFileLog = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.getDesc(), BizTypeEnums.VOICE_TEMPLATE.name());
-       // if (uploadFileLog)
+        UploadFileLog uploadFileLog = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.getDesc(), BizTypeEnums.MOBILE_LIST.name(), StatusEnum.NORMAL.getCode().toString());
+        if (uploadFileLog!=null){
+            asyncTaskExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    String filePath =   uploadFileLog.getFileRealPath();
+                    List<Map<String,Object>> list = OperExcel.readExcel(filePath, AppConst.VOICE_TEMPLATE_METAS);
+                    contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),encodeBase64(generateAesKey()));
+                }
+            });
+        }
     }
 }

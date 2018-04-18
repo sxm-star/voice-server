@@ -8,13 +8,16 @@ import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
+import com.mifa.cloud.voice.server.utils.EncodesUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: songxm
@@ -73,7 +76,34 @@ public class ContactsService extends BaseService<CustomerTaskUserContactsDO>{
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-
+    /**
+     * 解析号码入库
+     * @param list
+     * @param contractNo
+     * @param taskId
+     * @param salt
+     */
+    public void addContancts(List<Map<String, Object>> list, String contractNo, String taskId, String salt) {
+        log.info("list size:{},contractNo:{},taskId:{},salt:{}",list.size(),contractNo,taskId,salt);
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(map -> {
+                CustomerTaskUserContactsDO taskUserContactsDO = BaseBeanUtils.convert(map, CustomerTaskUserContactsDO.class);
+                taskUserContactsDO.setTaskId(taskId);
+                taskUserContactsDO.setContractNo(contractNo);
+                taskUserContactsDO.setSalt(salt);
+                String phone = taskUserContactsDO.getUserPhone();
+                try {
+                    taskUserContactsDO.setUserPhone(EncodesUtils.encodeBase64(EncodesUtils.aesEncrypt(phone.getBytes("UTF-8"), EncodesUtils.decodeBase64(salt))));
+                } catch (Exception e) {
+                    log.info("手机号:{}加密失败:{}", phone, e);
+                }
+                taskUserContactsDO.setCreatedAt(new Date());
+                taskUserContactsDO.setCreatedBy(contractNo);
+                this.save(taskUserContactsDO);
+                log.info("保存成功");
+            });
+        }
+    }
 
 }
 

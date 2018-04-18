@@ -16,7 +16,6 @@ public class VerficationServiceImplProd implements VerficationService{
 
     @Autowired
     private KeyValueDao keyValueDao;
-
     @Override
     public String getmobileAuthCodeFromCache(String mobile) {
         // 校验验证码
