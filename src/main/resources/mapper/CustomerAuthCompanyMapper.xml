@@ -5,6 +5,7 @@
     <id column="contract_no" property="contractNo" jdbcType="VARCHAR" />
     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
     <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="business_life" property="businessLife" jdbcType="VARCHAR" />
     <result column="profession" property="profession" jdbcType="VARCHAR" />
     <result column="official_website_url" property="officialWebsiteUrl" jdbcType="VARCHAR" />
@@ -76,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    contract_no, company_name, company_address, business_life, profession, official_website_url, 
+    contract_no, company_name, company_address, scale, business_life, profession, official_website_url, 
     business_license_no, business_license_url, auth_status, remark, created_by, created_at, 
     updated_by, updated_at
   </sql>
@@ -112,17 +113,17 @@
   </delete>
   <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAuthCompany" >
     insert into t_customer_auth_company (contract_no, company_name, company_address, 
-      business_life, profession, official_website_url, 
-      business_license_no, business_license_url, 
-      auth_status, remark, created_by, 
-      created_at, updated_by, updated_at
-      )
+      scale, business_life, profession, 
+      official_website_url, business_license_no, 
+      business_license_url, auth_status, remark, 
+      created_by, created_at, updated_by, 
+      updated_at)
     values (#{contractNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
-      #{businessLife,jdbcType=VARCHAR}, #{profession,jdbcType=VARCHAR}, #{officialWebsiteUrl,jdbcType=VARCHAR}, 
-      #{businessLicenseNo,jdbcType=VARCHAR}, #{businessLicenseUrl,jdbcType=VARCHAR}, 
-      #{authStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}
-      )
+      #{scale,jdbcType=VARCHAR}, #{businessLife,jdbcType=VARCHAR}, #{profession,jdbcType=VARCHAR}, 
+      #{officialWebsiteUrl,jdbcType=VARCHAR}, #{businessLicenseNo,jdbcType=VARCHAR}, 
+      #{businessLicenseUrl,jdbcType=VARCHAR}, #{authStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerAuthCompany" >
     insert into t_customer_auth_company
@@ -135,6 +136,9 @@
       </if>
       <if test="companyAddress != null" >
         company_address,
+      </if>
+      <if test="scale != null" >
+        scale,
       </if>
       <if test="businessLife != null" >
         business_life,
@@ -179,6 +183,9 @@
       </if>
       <if test="companyAddress != null" >
         #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=VARCHAR},
       </if>
       <if test="businessLife != null" >
         #{businessLife,jdbcType=VARCHAR},
@@ -233,6 +240,9 @@
       <if test="record.companyAddress != null" >
         company_address = #{record.companyAddress,jdbcType=VARCHAR},
       </if>
+      <if test="record.scale != null" >
+        scale = #{record.scale,jdbcType=VARCHAR},
+      </if>
       <if test="record.businessLife != null" >
         business_life = #{record.businessLife,jdbcType=VARCHAR},
       </if>
@@ -276,6 +286,7 @@
     set contract_no = #{record.contractNo,jdbcType=VARCHAR},
       company_name = #{record.companyName,jdbcType=VARCHAR},
       company_address = #{record.companyAddress,jdbcType=VARCHAR},
+      scale = #{record.scale,jdbcType=VARCHAR},
       business_life = #{record.businessLife,jdbcType=VARCHAR},
       profession = #{record.profession,jdbcType=VARCHAR},
       official_website_url = #{record.officialWebsiteUrl,jdbcType=VARCHAR},
@@ -299,6 +310,9 @@
       </if>
       <if test="companyAddress != null" >
         company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=VARCHAR},
       </if>
       <if test="businessLife != null" >
         business_life = #{businessLife,jdbcType=VARCHAR},
@@ -340,6 +354,7 @@
     update t_customer_auth_company
     set company_name = #{companyName,jdbcType=VARCHAR},
       company_address = #{companyAddress,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
       business_life = #{businessLife,jdbcType=VARCHAR},
       profession = #{profession,jdbcType=VARCHAR},
       official_website_url = #{officialWebsiteUrl,jdbcType=VARCHAR},

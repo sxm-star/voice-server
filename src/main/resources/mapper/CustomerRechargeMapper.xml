@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mifa.cloud.voice.server.dao.CustomerRechargeMapper" >
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.CustomerRecharge" >
+    <id column="recharge_id" property="rechargeId" jdbcType="VARCHAR" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+    <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="recharge_time" property="rechargeTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="recharge_name" property="rechargeName" jdbcType="VARCHAR" />
+    <result column="recharge_way" property="rechargeWay" jdbcType="VARCHAR" />
+    <result column="recharge_remark" property="rechargeRemark" jdbcType="VARCHAR" />
+    <result column="sys_payee_no" property="sysPayeeNo" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    recharge_id, fee, pay_no, account_no, contract_no, recharge_time, status, recharge_name, 
+    recharge_way, recharge_remark, sys_payee_no, created_by, created_at, updated_by, 
+    updated_at
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRechargeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_customer_recharge
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_recharge
+    where recharge_id = #{rechargeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_customer_recharge
+    where recharge_id = #{rechargeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRechargeExample" >
+    delete from t_customer_recharge
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRecharge" >
+    insert into t_customer_recharge (recharge_id, fee, pay_no, 
+      account_no, contract_no, recharge_time, 
+      status, recharge_name, recharge_way, 
+      recharge_remark, sys_payee_no, created_by, 
+      created_at, updated_by, updated_at
+      )
+    values (#{rechargeId,jdbcType=VARCHAR}, #{fee,jdbcType=DECIMAL}, #{payNo,jdbcType=VARCHAR}, 
+      #{accountNo,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, #{rechargeTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=CHAR}, #{rechargeName,jdbcType=VARCHAR}, #{rechargeWay,jdbcType=VARCHAR}, 
+      #{rechargeRemark,jdbcType=VARCHAR}, #{sysPayeeNo,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRecharge" >
+    insert into t_customer_recharge
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rechargeId != null" >
+        recharge_id,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+      <if test="payNo != null" >
+        pay_no,
+      </if>
+      <if test="accountNo != null" >
+        account_no,
+      </if>
+      <if test="contractNo != null" >
+        contract_no,
+      </if>
+      <if test="rechargeTime != null" >
+        recharge_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="rechargeName != null" >
+        recharge_name,
+      </if>
+      <if test="rechargeWay != null" >
+        recharge_way,
+      </if>
+      <if test="rechargeRemark != null" >
+        recharge_remark,
+      </if>
+      <if test="sysPayeeNo != null" >
+        sys_payee_no,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rechargeId != null" >
+        #{rechargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="payNo != null" >
+        #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null" >
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeTime != null" >
+        #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="rechargeName != null" >
+        #{rechargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeWay != null" >
+        #{rechargeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeRemark != null" >
+        #{rechargeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysPayeeNo != null" >
+        #{sysPayeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRechargeExample" resultType="java.lang.Integer" >
+    select count(*) from t_customer_recharge
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_customer_recharge
+    <set >
+      <if test="record.rechargeId != null" >
+        recharge_id = #{record.rechargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fee != null" >
+        fee = #{record.fee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payNo != null" >
+        pay_no = #{record.payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNo != null" >
+        account_no = #{record.accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractNo != null" >
+        contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rechargeTime != null" >
+        recharge_time = #{record.rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.rechargeName != null" >
+        recharge_name = #{record.rechargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rechargeWay != null" >
+        recharge_way = #{record.rechargeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rechargeRemark != null" >
+        recharge_remark = #{record.rechargeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysPayeeNo != null" >
+        sys_payee_no = #{record.sysPayeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null" >
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null" >
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedAt != null" >
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_customer_recharge
+    set recharge_id = #{record.rechargeId,jdbcType=VARCHAR},
+      fee = #{record.fee,jdbcType=DECIMAL},
+      pay_no = #{record.payNo,jdbcType=VARCHAR},
+      account_no = #{record.accountNo,jdbcType=VARCHAR},
+      contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      recharge_time = #{record.rechargeTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=CHAR},
+      recharge_name = #{record.rechargeName,jdbcType=VARCHAR},
+      recharge_way = #{record.rechargeWay,jdbcType=VARCHAR},
+      recharge_remark = #{record.rechargeRemark,jdbcType=VARCHAR},
+      sys_payee_no = #{record.sysPayeeNo,jdbcType=VARCHAR},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRecharge" >
+    update t_customer_recharge
+    <set >
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="payNo != null" >
+        pay_no = #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        account_no = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null" >
+        contract_no = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeTime != null" >
+        recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="rechargeName != null" >
+        recharge_name = #{rechargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeWay != null" >
+        recharge_way = #{rechargeWay,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeRemark != null" >
+        recharge_remark = #{rechargeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysPayeeNo != null" >
+        sys_payee_no = #{sysPayeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where recharge_id = #{rechargeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.CustomerRecharge" >
+    update t_customer_recharge
+    set fee = #{fee,jdbcType=DECIMAL},
+      pay_no = #{payNo,jdbcType=VARCHAR},
+      account_no = #{accountNo,jdbcType=VARCHAR},
+      contract_no = #{contractNo,jdbcType=VARCHAR},
+      recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR},
+      recharge_name = #{rechargeName,jdbcType=VARCHAR},
+      recharge_way = #{rechargeWay,jdbcType=VARCHAR},
+      recharge_remark = #{rechargeRemark,jdbcType=VARCHAR},
+      sys_payee_no = #{sysPayeeNo,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where recharge_id = #{rechargeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

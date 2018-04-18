@@ -27,7 +27,12 @@ public class CustomerAuthCompany implements Serializable {
     private String companyAddress;
 
     /**
-     * 
+     * 企业规模
+     */
+    private String scale;
+
+    /**
+     * 经营年限
      */
     private String businessLife;
 

@@ -61,13 +61,6 @@ public class UserRegisterDTO {
     private String mobieAuthCode;
 
     /**
-     * 最后登录IP
-     * */
-    @ApiModelProperty("最后登录IP")
-    private String lastLoginIp;
-
-
-    /**
      * 注册类型 0:系统自动注册；1:自助注册
      * */
     @ApiModelProperty("注册类型 0:系统自动注册；1:自助注册")

@@ -4,11 +4,8 @@ import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompanyExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface CustomerAuthCompanyMapper {
-
     int countByExample(CustomerAuthCompanyExample example);
 
     int deleteByExample(CustomerAuthCompanyExample example);
