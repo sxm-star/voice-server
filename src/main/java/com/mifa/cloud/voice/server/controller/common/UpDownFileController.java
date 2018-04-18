@@ -46,22 +46,19 @@ public class UpDownFileController {
     @Loggable(descp = "单个上传文件")
     public CommonResponse<UploadFileVO> uploadFileCompress(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("文件类型") FileTypeEnums fileType,
-            @RequestParam("业务类型") BizTypeEnums bizType,
-            @RequestParam("用户ID") String contractNo
+            @RequestParam("fileType") FileTypeEnums fileType,
+            @RequestParam("bizType") BizTypeEnums bizType,
+            @RequestParam("contractNo") String contractNo
             ) throws Exception {
         return CommonResponse.successCommonResponse(uploadFileUtil.upload(file, fileType, bizType, contractNo, aconst));
     }
 
     @GetMapping("/download-file")
     @ApiOperation(value = "下载文件", notes = "下载文件")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
-            required = true, value = "service token", dataType = "string")
-    })
     @Loggable(descp = "下载文件")
     public CommonResponse<DownLoadFileVO> downLoadFile(
-            @RequestParam("文件类型") FileTypeEnums fileType,
-            @RequestParam("业务类型") BizTypeEnums bizType) {
+            @RequestParam(name = "fileType") FileTypeEnums fileType,
+            @RequestParam(name = "bizType") BizTypeEnums bizType) {
 
         UploadFileLog fileLog = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
         DownLoadFileVO vo = DownLoadFileVO.builder()
