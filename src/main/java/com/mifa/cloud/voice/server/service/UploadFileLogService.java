@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class UploadFileLogService {
     }
 
 
-    public UploadFileLog selectByFileTypeAndBizType(String fileType, String bizType, String status) {
+    public List<UploadFileLog> selectByFileTypeAndBizType(String fileType, String bizType, String status) {
         UploadFileLogExample example = new UploadFileLogExample();
         UploadFileLogExample.Criteria criteria = example.createCriteria();
         criteria.andFileTypeEqualTo(fileType);
@@ -35,8 +36,8 @@ public class UploadFileLogService {
         criteria.andFileStatusEqualTo(status);
         List<UploadFileLog> fileLogs = mapper.selectByExample(example);
         if(fileLogs.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
-        return fileLogs.get(0);
+        return fileLogs;
     }
 }
