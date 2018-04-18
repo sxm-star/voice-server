@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @RestController
 @Api(value = "文件管理", description = "文件管理", produces = MediaType.APPLICATION_JSON)
@@ -60,9 +61,9 @@ public class UpDownFileController {
             @RequestParam(name = "fileType") FileTypeEnums fileType,
             @RequestParam(name = "bizType") BizTypeEnums bizType) {
 
-        UploadFileLog fileLog = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
+        List<UploadFileLog> uploadFileLogs = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
         DownLoadFileVO vo = DownLoadFileVO.builder()
-                .fileUrl(fileLog!=null ? aconst.H5_URL_PATH + fileLog.getFileUrl() : "")
+                .fileUrl(uploadFileLogs.get(0)!=null ? aconst.H5_URL_PATH + uploadFileLogs.get(0).getFileUrl() : "")
                 .build();
         return CommonResponse.successCommonResponse(vo);
     }
