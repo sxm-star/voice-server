@@ -5,12 +5,14 @@ import com.mifa.cloud.voice.server.dao.CallJobDAO;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author: songxm
  * @date: 2018/4/16 19:20
  * @version: v1.0.0
  */
+@Service
 public class CallJobService extends BaseService<CallJobDO>{
     @Autowired
     CallJobDAO customerCallJobDAO;
