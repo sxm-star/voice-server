@@ -17,7 +17,7 @@ public enum MQMsgEnum {
     /**
      * 解析号码列表
      */
-    ANALYSIS_MOBILE_LIST("analysis_mobile_list");
+    ANALYSIS_MOBILE_LIST("q_analysis_mobile_list");
 
     private String code;
 

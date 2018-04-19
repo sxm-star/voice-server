@@ -1,11 +1,13 @@
 package com.mifa.cloud.voice.server.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.commons.enums.FileStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.MQMsgEnum;
 import com.mifa.cloud.voice.server.config.ConstConfig;
+import com.mifa.cloud.voice.server.dto.AnalysisMobileListMQDTO;
 import com.mifa.cloud.voice.server.dto.UploadFileVO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
@@ -88,8 +90,12 @@ public class UploadFileUtil {
 
                 //如果上传类型为号码列表，发送mq消息通知解析号码excel
                 if (FileTypeEnums.EXCEL.name().equals(fileType.name()) && BizTypeEnums.MOBILE_LIST.name().equals(bizType.name())) {
-                    log.info("号码列表上传完成发送mq消息");
-                    rabbitTemplate.convertAndSend(MQMsgEnum.ANALYSIS_MOBILE_LIST.getCode(), "");
+                    AnalysisMobileListMQDTO dto = AnalysisMobileListMQDTO.builder()
+                            .groupId(groupId)
+                            .fileRealPath(path + "/" + pathname)
+                            .build();
+                    log.info("号码列表上传完成发送mq消息：" + JSON.toJSONString(dto));
+                    rabbitTemplate.convertAndSend(MQMsgEnum.ANALYSIS_MOBILE_LIST.getCode(), dto);
                 }
 
             } catch (IOException e) {
