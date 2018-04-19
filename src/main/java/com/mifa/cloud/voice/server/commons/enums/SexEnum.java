@@ -9,6 +9,13 @@ import lombok.Getter;
  */
 @Getter
 public enum SexEnum {
-    M,
-    W
+    M("男"),
+    W("女"),
+    N("未知");
+
+    private String desc;
+    SexEnum(String desc){
+       this.desc = desc;
+    }
+
 }
