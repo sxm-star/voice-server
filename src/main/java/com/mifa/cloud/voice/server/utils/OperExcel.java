@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 @Slf4j
 public class OperExcel {
@@ -15,6 +16,7 @@ public class OperExcel {
      */
     public static List<Map<String,Object>> readExcel(String filePath, String[] metaName)
     {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         List<Map<String,Object>> list = new ArrayList<>();
         try {
             //同时支持Excel 2003、2007
@@ -43,7 +45,34 @@ public class OperExcel {
                     for (int c = 0; c < cellCount; c++) {
                         Cell cell = row.getCell(c);
                         int cellType = cell.getCellType();
-                        String cellValue = cell.getStringCellValue();
+                        String cellValue = null;
+                        switch(cellType) {
+                            case Cell.CELL_TYPE_STRING: //文本
+                                cellValue = cell.getStringCellValue();
+                                break;
+                            case Cell.CELL_TYPE_NUMERIC: //数字、日期
+                                if(DateUtil.isCellDateFormatted(cell)) {
+                                    cellValue = fmt.format(cell.getDateCellValue()); //日期型
+                                }
+                                else {
+                                    cellValue = String.valueOf(cell.getNumericCellValue()); //数字
+                                }
+                                break;
+                            case Cell.CELL_TYPE_BOOLEAN: //布尔型
+                                cellValue = String.valueOf(cell.getBooleanCellValue());
+                                break;
+                            case Cell.CELL_TYPE_BLANK: //空白
+                                cellValue = cell.getStringCellValue();
+                                break;
+                            case Cell.CELL_TYPE_ERROR: //错误
+                                cellValue = "错误";
+                                break;
+                            case Cell.CELL_TYPE_FORMULA: //公式
+                                cellValue = "错误";
+                                break;
+                            default:
+                                cellValue = "错误";
+                        }
                         map.put(metaName[c],cellValue);
                         System.out.print(cellValue + "    ");
                     }
@@ -53,7 +82,7 @@ public class OperExcel {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+           log.error("工具类异常:{}",e);
         }
         return list;
     }
