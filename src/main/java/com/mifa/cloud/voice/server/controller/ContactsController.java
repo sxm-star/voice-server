@@ -69,7 +69,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
     })
     @RequestMapping(value = "/contact-group-list",method = RequestMethod.GET)
-    public CommonResponse<PageDto<ContactDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
+    public CommonResponse<PageDto<ContactGroupRspDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
     }
 
