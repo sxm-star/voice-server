@@ -7,12 +7,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author: songxm
- * @date: 2018/4/16 11:07
+ * @date: 2018/4/19 13:28
  * @version: v1.0.0
  */
+@ApiModel("号码响应")
 @Data
-@ApiModel("用户查询实体信息")
-public class ContactQueryDto {
+public class ContactRspDto {
+    @ApiModelProperty("单个号码的ID号")
+    private Long id;
     /**
      * 租户号
      */
@@ -20,14 +22,11 @@ public class ContactQueryDto {
     @ApiModelProperty("租户号")
     private String contractNo;
 
-    @ApiModelProperty("组内批次ID号")
-    @NotEmpty(message = "组内批次ID号不能为空")
-    private String taskId;
-
     /**
      * 用户手机号加密处理
      */
-    @ApiModelProperty("用户手机号")
+    @NotEmpty
+    @ApiModelProperty("用户手机号加密处理")
     private String userPhone;
 
     /**
@@ -36,10 +35,29 @@ public class ContactQueryDto {
     @ApiModelProperty("用户姓名")
     private String userName;
 
+    /**
+     * M:男性; W:女性; N:未知
+     */
+    @ApiModelProperty("男; 女; 未知")
+    private String userSex;
 
     /**
      * 机构(公司)名字
      */
-    @ApiModelProperty("公司名字")
+    @NotEmpty
+    @ApiModelProperty("机构(公司)名字")
     private String orgName;
+
+    /**
+     * 地址
+     */
+    @ApiModelProperty("地址")
+    private String userAddress;
+
+    /**
+     * 用户职位
+     */
+    @ApiModelProperty("用户职位")
+    private String userJob;
+
 }

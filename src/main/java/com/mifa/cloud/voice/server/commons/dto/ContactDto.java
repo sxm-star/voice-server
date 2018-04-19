@@ -1,9 +1,12 @@
 package com.mifa.cloud.voice.server.commons.dto;
 
+import com.mifa.cloud.voice.server.commons.enums.SexEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author: songxm
@@ -11,10 +14,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @version: v1.0.0
  */
 @Data
-@ApiModel("通讯录")
+@ApiModel("组内号码新增")
 public class ContactDto {
-    @ApiModelProperty("任务批次号")
-    private String taskId;
+    @ApiModelProperty("组ID号")
+    @NotNull(message = "不能为空组ID号")
+    private Long groupId;
     /**
      * 租户号
      */
@@ -39,7 +43,7 @@ public class ContactDto {
      * M:男性; W:女性; N:未知
      */
     @ApiModelProperty("M:男性; W:女性; N:未知")
-    private String userSex;
+    private SexEnum userSex;
 
     /**
      * 机构(公司)名字

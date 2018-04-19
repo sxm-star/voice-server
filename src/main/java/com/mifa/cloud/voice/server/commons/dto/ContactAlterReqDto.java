@@ -7,17 +7,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author: songxm
- * @date: 2018/4/16 11:07
+ * @date: 2018/4/19 14:01
  * @version: v1.0.0
  */
+@ApiModel("号码修改实体信息")
 @Data
-@ApiModel("用户查询实体信息")
-public class ContactQueryDto {
+public class ContactAlterReqDto {
+
+    @ApiModelProperty(value = "单个号码ID号",required = true)
+    @NotEmpty(message = "单个号码ID号不能为空")
+    private Long id;
     /**
      * 租户号
      */
     @NotEmpty
-    @ApiModelProperty("租户号")
+    @ApiModelProperty(value = "租户号",required = true)
     private String contractNo;
 
     @ApiModelProperty("组内批次ID号")

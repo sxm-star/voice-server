@@ -2,18 +2,18 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.ContactDto;
-import com.mifa.cloud.voice.server.commons.dto.ContactQueryDto;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.commons.enums.SexEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
+import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.dao.UploadFileLogMapper;
+import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
-import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.EncodesUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -41,16 +41,19 @@ public class ContactsService {
     UploadFileLogMapper uploadFileLogMapper;
     @Autowired
     AppProperties appProperties;
+    @Autowired
+    CustomerTaskContactGroupDAO taskContactGroupDAO;
     /**
      * 查询号码
      *
      * @return
      */
-    public PageDto<ContactDto> queryContactList(ContactQueryDto contactQueryDto, Integer pageNum, Integer pageSize) {
+    public PageDto<ContactRspDto> queryContactList(ContactQueryDto contactQueryDto, Integer pageNum, Integer pageSize) {
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactQueryDto, CustomerTaskUserContactsDO.class);
             CustomerTaskUserContactsDOExample example = new CustomerTaskUserContactsDOExample();
             CustomerTaskUserContactsDOExample.Criteria criteria = example.createCriteria();
             criteria.andContractNoEqualTo(contactQueryDto.getContractNo());
+            criteria.andTaskIdEqualTo(contactQueryDto.getTaskId());
             if (StringUtils.isNotEmpty(contactQueryDto.getUserName())) {
                 criteria.andUserNameEqualTo(contactQueryDto.getUserName());
             }
@@ -65,10 +68,11 @@ public class ContactsService {
             List<CustomerTaskUserContactsDO> contactListDOs = contactsDAO.selectByExample(example);
             PageInfo<CustomerTaskUserContactsDO> pageInfo = new PageInfo<>(contactListDOs);
             if (pageInfo != null && CollectionUtils.isNotEmpty(pageInfo.getList())) {
-                List<ContactDto> contactDtos = new ArrayList<>();
+                List<ContactRspDto> contactDtos = new ArrayList<>();
 
                 pageInfo.getList().stream().forEach(contact -> {
-                    ContactDto contactDto = BaseBeanUtils.convert(contact, ContactDto.class);
+                    ContactRspDto contactDto = BaseBeanUtils.convert(contact, ContactRspDto.class);
+                    contactDto.setUserSex(SexEnum.valueOf(contactDto.getUserSex()).getDesc());
                     try {
                         contactDto.setUserPhone(EncodesUtils.selfDecrypt(contactDto.getUserPhone(),appProperties.getSalt()));
                     } catch (Exception e) {
@@ -76,7 +80,7 @@ public class ContactsService {
                     }
                     contactDtos.add(contactDto);
                 });
-                PageDto<ContactDto> pageResult = BaseBeanUtils.convert(pageInfo, PageDto.class);
+                PageDto<ContactRspDto> pageResult = BaseBeanUtils.convert(pageInfo, PageDto.class);
                 pageResult.setList(contactDtos);
 
                 return pageResult;
@@ -91,10 +95,12 @@ public class ContactsService {
      * @return
      */
     public Boolean insertContact(ContactDto contactDto) {
+        CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(contactDto.getGroupId());
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
-        contactDo.setTaskId(BaseStringUtils.uuid());
+        contactDo.setTaskId(taskContactGroupDO.getTaskId());
         contactDo.setCreatedBy(contactDto.getContractNo());
-        contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDo.getUserPhone(),appProperties.getSalt()));
+        contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
+        contactDo.setSalt(appProperties.getSalt());
         int cnt = contactsDAO.insert(contactDo);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -104,8 +110,8 @@ public class ContactsService {
      *
      * @return
      */
-    public Boolean alterContact(Long id, ContactQueryDto contactQueryDto) {
-        CustomerTaskUserContactsDO pre_ContactsDo = contactsDAO.selectByPrimaryKey(id);
+    public Boolean alterContact(ContactAlterReqDto contactQueryDto) {
+        CustomerTaskUserContactsDO pre_ContactsDo = contactsDAO.selectByPrimaryKey(contactQueryDto.getId());
         BaseBeanUtils.copyNoneNullProperties(contactQueryDto, pre_ContactsDo);
         pre_ContactsDo.setUpdatedBy(contactQueryDto.getContractNo());
         try {
