@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.commons.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -12,44 +13,51 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @ApiModel("通讯录")
 public class ContactDto {
-
+    @ApiModelProperty("任务批次号")
     private String taskId;
     /**
      * 租户号
      */
     @NotEmpty
+    @ApiModelProperty("租户号")
     private String contractNo;
 
     /**
      * 用户手机号加密处理
      */
     @NotEmpty
+    @ApiModelProperty("用户手机号加密处理")
     private String userPhone;
 
     /**
      * 用户姓名
      */
+    @ApiModelProperty("用户姓名")
     private String userName;
 
     /**
      * M:男性; W:女性; N:未知
      */
+    @ApiModelProperty("M:男性; W:女性; N:未知")
     private String userSex;
 
     /**
      * 机构(公司)名字
      */
     @NotEmpty
+    @ApiModelProperty("机构(公司)名字")
     private String orgName;
 
     /**
      * 地址
      */
+    @ApiModelProperty("地址")
     private String userAddress;
 
     /**
      * 用户职位
      */
+    @ApiModelProperty("用户职位")
     private String userJob;
 
 }

@@ -6,6 +6,7 @@ import com.mifa.cloud.voice.server.commons.dto.ContactDto;
 import com.mifa.cloud.voice.server.commons.dto.ContactQueryDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.service.ContactsService;
+import com.mifa.cloud.voice.server.service.CustomerTaskContactGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,14 @@ public class ContactsController {
     @Autowired
     ContactsService contactsService;
 
+    @Autowired
+    CustomerTaskContactGroupService customerTaskContactGroupService;
+
+    @ApiOperation(value = "号码列表查询")
+    @RequestMapping(value = "/contact-group",method = RequestMethod.GET)
+    public CommonResponse<Boolean> addContactGroup(String groupName,String source){
+     return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(groupName,source));
+    }
 
     @ApiOperation(value = "号码列表查询")
     @RequestMapping(value = "/contact-list",method = RequestMethod.GET)

@@ -3,10 +3,7 @@ package com.mifa.cloud.voice.server.pojo;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author 
@@ -18,7 +15,7 @@ public class CallJobDO extends BaseDataDo {
      * 主键
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     /**

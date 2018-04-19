@@ -2,12 +2,13 @@ package com.mifa.cloud.voice.server.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
-
+@Slf4j
 public class OperExcel {
     /**
      * 读取Excel测试，兼容 Excel 2003/2007/2010 模板必须是预先给的文本类型的
@@ -18,7 +19,10 @@ public class OperExcel {
         try {
             //同时支持Excel 2003、2007
             File excelFile = new File(filePath);
-            if (!excelFile.exists()) return Collections.emptyList();
+            if (!excelFile.exists()) {
+                log.warn("路径不存在,任务结束");
+                return Collections.emptyList();
+            }
             FileInputStream is = new FileInputStream(excelFile);
             //这种方式 Excel 2003/2007/2010 都是可以处理的
             Workbook workbook = WorkbookFactory.create(is);
