@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +69,8 @@ public class ContactTaskListener {
                         boolean flag =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),uploadFileLog.getId());
                         Integer  cnt  = taskContactGroupDO.getGroupCnt()==null?0:taskContactGroupDO.getGroupCnt();
                         taskContactGroupDO.setGroupCnt(cnt+list.size());
+                        taskContactGroupDO.setUpdatedAt(new Date());
+                        taskContactGroupDO.setUpdatedBy("system");
                         taskContactGroupService.updateByIdSelective(taskContactGroupDO);
                     }
                 });
