@@ -33,6 +33,11 @@ public class CustomerTaskContactGroupDO extends BaseDataDo {
     private String groupName;
 
     /**
+     * 通讯录组内成员数量
+     */
+    private Integer groupCnt;
+
+    /**
      * 来源
      */
     private String source;

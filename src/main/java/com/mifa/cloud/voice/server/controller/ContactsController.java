@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.controller;
 
+import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.ContactDto;
@@ -8,7 +9,10 @@ import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.service.ContactsService;
 import com.mifa.cloud.voice.server.service.CustomerTaskContactGroupService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +35,16 @@ public class ContactsController {
     @Autowired
     CustomerTaskContactGroupService customerTaskContactGroupService;
 
-    @ApiOperation(value = "号码列表查询")
-    @RequestMapping(value = "/contact-group",method = RequestMethod.GET)
+    @ApiOperation(value = "增加号码组")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "groupName", required = false, dataType = "string",value = "组名必填"),
+            @ApiImplicitParam(paramType = "query", name = "source", required = false, dataType = "string", value = "来源选填")
+    })
+    @RequestMapping(value = "/contact-group",method = RequestMethod.POST)
     public CommonResponse<Boolean> addContactGroup(String groupName,String source){
+        if(StringUtils.isEmpty(groupName)){
+            return CommonResponse.failCommonResponse("400","组名必填,不能为空");
+        }
      return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(groupName,source));
     }
 
