@@ -47,6 +47,22 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         return Boolean.TRUE;
     }
 
+    public ContactGroupRspDto getContanctGroupById(Long id){
+        CustomerTaskContactGroupDO customerTaskContactGroupDO =  this.queryById(id);
+        if (customerTaskContactGroupDO!=null){
+            return BaseBeanUtils.convert(customerTaskContactGroupDO,ContactGroupRspDto.class);
+        }
+        return null;
+    }
+
+    public Boolean updateContanctGroupByIdSelective(ContactGroupRspDto contactGroupRspDto){
+        CustomerTaskContactGroupDO customerTaskContactGroupDO =  BaseBeanUtils.convert(contactGroupRspDto,CustomerTaskContactGroupDO.class);
+        customerTaskContactGroupDO.setUpdatedAt(new Date());
+        customerTaskContactGroupDO.setUpdatedBy("system");
+        this.updateByIdSelective(customerTaskContactGroupDO);
+        return Boolean.TRUE;
+    }
+
     public PageDto<ContactGroupRspDto> queryContactGroupList(String contractNo, String groupName, Integer pageNum, Integer pageSize) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setCreatedBy(contractNo);
