@@ -131,7 +131,7 @@ public class ContactsService {
      * @param taskId
      */
     @Transactional(rollbackFor = Exception.class)
-    public void addContancts(List<Map<String, Object>> list, String contractNo, String taskId, Long fileId) {
+    public Boolean addContancts(List<Map<String, Object>> list, String contractNo, String taskId, Long fileId) {
         log.info("list size:{},contractNo:{},taskId:{},salt:{}", list.size(), contractNo, taskId,appProperties.getSalt());
         if (CollectionUtils.isNotEmpty(list)) {
             List<CustomerTaskUserContactsDO> contactsDOs = new ArrayList<>();
@@ -158,9 +158,11 @@ public class ContactsService {
                 uploadFileLog.setUpdateBy("system");
                 uploadFileLog.setUpdateAt(new Date());
                 uploadFileLogMapper.updateByPrimaryKeySelective(uploadFileLog);
+                return Boolean.TRUE;
             }
 
         }
+        return Boolean.FALSE;
     }
 
 }
