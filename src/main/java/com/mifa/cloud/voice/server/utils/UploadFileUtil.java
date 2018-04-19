@@ -1,13 +1,17 @@
 package com.mifa.cloud.voice.server.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mifa.cloud.voice.server.commons.enums.FileStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.MQMsgEnum;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dto.UploadFileVO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +21,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -30,8 +36,11 @@ public class UploadFileUtil {
     private static final int HEADERHEIGHT = 1920;
     @Autowired
     private UploadFileLogService uploadFileLogService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
-    public UploadFileVO upload(MultipartFile file, FileTypeEnums fileType, BizTypeEnums bizType, String contractNo, ConstConfig aconst) throws Exception {
+
+    public UploadFileVO upload(MultipartFile file, FileTypeEnums fileType, BizTypeEnums bizType, String contractNo, String groupId, ConstConfig aconst) throws Exception {
         UploadFileVO vo = null;
         if (!file.isEmpty()) {
             try {
@@ -49,12 +58,12 @@ public class UploadFileUtil {
                 //索引到最后一个反斜杠
                 int start = fileName.lastIndexOf("\\");
                 //截取 上传文件的 字符串名字，加1是 去掉反斜杠，
-                String filename = fileName.substring(start+1);
+                String filename = fileName.substring(start + 1);
                 String fileEnd = filename.substring(filename.lastIndexOf(".") + 1);
-                String newFileName = getRandomChar()+"."+fileEnd;
+                String newFileName = getRandomChar() + "." + fileEnd;
                 String pathname = getRandomString(4) + newFileName;
-                String srcPath = path+"/" + newFileName;
-                String desPath = path +"/"+ pathname;
+                String srcPath = path + "/" + newFileName;
+                String desPath = path + "/" + pathname;
                 GmImageUtil.scaleImg(srcPath, desPath, HEADERWIDTH, HEADERHEIGHT);
                 //这里将上传得到的文件
                 FileUtils.copyInputStreamToFile(file.getInputStream(), new File(tempFilePath, pathname));
@@ -66,7 +75,8 @@ public class UploadFileUtil {
                 // 插入上传记录表
                 UploadFileLog uploadFileLog = UploadFileLog.builder()
                         .fileName(newFileName)
-                        .fileStatus("0")
+                        .mobileListGroupId(groupId)
+                        .fileStatus(FileStatusEnum.EFFECTIVE.getCode())
                         .fileType(fileType.name())
                         .bizType(bizType.name())
                         .fileUrl(initPath + "/" + pathname)
@@ -75,6 +85,12 @@ public class UploadFileUtil {
                         .createBy(contractNo)
                         .build();
                 uploadFileLogService.insert(uploadFileLog);
+
+                //如果上传类型为号码列表，发送mq消息通知解析号码excel
+                if (FileTypeEnums.EXCEL.name().equals(fileType.name()) && BizTypeEnums.MOBILE_LIST.name().equals(bizType.name())) {
+                    log.info("号码列表上传完成发送mq消息");
+                    rabbitTemplate.convertAndSend(MQMsgEnum.ANALYSIS_MOBILE_LIST.getCode(), "");
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,7 +103,6 @@ public class UploadFileUtil {
     }
 
 
-
     private static String getRandomString(int length) {
         String base = "0123456789";
         Random random = new Random();
@@ -98,8 +113,10 @@ public class UploadFileUtil {
         }
         return sb.toString();
     }
+
     /**
      * JAVA获得0-9,a-z,A-Z范围的随机数
+     *
      * @param length 随机数长度
      * @return String
      */
