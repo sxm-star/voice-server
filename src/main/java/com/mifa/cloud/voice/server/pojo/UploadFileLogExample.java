@@ -74,7 +74,7 @@ public class UploadFileLogExample {
     }
 
     /**
-     * t_upload_file_log 2018-04-18
+     * t_upload_file_log 2018-04-19
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -314,6 +314,76 @@ public class UploadFileLogExample {
 
         public Criteria andFileStatusNotBetween(String value1, String value2) {
             addCriterion("file_status not between", value1, value2, "fileStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdIsNull() {
+            addCriterion("mobile_list_group_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdIsNotNull() {
+            addCriterion("mobile_list_group_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdEqualTo(String value) {
+            addCriterion("mobile_list_group_id =", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdNotEqualTo(String value) {
+            addCriterion("mobile_list_group_id <>", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdGreaterThan(String value) {
+            addCriterion("mobile_list_group_id >", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdGreaterThanOrEqualTo(String value) {
+            addCriterion("mobile_list_group_id >=", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdLessThan(String value) {
+            addCriterion("mobile_list_group_id <", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdLessThanOrEqualTo(String value) {
+            addCriterion("mobile_list_group_id <=", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdLike(String value) {
+            addCriterion("mobile_list_group_id like", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdNotLike(String value) {
+            addCriterion("mobile_list_group_id not like", value, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdIn(List<String> values) {
+            addCriterion("mobile_list_group_id in", values, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdNotIn(List<String> values) {
+            addCriterion("mobile_list_group_id not in", values, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdBetween(String value1, String value2) {
+            addCriterion("mobile_list_group_id between", value1, value2, "mobileListGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileListGroupIdNotBetween(String value1, String value2) {
+            addCriterion("mobile_list_group_id not between", value1, value2, "mobileListGroupId");
             return (Criteria) this;
         }
 
@@ -866,7 +936,7 @@ public class UploadFileLogExample {
     }
 
     /**
-     * t_upload_file_log 2018-04-18
+     * t_upload_file_log 2018-04-19
      */
     public static class Criterion {
         private String condition;

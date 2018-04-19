@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="file_name" property="fileName" jdbcType="VARCHAR" />
     <result column="file_status" property="fileStatus" jdbcType="VARCHAR" />
+    <result column="mobile_list_group_id" property="mobileListGroupId" jdbcType="VARCHAR" />
     <result column="file_type" property="fileType" jdbcType="VARCHAR" />
     <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
     <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, file_name, file_status, file_type, biz_type, file_url, file_real_path, create_at, 
-    create_by, update_at, update_by
+    id, file_name, file_status, mobile_list_group_id, file_type, biz_type, file_url, 
+    file_real_path, create_at, create_by, update_at, update_by
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mifa.cloud.voice.server.pojo.UploadFileLogExample" >
     select
@@ -108,13 +109,15 @@
   </delete>
   <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.UploadFileLog" >
     insert into t_upload_file_log (id, file_name, file_status, 
-      file_type, biz_type, file_url, 
-      file_real_path, create_at, create_by, 
-      update_at, update_by)
+      mobile_list_group_id, file_type, biz_type, 
+      file_url, file_real_path, create_at, 
+      create_by, update_at, update_by
+      )
     values (#{id,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{fileStatus,jdbcType=VARCHAR}, 
-      #{fileType,jdbcType=VARCHAR}, #{bizType,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
-      #{fileRealPath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR})
+      #{mobileListGroupId,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, #{bizType,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{fileRealPath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateAt,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.UploadFileLog" >
     insert into t_upload_file_log
@@ -127,6 +130,9 @@
       </if>
       <if test="fileStatus != null" >
         file_status,
+      </if>
+      <if test="mobileListGroupId != null" >
+        mobile_list_group_id,
       </if>
       <if test="fileType != null" >
         file_type,
@@ -162,6 +168,9 @@
       </if>
       <if test="fileStatus != null" >
         #{fileStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileListGroupId != null" >
+        #{mobileListGroupId,jdbcType=VARCHAR},
       </if>
       <if test="fileType != null" >
         #{fileType,jdbcType=VARCHAR},
@@ -207,6 +216,9 @@
       <if test="record.fileStatus != null" >
         file_status = #{record.fileStatus,jdbcType=VARCHAR},
       </if>
+      <if test="record.mobileListGroupId != null" >
+        mobile_list_group_id = #{record.mobileListGroupId,jdbcType=VARCHAR},
+      </if>
       <if test="record.fileType != null" >
         file_type = #{record.fileType,jdbcType=VARCHAR},
       </if>
@@ -241,6 +253,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       file_name = #{record.fileName,jdbcType=VARCHAR},
       file_status = #{record.fileStatus,jdbcType=VARCHAR},
+      mobile_list_group_id = #{record.mobileListGroupId,jdbcType=VARCHAR},
       file_type = #{record.fileType,jdbcType=VARCHAR},
       biz_type = #{record.bizType,jdbcType=VARCHAR},
       file_url = #{record.fileUrl,jdbcType=VARCHAR},
@@ -261,6 +274,9 @@
       </if>
       <if test="fileStatus != null" >
         file_status = #{fileStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileListGroupId != null" >
+        mobile_list_group_id = #{mobileListGroupId,jdbcType=VARCHAR},
       </if>
       <if test="fileType != null" >
         file_type = #{fileType,jdbcType=VARCHAR},
@@ -293,6 +309,7 @@
     update t_upload_file_log
     set file_name = #{fileName,jdbcType=VARCHAR},
       file_status = #{fileStatus,jdbcType=VARCHAR},
+      mobile_list_group_id = #{mobileListGroupId,jdbcType=VARCHAR},
       file_type = #{fileType,jdbcType=VARCHAR},
       biz_type = #{bizType,jdbcType=VARCHAR},
       file_url = #{fileUrl,jdbcType=VARCHAR},

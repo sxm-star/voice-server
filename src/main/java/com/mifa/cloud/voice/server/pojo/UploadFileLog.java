@@ -7,8 +7,8 @@ import java.util.Date;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class UploadFileLog implements Serializable {
     /**
@@ -25,6 +25,11 @@ public class UploadFileLog implements Serializable {
      * 状态: 0:正常；1:删除
      */
     private String fileStatus;
+
+    /**
+     * 号码组id
+     */
+    private String mobileListGroupId;
 
     /**
      * 文件类型

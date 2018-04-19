@@ -5,6 +5,7 @@ import com.mifa.cloud.voice.server.LocalCache;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
+import com.mifa.cloud.voice.server.commons.enums.MQMsgEnum;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.StaticConst;
@@ -93,7 +94,7 @@ public class VerficationCodeController {
         map.put("identifyingCode", code);
         String json = JSONObject.toJSONString(map);
         log.info("send msg：" + json);
-        rabbitTemplate.convertAndSend("q_sms", json);
+        rabbitTemplate.convertAndSend(MQMsgEnum.MOBILE_AUTH_CODE.getCode(), json);
         return CommonResponse.successCommonResponse();
     }
 

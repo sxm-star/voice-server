@@ -4,6 +4,7 @@ package com.mifa.cloud.voice.server.controller.common;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
+import com.mifa.cloud.voice.server.commons.enums.FileStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
 import com.mifa.cloud.voice.server.config.ConstConfig;
@@ -41,17 +42,19 @@ public class UpDownFileController {
 
     @PostMapping(value = "/upload-file")
     @ApiOperation(value = "单个上传文件", notes = "单个上传文件")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
-            required = true, value = "service token", dataType = "string")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+                    required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "单个上传文件")
     public CommonResponse<UploadFileVO> uploadFileCompress(
             @RequestParam("file") MultipartFile file,
             @RequestParam("fileType") FileTypeEnums fileType,
             @RequestParam("bizType") BizTypeEnums bizType,
-            @RequestParam("contractNo") String contractNo
-            ) throws Exception {
-        return CommonResponse.successCommonResponse(uploadFileUtil.upload(file, fileType, bizType, contractNo, aconst));
+            @RequestParam("contractNo") String contractNo,
+            @RequestParam(value = "groupId", required = false) String groupId
+    ) throws Exception {
+        return CommonResponse.successCommonResponse(uploadFileUtil.upload(file, fileType, bizType, contractNo, groupId, aconst));
     }
 
     @GetMapping("/download-file")
@@ -61,30 +64,14 @@ public class UpDownFileController {
             @RequestParam("fileType") FileTypeEnums fileType,
             @RequestParam("bizType") BizTypeEnums bizType) {
 
-        List<UploadFileLog> uploadFileLogs = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), "0");
-        if(uploadFileLogs.isEmpty()) {
+        List<UploadFileLog> uploadFileLogs = uploadFileLogService.selectByFileTypeAndBizType(fileType.name(), bizType.name(), FileStatusEnum.EFFECTIVE.getCode());
+        if (uploadFileLogs.isEmpty()) {
             return CommonResponse.failCommonResponse("文件不存在");
         }
         DownLoadFileVO vo = DownLoadFileVO.builder()
-                .fileUrl(uploadFileLogs.get(0)!=null ? aconst.H5_URL_PATH + uploadFileLogs.get(0).getFileUrl() : "")
+                .fileUrl(uploadFileLogs.get(0) != null ? aconst.H5_URL_PATH + uploadFileLogs.get(0).getFileUrl() : "")
                 .build();
         return CommonResponse.successCommonResponse(vo);
     }
-
-    //@PostMapping(value = "/upload_files")
-    //@ApiOperation(value = "多个上传文件", notes = "多个上传文件")
-    /*public CommonResponse<List<UploadFileVO>> UploadFileCompressV2(MultipartHttpServletRequest multiRequest) throws Exception {
-        List<UploadFileVO> voList = new ArrayList<>();
-        List<MultipartFile> files = multiRequest.getFiles("file");
-        if (!CollectionUtils.isEmpty(files)) {
-            for (MultipartFile file : files) {
-                UploadFileVO vo = uploadFileUtil.upload(file, aconst);
-                voList.add(vo);
-            }
-        } else {
-            log.error("上传文件为空");
-        }
-        return CommonResponse.successCommonResponse(voList);
-    }*/
-
+    
 }
