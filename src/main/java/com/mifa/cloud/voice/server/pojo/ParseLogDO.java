@@ -1,9 +1,8 @@
 package com.mifa.cloud.voice.server.pojo;
-
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -18,7 +17,7 @@ public class ParseLogDO extends BaseDataDo {
      * 主键ID号
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
