@@ -28,6 +28,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         customerTaskContactGroupDO.setTaskId(BaseStringUtils.uuid());
         customerTaskContactGroupDO.setSource(source);
         customerTaskContactGroupDO.setGroupName(groupName);
+        customerTaskContactGroupDO.setGroupCnt(0);//默认0
         customerTaskContactGroupDO.setCreatedBy(contractNo);
         this.save(customerTaskContactGroupDO);
         return Boolean.TRUE;
