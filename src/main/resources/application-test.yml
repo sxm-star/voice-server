@@ -6,7 +6,7 @@ spring:
   session:
     store-type: none 
   rabbitmq:
-    host: 127.0.0.1
+    host: 192.168.2.181
     port: 5672
     username: guest
     password: guest
@@ -14,7 +14,6 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
-download_local_path: /home/download/
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
@@ -37,7 +36,15 @@ server:
   max-http-header-size: 4194304
   tomcat:
     max-http-post-size: 0
+#文件上传
+upload:
+  path: /usr/local/nginx/html
 
+#h5地址
+h5:
+ app:
+  url:
+   path: http://192.168.2.122
 #redis
 jedis:
   host: 127.0.0.1

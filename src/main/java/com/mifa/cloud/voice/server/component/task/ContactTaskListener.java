@@ -67,7 +67,7 @@ public class ContactTaskListener {
                         }
                         boolean flag =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),uploadFileLog.getId());
                         Integer  cnt  = taskContactGroupDO.getGroupCnt()==null?0:taskContactGroupDO.getGroupCnt();
-                       taskContactGroupDO.setGroupCnt(cnt+list.size());
+                        taskContactGroupDO.setGroupCnt(cnt+list.size());
                         taskContactGroupService.updateByIdSelective(taskContactGroupDO);
                     }
                 });
