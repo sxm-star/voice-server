@@ -33,6 +33,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         customerTaskContactGroupDO.setSource(source);
         customerTaskContactGroupDO.setGroupName(groupName);
         customerTaskContactGroupDO.setGroupCnt(0);//默认0
+        customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         customerTaskContactGroupDO.setCreatedBy(contractNo);
         this.save(customerTaskContactGroupDO);
         return Boolean.TRUE;
@@ -71,6 +72,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
     public PageDto<ContactGroupRspDto> queryContactGroupList(String contractNo, String groupName, Integer pageNum, Integer pageSize) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setCreatedBy(contractNo);
+        customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         PageInfo<CustomerTaskContactGroupDO> pageInfo;
         try {
             if (StringUtils.isNotEmpty(groupName)) {
@@ -94,6 +96,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
     public List<ContactGroupSelectDto> querySelectedContactGroupList(String contactNo) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setCreatedBy(contactNo);
+        customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         List<CustomerTaskContactGroupDO> list = this.queryListByWhere(customerTaskContactGroupDO);
         if (CollectionUtils.isNotEmpty(list)) {
             List<ContactGroupSelectDto> resList = new ArrayList<>();

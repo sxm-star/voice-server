@@ -54,6 +54,7 @@ public class ContactsService {
             CustomerTaskUserContactsDOExample.Criteria criteria = example.createCriteria();
             criteria.andContractNoEqualTo(contactQueryDto.getContractNo());
             criteria.andTaskIdEqualTo(contactQueryDto.getTaskId());
+            criteria.andStatusEqualTo(StatusEnum.NORMAL.getCode().toString());
             if (StringUtils.isNotEmpty(contactQueryDto.getUserName())) {
                 criteria.andUserNameEqualTo(contactQueryDto.getUserName());
             }
@@ -99,6 +100,7 @@ public class ContactsService {
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
         contactDo.setCreatedBy(contactDto.getContractNo());
+        contactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
         contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
         contactDo.setSalt(appProperties.getSalt());
         int cnt = contactsDAO.insert(contactDo);
@@ -150,6 +152,7 @@ public class ContactsService {
                 taskUserContactsDO.setTaskId(taskId);
                 taskUserContactsDO.setContractNo(contractNo);
                 taskUserContactsDO.setSalt(appProperties.getSalt());
+                taskUserContactsDO.setStatus(StatusEnum.NORMAL.getCode().toString());
                 String phone = taskUserContactsDO.getUserPhone();
                 try {
                     taskUserContactsDO.setUserPhone(EncodesUtils.selfEncrypt(phone,appProperties.getSalt()));
