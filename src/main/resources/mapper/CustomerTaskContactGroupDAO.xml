@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mifa.cloud.voice.server.dao.test.CustomerTaskContactGroupDAO">
-  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+<mapper namespace="com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO">
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
@@ -75,7 +75,7 @@
     id, task_id, group_name, group_cnt, status, source, created_at, created_by, updated_at, 
     updated_by
   </sql>
-  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -107,13 +107,13 @@
     delete from t_customer_task_contact_group
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample">
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDOExample">
     delete from t_customer_task_contact_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO">
     insert into t_customer_task_contact_group (id, task_id, group_name, 
       group_cnt, status, source, 
       created_at, created_by, updated_at, 
@@ -123,7 +123,7 @@
       #{createdAt,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, 
       #{updatedBy,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO">
     insert into t_customer_task_contact_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -190,7 +190,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDOExample" resultType="java.lang.Long">
     select count(*) from t_customer_task_contact_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -250,7 +250,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO">
     update t_customer_task_contact_group
     <set>
       <if test="taskId != null">
@@ -283,7 +283,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO">
     update t_customer_task_contact_group
     set task_id = #{taskId,jdbcType=VARCHAR},
       group_name = #{groupName,jdbcType=VARCHAR},

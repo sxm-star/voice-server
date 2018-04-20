@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mifa.cloud.voice.server.dao.test.CustomerTaskUserContactsDAO">
-  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+<mapper namespace="com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO">
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
@@ -81,7 +81,7 @@
     id, contract_no, task_id, status, user_phone, user_name, user_sex, org_name, user_address, 
     user_job, salt, call_status, created_at, created_by, updated_at, updated_by
   </sql>
-  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -113,13 +113,13 @@
     delete from t_customer_task_user_contacts
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample">
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample">
     delete from t_customer_task_user_contacts
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO">
     insert into t_customer_task_user_contacts (id, contract_no, task_id, 
       status, user_phone, user_name, 
       user_sex, org_name, user_address, 
@@ -133,7 +133,7 @@
       #{createdAt,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, 
       #{updatedBy,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO">
     insert into t_customer_task_user_contacts
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -236,7 +236,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample" resultType="java.lang.Long">
     select count(*) from t_customer_task_user_contacts
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -320,7 +320,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO">
     update t_customer_task_user_contacts
     <set>
       <if test="contractNo != null">
@@ -371,7 +371,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO">
     update t_customer_task_user_contacts
     set contract_no = #{contractNo,jdbcType=VARCHAR},
       task_id = #{taskId,jdbcType=VARCHAR},
