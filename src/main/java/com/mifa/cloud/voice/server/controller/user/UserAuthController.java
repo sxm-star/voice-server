@@ -3,11 +3,10 @@ package com.mifa.cloud.voice.server.controller.user;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.dto.AuthCheckDTO;
-import com.mifa.cloud.voice.server.dto.AuthCompanyDTO;
-import com.mifa.cloud.voice.server.dto.AuthPersionDTO;
+import com.mifa.cloud.voice.server.commons.dto.AuthCheckDTO;
+import com.mifa.cloud.voice.server.commons.dto.AuthCompanyDTO;
+import com.mifa.cloud.voice.server.commons.dto.AuthPersionDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
-import com.mifa.cloud.voice.server.pojo.CustomerAuthAudit;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerAauthPersonService;
@@ -19,15 +18,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
 
 /**
  * Created by Administrator on 2018/4/11.

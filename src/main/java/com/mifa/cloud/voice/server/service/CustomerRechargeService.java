@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.dao.CustomerRechargeMapper;
-import com.mifa.cloud.voice.server.dto.CustomerRechargeVO;
+import com.mifa.cloud.voice.server.commons.dto.CustomerRechargeVO;
 import com.mifa.cloud.voice.server.pojo.CustomerRecharge;
 import com.mifa.cloud.voice.server.pojo.CustomerRechargeExample;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
