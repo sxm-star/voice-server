@@ -2,15 +2,18 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +88,17 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
             log.error("查询异常:{}", e);
             return null;
         }
+    }
 
-
+    public List<ContactGroupSelectDto> querySelectedContactGroupList(String contactNo){
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
+        customerTaskContactGroupDO.setCreatedBy(contactNo);
+        List<CustomerTaskContactGroupDO> list =  this.queryListByWhere(customerTaskContactGroupDO);
+        if (CollectionUtils.isNotEmpty(list)){
+            List<ContactGroupSelectDto> resList = new ArrayList<>();
+            list.forEach(customerTaskContactGroupDO1 -> resList.add(BaseBeanUtils.convert(customerTaskContactGroupDO1,ContactGroupSelectDto.class)));
+            return resList;
+        }
+        return Collections.EMPTY_LIST;
     }
 }

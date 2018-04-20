@@ -1,9 +1,12 @@
 package com.mifa.cloud.voice.server.commons.dto;
 
+import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author: songxm
@@ -17,23 +20,23 @@ public class CustomerCallJobDto {
      * 客户号
      */
     @NotEmpty
-    @ApiModelProperty("客户号")
+    @ApiModelProperty(value = "客户号",required = true)
     private String contractNo;
 
     /**
      * 语音模板id
      */
     @NotEmpty
-    @ApiModelProperty("语音模板ID")
+    @ApiModelProperty(value = "语音模板ID",required = true)
     private String templateId;
     /**
      * 语音模板类型 冗余
      */
-    @NotEmpty
-    @ApiModelProperty("语音模板类型")
-    private String templateType;
+    @NotNull
+    @ApiModelProperty(value = "语音模板类型",required = true,example = "VOICE")
+    private VoiceTypeEnum templateType;
 
-    @ApiModelProperty("号码组批次taskId")
+    @ApiModelProperty(value = "号码组批次taskId",required = true)
     private String contactTaskId;
     /**
      * 语音模板类目 冗余
@@ -53,30 +56,30 @@ public class CustomerCallJobDto {
      * 计划内容
      */
     @NotEmpty
-    @ApiModelProperty("计划名称")
+    @ApiModelProperty(value = "计划名称",required = true,example = "米之发催收部拨打计划1")
     private String jobName;
 
     /**
      * 拨打开始时间段 格式 HH:mm
      */
-    @ApiModelProperty("拨打开始时间段 格式 HH:mm")
+    @ApiModelProperty(value = "拨打开始时间段 格式 HH:mm",required = true,example = "08:00")
     private String callStartTime;
 
     /**
      * 拨打结束时间段 格式 HH:mm
      */
-    @ApiModelProperty("拨打结束时间段 格式 HH:mm")
+    @ApiModelProperty(value = "拨打结束时间段 格式 HH:mm",required = true,example = "16:30")
     private String callEndTime;
 
     /**
      * 重试次数
      */
-    @ApiModelProperty("重试次数")
+    @ApiModelProperty(value = "重试次数",required = true,example = "2")
     private Integer retryCount;
 
     /**
      * 备注
      */
-    @ApiModelProperty("备注")
+    @ApiModelProperty(value = "备注",required = false,example = "米之发催收部定制拨打计划1")
     private String note;
 }
