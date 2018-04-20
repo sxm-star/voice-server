@@ -12,6 +12,7 @@
     <result column="user_address" jdbcType="VARCHAR" property="userAddress" />
     <result column="user_job" jdbcType="VARCHAR" property="userJob" />
     <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="status" jdbcType="VARCHAR"  property="status"/>
     <result column="call_status" jdbcType="VARCHAR" property="callStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -77,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, contract_no, task_id, user_phone, user_name, user_sex, org_name, user_address, 
+    id, contract_no, task_id, user_phone, user_name, user_sex, org_name, user_address, status,
     user_job, salt, call_status, created_at, created_by, updated_at, updated_by
   </sql>
   <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample" resultMap="BaseResultMap">
@@ -122,13 +123,13 @@
     insert into t_customer_task_user_contacts (id, contract_no, task_id, 
       user_phone, user_name, user_sex, 
       org_name, user_address, user_job, 
-      salt, call_status, created_at, 
+      salt, call_status, status,created_at,
       created_by, updated_at, updated_by
       )
     values (#{id,jdbcType=BIGINT}, #{contractNo,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, 
       #{userPhone,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=CHAR}, 
       #{orgName,jdbcType=VARCHAR}, #{userAddress,jdbcType=VARCHAR}, #{userJob,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{callStatus,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{salt,jdbcType=VARCHAR}, #{callStatus,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP},
       #{createdBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}
       )
   </insert>
@@ -136,7 +137,7 @@
         INSERT INTO t_customer_task_user_contacts (id, contract_no, task_id,
         user_phone, user_name, user_sex,
         org_name, user_address, user_job,
-        salt, call_status, created_at,
+        salt, call_status,status, created_at,
         created_by, updated_at, updated_by
         )
         values
@@ -144,7 +145,7 @@
             (#{item.id,jdbcType=BIGINT}, #{item.contractNo,jdbcType=VARCHAR}, #{item.taskId,jdbcType=VARCHAR},
             #{item.userPhone,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.userSex,jdbcType=CHAR},
             #{item.orgName,jdbcType=VARCHAR}, #{item.userAddress,jdbcType=VARCHAR}, #{item.userJob,jdbcType=VARCHAR},
-            #{item.salt,jdbcType=VARCHAR}, #{item.callStatus,jdbcType=VARCHAR}, #{item.createdAt,jdbcType=TIMESTAMP},
+            #{item.salt,jdbcType=VARCHAR}, #{item.callStatus,jdbcType=VARCHAR},#{item.status,jdbcType=VARCHAR}, #{item.createdAt,jdbcType=TIMESTAMP},
             #{item.createdBy,jdbcType=VARCHAR}, #{item.updatedAt,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=VARCHAR}
             )
         </foreach>
@@ -185,6 +186,9 @@
       <if test="callStatus != null">
         call_status,
       </if>
+        <if test="status != null">
+            status,
+        </if>
       <if test="createdAt != null">
         created_at,
       </if>
@@ -232,6 +236,9 @@
       <if test="callStatus != null">
         #{callStatus,jdbcType=VARCHAR},
       </if>
+        <if test="status != null">
+            #{status,jdbcType=VARCHAR},
+        </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -288,6 +295,9 @@
       <if test="record.callStatus != null">
         call_status = #{record.callStatus,jdbcType=VARCHAR},
       </if>
+        <if test="record.status != null">
+            status = #{record.status,jdbcType=VARCHAR},
+        </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -318,6 +328,7 @@
       user_job = #{record.userJob,jdbcType=VARCHAR},
       salt = #{record.salt,jdbcType=VARCHAR},
       call_status = #{record.callStatus,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
@@ -359,6 +370,9 @@
       <if test="callStatus != null">
         call_status = #{callStatus,jdbcType=VARCHAR},
       </if>
+        <if test="status != null">
+            status = #{status,jdbcType=VARCHAR},
+        </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -386,6 +400,7 @@
       user_job = #{userJob,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
       call_status = #{callStatus,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       created_by = #{createdBy,jdbcType=VARCHAR},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},

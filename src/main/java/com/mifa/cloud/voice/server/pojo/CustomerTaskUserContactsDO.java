@@ -27,6 +27,11 @@ public class CustomerTaskUserContactsDO extends BaseDataDo{
     private String contractNo;
 
     /**
+     * 0:正常; 1:删除
+     */
+    private String status;
+
+    /**
      * 批次上传生成的task_id
      */
     @NotEmpty
