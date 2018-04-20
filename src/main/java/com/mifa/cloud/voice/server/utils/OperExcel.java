@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 @Slf4j
@@ -55,7 +56,8 @@ public class OperExcel {
                                     cellValue = fmt.format(cell.getDateCellValue()); //日期型
                                 }
                                 else {
-                                    cellValue = String.valueOf(cell.getNumericCellValue()); //数字
+                                    DecimalFormat df = new DecimalFormat("0");
+                                    cellValue = String.valueOf(df.format(cell.getNumericCellValue())); //数字
                                 }
                                 break;
                             case Cell.CELL_TYPE_BOOLEAN: //布尔型
