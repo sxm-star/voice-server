@@ -3,20 +3,20 @@ spring:
     name: voice-server-api #应用名称,与application.properities中保持一致
   session:
     store-type: none
-  rabbitmq:
-    host: 10.105.85.56
-    port: 5672
-    username: bmdb
-    password: bmdb
+#  rabbitmq:
+#    host: 10.105.85.56
+#    port: 5672
+#    username: bmdb
+#    password: bmdb
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
- url: jdbc:mysql://10.105.2.217:3391/voice-cloud?useUnicode=true&amp;characterEncoding=utf-8
- username: bmdb
- password: 4321dbca*^%
+ url: jdbc:mysql://127.0.0.1:3306/voice-cloud?useUnicode=true&amp;characterEncoding=utf-8
+ username: root
+ password: root
  initialSize: 10
  minIdle: 10
  maxIdle: 15

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author: songxm
@@ -71,6 +72,15 @@ public class ContactsController {
     @RequestMapping(value = "/contact-group-list",method = RequestMethod.GET)
     public CommonResponse<PageDto<ContactGroupRspDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "号码组的下拉框查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号")
+    })
+    @RequestMapping(value = "/contact-group-select-list",method = RequestMethod.GET)
+    public CommonResponse<List<ContactGroupSelectDto>> queryContactList(@RequestParam(required = true)String contractNo){
+        return CommonResponse.successCommonResponse(customerTaskContactGroupService.querySelectedContactGroupList(contractNo));
     }
 
     @ApiOperation(value = "号码列表查询")
