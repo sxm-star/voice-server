@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Date;
+
 /**
  * @author: songxm
  * @date: 2018/4/19 13:28
@@ -59,5 +61,8 @@ public class ContactRspDto {
      */
     @ApiModelProperty("用户职位")
     private String userJob;
+
+    @ApiModelProperty("创建时间")
+    private Date createdAt;
 
 }
