@@ -3,10 +3,9 @@ package com.mifa.cloud.voice.server.dao;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
-@Repository
+
 public interface CustomerTaskUserContactsDAO {
     long countByExample(CustomerTaskUserContactsDOExample example);
 
@@ -16,10 +15,9 @@ public interface CustomerTaskUserContactsDAO {
 
     int insert(CustomerTaskUserContactsDO record);
 
-    int insertBatch(List<CustomerTaskUserContactsDO> list);
-
     int insertSelective(CustomerTaskUserContactsDO record);
 
+    int insertBatch(List<CustomerTaskUserContactsDO> list);
     List<CustomerTaskUserContactsDO> selectByExample(CustomerTaskUserContactsDOExample example);
 
     CustomerTaskUserContactsDO selectByPrimaryKey(Long id);
