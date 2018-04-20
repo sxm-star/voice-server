@@ -43,6 +43,6 @@ public class ContactGroupRspDto {
     @ApiModelProperty("来源")
     private String source;
     @ApiModelProperty("上传时间")
-    private Date createAt;
+    private Date createdAt;
 
 }
