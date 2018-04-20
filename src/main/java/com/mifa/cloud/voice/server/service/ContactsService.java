@@ -125,7 +125,7 @@ public class ContactsService {
 
     public boolean deleteByContactNoAndId(String contactNo,Long id){
         CustomerTaskUserContactsDO contactsDO =  contactsDAO.selectByPrimaryKey(id);
-        if (contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
+        if (contactsDO!=null&&contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
             contactsDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = contactsDAO.updateByPrimaryKeySelective(contactsDO);
             return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
