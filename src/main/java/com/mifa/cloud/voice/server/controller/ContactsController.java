@@ -52,7 +52,7 @@ public class ContactsController {
     @ApiOperation(value = "编辑号码组")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
          , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号必填"),
-            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "来源选填"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "号码组ID"),
             @ApiImplicitParam(paramType = "query", name = "groupName", required = false, dataType = "string",value = "组名"),
             @ApiImplicitParam(paramType = "query", name = "source", required = false, dataType = "string", value = "来源选填")
     })

@@ -3,7 +3,6 @@ package com.mifa.cloud.voice.server.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.*;
-import com.mifa.cloud.voice.server.commons.enums.SexEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
@@ -73,7 +72,7 @@ public class ContactsService {
 
                 pageInfo.getList().stream().forEach(contact -> {
                     ContactRspDto contactDto = BaseBeanUtils.convert(contact, ContactRspDto.class);
-                    contactDto.setUserSex(SexEnum.valueOf(contactDto.getUserSex()).getDesc());
+                    contactDto.setUserSex(contactDto.getUserSex());
                     try {
                         contactDto.setUserPhone(EncodesUtils.selfDecrypt(contactDto.getUserPhone(),appProperties.getSalt()));
                     } catch (Exception e) {

@@ -5,12 +5,14 @@ import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
 import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class CustomerTaskContactGroupService extends BaseService<CustomerTaskContactGroupDO> {
+    @Autowired
+    CustomerTaskContactGroupDAO groupDAO;
 
     public Boolean addContactGroup(String groupName, String source, String contractNo) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();

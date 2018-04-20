@@ -3,17 +3,15 @@ package com.mifa.cloud.voice.server.pojo;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author 
  */
 @Table(name="t_customer_task_contact_group")
 @Data
-public class CustomerTaskContactGroupDO extends BaseDataDo {
+public class CustomerTaskContactGroupDO extends BaseDataDo{
     /**
      * 主键
      */
@@ -46,5 +44,28 @@ public class CustomerTaskContactGroupDO extends BaseDataDo {
      */
     private String source;
 
+    /**
+     * 创建时间
+     */
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    /**
+     * 创建人
+     */
+    @Column(name = "created_by")
+    private String createdBy;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    /**
+     * 最后更新人
+     */
+    @Column(name = "updated_by")
+    private String updatedBy;
 
 }
