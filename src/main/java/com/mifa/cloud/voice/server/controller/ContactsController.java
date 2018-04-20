@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.controller;
 
 import com.google.common.net.HttpHeaders;
+import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.service.ContactsService;
@@ -40,6 +41,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "source", required = false, dataType = "string", value = "来源选填")
     })
     @RequestMapping(value = "/contact-group",method = RequestMethod.POST)
+    @Loggable(descp = "增加号码组")
     public CommonResponse<Boolean> addContactGroup(String contractNo,String groupName,String source){
         if(StringUtils.isEmpty(groupName) || StringUtils.isEmpty(contractNo)){
             return CommonResponse.failCommonResponse("400","组名和客户号必填,不能为空");
@@ -55,6 +57,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "source", required = false, dataType = "string", value = "来源选填")
     })
     @RequestMapping(value = "/contact-group",method = RequestMethod.PUT)
+    @Loggable(descp = "编辑号码组")
     public CommonResponse<Boolean> addContactGroup(String contractNo,String groupName,String source ,Integer id){
         if(StringUtils.isEmpty(contractNo) || id==null){
             return CommonResponse.failCommonResponse("400","组ID和客户号必填,不能为空");
@@ -68,6 +71,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "来源选填")
     })
     @RequestMapping(value = "/contact-group",method = RequestMethod.DELETE)
+    @Loggable(descp = "删除号码组")
     public CommonResponse<Boolean> delContactGroup(String contractNo,Integer id){
         if(StringUtils.isEmpty(contractNo) || id==null){
             return CommonResponse.failCommonResponse("400","组ID和客户号必填,不能为空");
@@ -84,6 +88,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
     })
     @RequestMapping(value = "/contact-group-list",method = RequestMethod.GET)
+    @Loggable(descp = "号码组的列表查询")
     public CommonResponse<PageDto<ContactGroupRspDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
     }
@@ -93,6 +98,7 @@ public class ContactsController {
             ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号")
     })
     @RequestMapping(value = "/contact-group-select-list",method = RequestMethod.GET)
+    @Loggable(descp = "号码组的下拉框查询")
     public CommonResponse<List<ContactGroupSelectDto>> queryContactList(@RequestParam(required = true)String contractNo){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.querySelectedContactGroupList(contractNo));
     }
@@ -101,6 +107,7 @@ public class ContactsController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @RequestMapping(value = "/contact-list",method = RequestMethod.GET)
+    @Loggable(descp = "号码列表查询")
     public CommonResponse<PageDto<ContactDto>> queryContactList(@ModelAttribute @Valid ContactQueryDto contactQueryDto,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize){
         return CommonResponse.successCommonResponse(contactsService.queryContactList(contactQueryDto,pageNum,pageSize));
     }
@@ -110,6 +117,7 @@ public class ContactsController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @RequestMapping(value = "/contact",method = RequestMethod.POST)
+    @Loggable(descp = "号码新增")
     public CommonResponse<PageDto<ContactDto>> addContact(@RequestBody @Valid ContactDto contactDto){
         return CommonResponse.successCommonResponse(contactsService.insertContact(contactDto));
     }
@@ -118,6 +126,7 @@ public class ContactsController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @RequestMapping(value = "/contact",method = RequestMethod.PUT)
+    @Loggable(descp = "号码修改")
     public CommonResponse<PageDto<ContactDto>> addContact(@ModelAttribute @Valid ContactAlterReqDto contactDto){
         return CommonResponse.successCommonResponse(contactsService.alterContact(contactDto));
     }
@@ -128,6 +137,7 @@ public class ContactsController {
             @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "来源选填")
     })
     @RequestMapping(value = "/contact",method = RequestMethod.DELETE)
+    @Loggable(descp = "删除单个号码")
     public CommonResponse<Boolean> delContact(String contractNo,Integer id){
         if(StringUtils.isEmpty(contractNo) || id==null){
             return CommonResponse.failCommonResponse("400","ID和客户号必填,不能为空");

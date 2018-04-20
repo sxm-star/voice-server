@@ -54,6 +54,7 @@ public class ContactsService {
             CustomerTaskUserContactsDOExample.Criteria criteria = example.createCriteria();
             criteria.andContractNoEqualTo(contactQueryDto.getContractNo());
             criteria.andTaskIdEqualTo(contactQueryDto.getTaskId());
+            criteria.andStatusEqualTo(StatusEnum.NORMAL.getCode().toString());
             if (StringUtils.isNotEmpty(contactQueryDto.getUserName())) {
                 criteria.andUserNameEqualTo(contactQueryDto.getUserName());
             }
@@ -99,6 +100,7 @@ public class ContactsService {
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
         contactDo.setCreatedBy(contactDto.getContractNo());
+        contactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
         contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
         contactDo.setSalt(appProperties.getSalt());
         int cnt = contactsDAO.insert(contactDo);
@@ -125,7 +127,7 @@ public class ContactsService {
 
     public boolean deleteByContactNoAndId(String contactNo,Long id){
         CustomerTaskUserContactsDO contactsDO =  contactsDAO.selectByPrimaryKey(id);
-        if (contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
+        if (contactsDO!=null&&contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
             contactsDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = contactsDAO.updateByPrimaryKeySelective(contactsDO);
             return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
@@ -150,6 +152,7 @@ public class ContactsService {
                 taskUserContactsDO.setTaskId(taskId);
                 taskUserContactsDO.setContractNo(contractNo);
                 taskUserContactsDO.setSalt(appProperties.getSalt());
+                taskUserContactsDO.setStatus(StatusEnum.NORMAL.getCode().toString());
                 String phone = taskUserContactsDO.getUserPhone();
                 try {
                     taskUserContactsDO.setUserPhone(EncodesUtils.selfEncrypt(phone,appProperties.getSalt()));

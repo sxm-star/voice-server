@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mifa.cloud.voice.server.dao.test.CustomerTaskUserContactsDAO">
-  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
+<mapper namespace="com.mifa.cloud.voice.server.dao.test.CustomerTaskContactGroupDAO">
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_cnt" jdbcType="INTEGER" property="groupCnt" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_sex" jdbcType="CHAR" property="userSex" />
-    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
-    <result column="user_address" jdbcType="VARCHAR" property="userAddress" />
-    <result column="user_job" jdbcType="VARCHAR" property="userJob" />
-    <result column="salt" jdbcType="VARCHAR" property="salt" />
-    <result column="call_status" jdbcType="VARCHAR" property="callStatus" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
@@ -78,16 +72,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, contract_no, task_id, status, user_phone, user_name, user_sex, org_name, user_address, 
-    user_job, salt, call_status, created_at, created_by, updated_at, updated_by
+    id, task_id, group_name, group_cnt, status, source, created_at, created_by, updated_at, 
+    updated_by
   </sql>
-  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_customer_task_user_contacts
+    from t_customer_task_contact_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -106,71 +100,49 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_customer_task_user_contacts
+    from t_customer_task_contact_group
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_customer_task_user_contacts
+    delete from t_customer_task_contact_group
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample">
-    delete from t_customer_task_user_contacts
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample">
+    delete from t_customer_task_contact_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
-    insert into t_customer_task_user_contacts (id, contract_no, task_id, 
-      status, user_phone, user_name, 
-      user_sex, org_name, user_address, 
-      user_job, salt, call_status, 
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+    insert into t_customer_task_contact_group (id, task_id, group_name, 
+      group_cnt, status, source, 
       created_at, created_by, updated_at, 
       updated_by)
-    values (#{id,jdbcType=BIGINT}, #{contractNo,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{userSex,jdbcType=CHAR}, #{orgName,jdbcType=VARCHAR}, #{userAddress,jdbcType=VARCHAR}, 
-      #{userJob,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{callStatus,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{taskId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
+      #{groupCnt,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, 
       #{updatedBy,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
-    insert into t_customer_task_user_contacts
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+    insert into t_customer_task_contact_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="contractNo != null">
-        contract_no,
-      </if>
       <if test="taskId != null">
         task_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="groupCnt != null">
+        group_cnt,
       </if>
       <if test="status != null">
         status,
       </if>
-      <if test="userPhone != null">
-        user_phone,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="userSex != null">
-        user_sex,
-      </if>
-      <if test="orgName != null">
-        org_name,
-      </if>
-      <if test="userAddress != null">
-        user_address,
-      </if>
-      <if test="userJob != null">
-        user_job,
-      </if>
-      <if test="salt != null">
-        salt,
-      </if>
-      <if test="callStatus != null">
-        call_status,
+      <if test="source != null">
+        source,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -189,38 +161,20 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="contractNo != null">
-        #{contractNo,jdbcType=VARCHAR},
-      </if>
       <if test="taskId != null">
         #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCnt != null">
+        #{groupCnt,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="userPhone != null">
-        #{userPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="userSex != null">
-        #{userSex,jdbcType=CHAR},
-      </if>
-      <if test="orgName != null">
-        #{orgName,jdbcType=VARCHAR},
-      </if>
-      <if test="userAddress != null">
-        #{userAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="userJob != null">
-        #{userJob,jdbcType=VARCHAR},
-      </if>
-      <if test="salt != null">
-        #{salt,jdbcType=VARCHAR},
-      </if>
-      <if test="callStatus != null">
-        #{callStatus,jdbcType=VARCHAR},
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -236,50 +190,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDOExample" resultType="java.lang.Long">
-    select count(*) from t_customer_task_user_contacts
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDOExample" resultType="java.lang.Long">
+    select count(*) from t_customer_task_contact_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_customer_task_user_contacts
+    update t_customer_task_contact_group
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.contractNo != null">
-        contract_no = #{record.contractNo,jdbcType=VARCHAR},
-      </if>
       <if test="record.taskId != null">
         task_id = #{record.taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupName != null">
+        group_name = #{record.groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupCnt != null">
+        group_cnt = #{record.groupCnt,jdbcType=INTEGER},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.userPhone != null">
-        user_phone = #{record.userPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userName != null">
-        user_name = #{record.userName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userSex != null">
-        user_sex = #{record.userSex,jdbcType=CHAR},
-      </if>
-      <if test="record.orgName != null">
-        org_name = #{record.orgName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userAddress != null">
-        user_address = #{record.userAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userJob != null">
-        user_job = #{record.userJob,jdbcType=VARCHAR},
-      </if>
-      <if test="record.salt != null">
-        salt = #{record.salt,jdbcType=VARCHAR},
-      </if>
-      <if test="record.callStatus != null">
-        call_status = #{record.callStatus,jdbcType=VARCHAR},
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -299,19 +235,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_customer_task_user_contacts
+    update t_customer_task_contact_group
     set id = #{record.id,jdbcType=BIGINT},
-      contract_no = #{record.contractNo,jdbcType=VARCHAR},
       task_id = #{record.taskId,jdbcType=VARCHAR},
+      group_name = #{record.groupName,jdbcType=VARCHAR},
+      group_cnt = #{record.groupCnt,jdbcType=INTEGER},
       status = #{record.status,jdbcType=VARCHAR},
-      user_phone = #{record.userPhone,jdbcType=VARCHAR},
-      user_name = #{record.userName,jdbcType=VARCHAR},
-      user_sex = #{record.userSex,jdbcType=CHAR},
-      org_name = #{record.orgName,jdbcType=VARCHAR},
-      user_address = #{record.userAddress,jdbcType=VARCHAR},
-      user_job = #{record.userJob,jdbcType=VARCHAR},
-      salt = #{record.salt,jdbcType=VARCHAR},
-      call_status = #{record.callStatus,jdbcType=VARCHAR},
+      source = #{record.source,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
@@ -320,41 +250,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
-    update t_customer_task_user_contacts
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+    update t_customer_task_contact_group
     <set>
-      <if test="contractNo != null">
-        contract_no = #{contractNo,jdbcType=VARCHAR},
-      </if>
       <if test="taskId != null">
         task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCnt != null">
+        group_cnt = #{groupCnt,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="userPhone != null">
-        user_phone = #{userPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="userSex != null">
-        user_sex = #{userSex,jdbcType=CHAR},
-      </if>
-      <if test="orgName != null">
-        org_name = #{orgName,jdbcType=VARCHAR},
-      </if>
-      <if test="userAddress != null">
-        user_address = #{userAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="userJob != null">
-        user_job = #{userJob,jdbcType=VARCHAR},
-      </if>
-      <if test="salt != null">
-        salt = #{salt,jdbcType=VARCHAR},
-      </if>
-      <if test="callStatus != null">
-        call_status = #{callStatus,jdbcType=VARCHAR},
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -371,19 +283,13 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskUserContactsDO">
-    update t_customer_task_user_contacts
-    set contract_no = #{contractNo,jdbcType=VARCHAR},
-      task_id = #{taskId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.test.CustomerTaskContactGroupDO">
+    update t_customer_task_contact_group
+    set task_id = #{taskId,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      group_cnt = #{groupCnt,jdbcType=INTEGER},
       status = #{status,jdbcType=VARCHAR},
-      user_phone = #{userPhone,jdbcType=VARCHAR},
-      user_name = #{userName,jdbcType=VARCHAR},
-      user_sex = #{userSex,jdbcType=CHAR},
-      org_name = #{orgName,jdbcType=VARCHAR},
-      user_address = #{userAddress,jdbcType=VARCHAR},
-      user_job = #{userJob,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=VARCHAR},
-      call_status = #{callStatus,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       created_by = #{createdBy,jdbcType=VARCHAR},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
