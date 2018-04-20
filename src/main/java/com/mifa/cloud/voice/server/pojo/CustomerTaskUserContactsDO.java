@@ -1,46 +1,35 @@
 package com.mifa.cloud.voice.server.pojo;
 
-import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author 
  */
-@Table(name="t_customer_task_user_contacts")
-@Data
-public class CustomerTaskUserContactsDO extends BaseDataDo{
+public class CustomerTaskUserContactsDO implements Serializable {
     /**
      * ID号
      */
-    @Id
-    @GeneratedValue
     private Long id;
 
     /**
      * 租户号
      */
-    @NotEmpty
     private String contractNo;
-
-    /**
-     * 0:正常; 1:删除
-     */
-    private String status;
 
     /**
      * 批次上传生成的task_id
      */
-    @NotEmpty
     private String taskId;
+
+    /**
+     * 0:正常；1:删除
+     */
+    private String status;
 
     /**
      * 用户手机号加密处理
      */
-    @NotEmpty
     private String userPhone;
 
     /**
@@ -56,7 +45,6 @@ public class CustomerTaskUserContactsDO extends BaseDataDo{
     /**
      * 机构(公司)名字
      */
-    @NotEmpty
     private String orgName;
 
     /**
@@ -72,7 +60,6 @@ public class CustomerTaskUserContactsDO extends BaseDataDo{
     /**
      * 加密因子
      */
-    @NotEmpty
     private String salt;
 
     /**
@@ -80,4 +67,153 @@ public class CustomerTaskUserContactsDO extends BaseDataDo{
      */
     private String callStatus;
 
+    /**
+     * 创建时间
+     */
+    private Date createdAt;
+
+    /**
+     * 创建人
+     */
+    private String createdBy;
+
+    /**
+     * 更新时间
+     */
+    private Date updatedAt;
+
+    /**
+     * 更新人
+     */
+    private String updatedBy;
+
+    private static final long serialVersionUID = 1L;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(String userSex) {
+        this.userSex = userSex;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public String getUserJob() {
+        return userJob;
+    }
+
+    public void setUserJob(String userJob) {
+        this.userJob = userJob;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getCallStatus() {
+        return callStatus;
+    }
+
+    public void setCallStatus(String callStatus) {
+        this.callStatus = callStatus;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 }

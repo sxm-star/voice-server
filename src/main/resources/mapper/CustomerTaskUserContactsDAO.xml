@@ -236,7 +236,25 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample" resultType="java.lang.Long">
+    <insert id="insertBatch" parameterType="List">
+        INSERT INTO t_customer_task_user_contacts (id, contract_no, task_id,
+        user_phone, user_name, user_sex,
+        org_name, user_address, user_job,
+        salt, call_status, created_at,
+        created_by, updated_at, updated_by
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT}, #{item.contractNo,jdbcType=VARCHAR}, #{item.taskId,jdbcType=VARCHAR},
+            #{item.userPhone,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.userSex,jdbcType=CHAR},
+            #{item.orgName,jdbcType=VARCHAR}, #{item.userAddress,jdbcType=VARCHAR}, #{item.userJob,jdbcType=VARCHAR},
+            #{item.salt,jdbcType=VARCHAR}, #{item.callStatus,jdbcType=VARCHAR}, #{item.createdAt,jdbcType=TIMESTAMP},
+            #{item.createdBy,jdbcType=VARCHAR}, #{item.updatedAt,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample" resultType="java.lang.Long">
     select count(*) from t_customer_task_user_contacts
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
