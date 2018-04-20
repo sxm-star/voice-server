@@ -108,7 +108,7 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param t
      */
-    public void save(T t) {
+    public int save(T t) {
         if (t.getCreatedAt() == null) {
             t.setCreatedAt(new Date());
             // 业务上要求，更新时间和创建时间必须一直，如果new的话，很可能不一致，造成业务上的错误
@@ -116,7 +116,7 @@ public abstract class BaseService<T extends BaseDataDo> {
         } else {
             t.setUpdatedAt(t.getCreatedAt());
         }
-        this.getMapper().insert(t);
+        return this.getMapper().insert(t);
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param t
      */
-    public void saveSelective(T t) {
+    public int saveSelective(T t) {
         if (t.getCreatedAt() == null) {
             t.setCreatedAt(new Date());
             // 业务上要求，更新时间和创建时间必须一直，如果new的话，很可能不一致，造成业务上的错误
@@ -132,7 +132,7 @@ public abstract class BaseService<T extends BaseDataDo> {
         } else {
             t.setUpdatedAt(t.getCreatedAt());
         }
-        this.getMapper().insertSelective(t);
+        return this.getMapper().insertSelective(t);
     }
 
     /**
@@ -140,9 +140,9 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param t
      */
-    public void updateById(T t) {
+    public int updateById(T t) {
         t.setUpdatedAt(new Date());
-        this.getMapper().updateByPrimaryKey(t);
+        return this.getMapper().updateByPrimaryKey(t);
     }
 
     /**
@@ -150,9 +150,9 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param t
      */
-    public void updateByIdSelective(T t) {
+    public int updateByIdSelective(T t) {
         t.setUpdatedAt(new Date());
-        this.getMapper().updateByPrimaryKeySelective(t);
+       return this.getMapper().updateByPrimaryKeySelective(t);
     }
 
     /**
@@ -160,8 +160,8 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param id
      */
-    public void deleteById(Long id) {
-        this.getMapper().deleteByPrimaryKey(id);
+    public int deleteById(Long id) {
+       return this.getMapper().deleteByPrimaryKey(id);
     }
 
     /**
@@ -169,17 +169,17 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param ids
      */
-    public void deleteByIds(List<Object> ids) {
+    public int deleteByIds(List<Object> ids) {
         // 设置条件
         Example example = new Example(clazz);
         example.createCriteria().andIn("id", ids);
         // 根据条件删除
-        this.getMapper().deleteByExample(example);
+        return this.getMapper().deleteByExample(example);
     }
     
-    public void deleteByIds(Long[] ids) {
+    public int deleteByIds(Long[] ids) {
        
-        this.getMapper().deleteByIDS(ids);
+        return this.getMapper().deleteByIDS(ids);
     }
 
     /**

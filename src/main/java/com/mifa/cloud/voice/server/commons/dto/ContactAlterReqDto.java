@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author: songxm
  * @date: 2018/4/19 14:01
@@ -15,7 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ContactAlterReqDto {
 
     @ApiModelProperty(value = "单个号码ID号",required = true)
-    @NotEmpty(message = "单个号码ID号不能为空")
+    @NotNull(message = "单个号码ID号不能为空")
     private Long id;
     /**
      * 租户号

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author: songxm
@@ -61,6 +62,20 @@ public class ContactsController {
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.updateContactGroup(groupName,source,contractNo,Long.valueOf(id)));
     }
 
+    @ApiOperation(value = "删除号码组")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号必填"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "来源选填")
+    })
+    @RequestMapping(value = "/contact-group",method = RequestMethod.DELETE)
+    public CommonResponse<Boolean> delContactGroup(String contractNo,Integer id){
+        if(StringUtils.isEmpty(contractNo) || id==null){
+            return CommonResponse.failCommonResponse("400","组ID和客户号必填,不能为空");
+        }
+
+        return CommonResponse.successCommonResponse(customerTaskContactGroupService.deleteByContactNoAndId(contractNo,Long.parseLong(String.valueOf(id))));
+    }
+
     @ApiOperation(value = "号码组的列表查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
@@ -71,6 +86,15 @@ public class ContactsController {
     @RequestMapping(value = "/contact-group-list",method = RequestMethod.GET)
     public CommonResponse<PageDto<ContactGroupRspDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "号码组的下拉框查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号")
+    })
+    @RequestMapping(value = "/contact-group-select-list",method = RequestMethod.GET)
+    public CommonResponse<List<ContactGroupSelectDto>> queryContactList(@RequestParam(required = true)String contractNo){
+        return CommonResponse.successCommonResponse(customerTaskContactGroupService.querySelectedContactGroupList(contractNo));
     }
 
     @ApiOperation(value = "号码列表查询")
@@ -96,6 +120,20 @@ public class ContactsController {
     @RequestMapping(value = "/contact",method = RequestMethod.PUT)
     public CommonResponse<PageDto<ContactDto>> addContact(@ModelAttribute @Valid ContactAlterReqDto contactDto){
         return CommonResponse.successCommonResponse(contactsService.alterContact(contactDto));
+    }
+
+    @ApiOperation(value = "删除单个号码")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号必填"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "来源选填")
+    })
+    @RequestMapping(value = "/contact",method = RequestMethod.DELETE)
+    public CommonResponse<Boolean> delContact(String contractNo,Integer id){
+        if(StringUtils.isEmpty(contractNo) || id==null){
+            return CommonResponse.failCommonResponse("400","ID和客户号必填,不能为空");
+        }
+
+        return CommonResponse.successCommonResponse(contactsService.deleteByContactNoAndId(contractNo,Long.parseLong(String.valueOf(id))));
     }
 
 }

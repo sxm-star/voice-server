@@ -123,6 +123,16 @@ public class ContactsService {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    public boolean deleteByContactNoAndId(String contactNo,Long id){
+        CustomerTaskUserContactsDO contactsDO =  contactsDAO.selectByPrimaryKey(id);
+        if (contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
+            contactsDO.setStatus(StatusEnum.BLOCK.getCode().toString());
+            int cnt = contactsDAO.updateByPrimaryKeySelective(contactsDO);
+            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return Boolean.FALSE;
+    }
+
     /**
      * 解析号码入库
      *

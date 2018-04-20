@@ -2,15 +2,19 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -48,16 +52,16 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         return Boolean.TRUE;
     }
 
-    public ContactGroupRspDto getContanctGroupById(Long id){
-        CustomerTaskContactGroupDO customerTaskContactGroupDO =  this.queryById(id);
-        if (customerTaskContactGroupDO!=null){
-            return BaseBeanUtils.convert(customerTaskContactGroupDO,ContactGroupRspDto.class);
+    public ContactGroupRspDto getContanctGroupById(Long id) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = this.queryById(id);
+        if (customerTaskContactGroupDO != null) {
+            return BaseBeanUtils.convert(customerTaskContactGroupDO, ContactGroupRspDto.class);
         }
         return null;
     }
 
-    public Boolean updateContanctGroupByIdSelective(ContactGroupRspDto contactGroupRspDto){
-        CustomerTaskContactGroupDO customerTaskContactGroupDO =  BaseBeanUtils.convert(contactGroupRspDto,CustomerTaskContactGroupDO.class);
+    public Boolean updateContanctGroupByIdSelective(ContactGroupRspDto contactGroupRspDto) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = BaseBeanUtils.convert(contactGroupRspDto, CustomerTaskContactGroupDO.class);
         customerTaskContactGroupDO.setUpdatedAt(new Date());
         customerTaskContactGroupDO.setUpdatedBy("system");
         this.updateByIdSelective(customerTaskContactGroupDO);
@@ -76,8 +80,8 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
 
             List<ContactGroupRspDto> list = new ArrayList<>();
             pageInfo.getList().forEach(
-                            item -> list.add(BaseBeanUtils.convert(item, ContactGroupRspDto.class))
-                    );
+                    item -> list.add(BaseBeanUtils.convert(item, ContactGroupRspDto.class))
+            );
             PageDto<ContactGroupRspDto> pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
             pageDto.setList(list);
             return pageDto;
@@ -85,7 +89,29 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
             log.error("查询异常:{}", e);
             return null;
         }
+    }
 
+    public List<ContactGroupSelectDto> querySelectedContactGroupList(String contactNo) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
+        customerTaskContactGroupDO.setCreatedBy(contactNo);
+        List<CustomerTaskContactGroupDO> list = this.queryListByWhere(customerTaskContactGroupDO);
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<ContactGroupSelectDto> resList = new ArrayList<>();
+            list.forEach(customerTaskContactGroupDO1 -> resList.add(BaseBeanUtils.convert(customerTaskContactGroupDO1, ContactGroupSelectDto.class)));
+            return resList;
+        }
+        return Collections.EMPTY_LIST;
+    }
 
+    public Boolean deleteByContactNoAndId(String contactNo, Long id) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
+        customerTaskContactGroupDO.setCreatedBy(contactNo);
+        customerTaskContactGroupDO.setId(Long.parseLong(String.valueOf(id)));
+        if (this.queryOne(customerTaskContactGroupDO) != null) {
+            customerTaskContactGroupDO.setStatus(StatusEnum.BLOCK.getCode().toString());
+            int cnt = this.updateByIdSelective(customerTaskContactGroupDO);
+            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return Boolean.FALSE;
     }
 }
