@@ -170,6 +170,7 @@ public class ContactsService {
                 uploadFileLog.setUpdateBy("system");
                 uploadFileLog.setUpdateAt(new Date());
                 uploadFileLogMapper.updateByPrimaryKeySelective(uploadFileLog);
+                log.info("上传文件日志更新");
                 return Boolean.TRUE;
             }
 
