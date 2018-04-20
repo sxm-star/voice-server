@@ -9,7 +9,6 @@ import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.ContactsService;
 import com.mifa.cloud.voice.server.service.CustomerTaskContactGroupService;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
-import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -66,7 +65,7 @@ public class ContactTaskListener {
                         if (CollectionUtils.isEmpty(list)) {
                             return;
                         }
-                        boolean flag =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),uploadFileLog.getId());
+                        boolean flag =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), taskContactGroupDO.getTaskId(),uploadFileLog.getId());
                         Integer  cnt  = taskContactGroupDO.getGroupCnt()==null?0:taskContactGroupDO.getGroupCnt();
                         taskContactGroupDO.setGroupCnt(cnt+list.size());
                         taskContactGroupDO.setUpdatedAt(new Date());
