@@ -1,4 +1,4 @@
-package com.mifa.cloud.voice.server.dto;
+package com.mifa.cloud.voice.server.commons.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.mifa.cloud.voice.server.dao.CustomerAuthCompanyMapper;
-import com.mifa.cloud.voice.server.dto.AuthCheckDTO;
-import com.mifa.cloud.voice.server.dto.AuthCompanyDTO;
+import com.mifa.cloud.voice.server.commons.dto.AuthCheckDTO;
+import com.mifa.cloud.voice.server.commons.dto.AuthCompanyDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthAudit;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
