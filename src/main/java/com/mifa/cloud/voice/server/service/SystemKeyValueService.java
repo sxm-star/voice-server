@@ -40,5 +40,13 @@ public class SystemKeyValueService {
         return mapper.selectByExample(example);
     }
 
+    /**
+     * 根据主键id删除数据
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteByPrimaryKey(Long id) {
+        return mapper.deleteByPrimaryKey(id) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
 
 }

@@ -25,4 +25,7 @@ public class SystemKeyValueDTO {
     @ApiModelProperty(value = "字典说明")
     private String remark;
 
+    @ApiModelProperty("客户ID")
+    private String contractNo;
+
 }
