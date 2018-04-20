@@ -26,6 +26,10 @@ public class CustomerTaskContactGroupDO extends BaseDataDo {
      */
     @NotEmpty
     private String taskId;
+    /**
+     * 0:正常; 1:删除
+     */
+    private String status;
 
     /**
      * 通讯簿组表
