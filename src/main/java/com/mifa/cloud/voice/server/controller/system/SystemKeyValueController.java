@@ -50,6 +50,7 @@ public class SystemKeyValueController {
                 .paramKey(param.getParamKey())
                 .paramValue(param.getParamValue())
                 .remark(param.getRemark())
+                .createdBy(param.getContractNo())
                 .build();
         int count = systemKeyValueService.insert(systemKeyValue);
         if (count > 0) {
@@ -81,6 +82,18 @@ public class SystemKeyValueController {
         return CommonResponse.successCommonResponse(voList);
 
     }
+
+    @DeleteMapping(value = "/keyValue")
+    @ApiOperation(value = "根据ID删除系统字典")
+    @Loggable(descp = "根据ID删除系统字典")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, dataType = "string", value = "service token"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "long", value = "主键ID")
+    })
+    public CommonResponse<Boolean> deleteKeyValueById(Long id) {
+        return CommonResponse.successCommonResponse(systemKeyValueService.deleteByPrimaryKey(id));
+    }
+
 
 
 }
