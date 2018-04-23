@@ -152,7 +152,7 @@ public class LogAspect {
 				printWriter = rsp.getWriter();
                 String CORRELATION_ID = MDC.get("CORRELATION_ID");
                 MDC.clear();
-				resp = CommonResponse.failCommonResponse("400" ,e.getMessage()==null?"["+CORRELATION_ID+"]空指针异常": "["+CORRELATION_ID+"]"+e.getMessage());
+				resp = CommonResponse.failCommonResponse("400" ,e.getMessage()==null?"系统异常,请联系管理员": e.getMessage(),"["+CORRELATION_ID+"]");
 				printWriter.write(JSON.toJSONString(resp));
 			} catch (IOException ignored) {
 			} finally {
