@@ -47,10 +47,12 @@ public class TemplateVoiceController {
 
     @ApiOperation("语音模板删除")
     @RequestMapping(value = "/template-voice", method = RequestMethod.DELETE)
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN),
+            @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号",example = "123456"),
+            @ApiImplicitParam(paramType = "query", name = "templateId", required = true, dataType = "string",value = "语音模板ID号",example = "1111111111")
     })
     @Loggable(descp = "语音模板删除")
-    public CommonResponse<Boolean> delTemplateVoiceList(String contractNo,String templateId){
+    public CommonResponse<Boolean> delTemplateVoiceList(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
         return CommonResponse.successCommonResponse(templateVoiceService.delTemplateVoice(contractNo,templateId));
     }
 
