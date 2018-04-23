@@ -59,6 +59,16 @@ public class CallJobDO extends BaseDataDo {
     private String jobName;
 
     /**
+     * 任务状态 ：0-待启动 1-运行中，02-暂停，03-停止
+     */
+    private Integer jobStatus;
+
+    /**
+     * 任务执行表达式
+     */
+    private String cronExpression;
+
+    /**
      * 拨打开始时间段 格式 HH:mm
      */
     private String callStartTime;
