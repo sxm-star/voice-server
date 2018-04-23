@@ -2,6 +2,8 @@ package com.mifa.cloud.voice.server.component.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Date;
+
 /**
  * 自定义参数
  * 
@@ -20,6 +22,8 @@ public class AppProperties {
     private MontnetsVoice montnetsVoice;
 
     private String salt;
+
+
 	@Data
 	public static class AliyunVoice{
 		private String accessId;

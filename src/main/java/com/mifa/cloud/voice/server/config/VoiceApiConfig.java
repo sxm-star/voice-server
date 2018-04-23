@@ -36,4 +36,17 @@ public class VoiceApiConfig {
                 .retryWhenTimeout(2)
                 .build().create(AliyunVoiceApi.class);
     }
+
+//    @Bean
+//    public JxVoiceApi jxVoiceApi(){
+//        Date date  = new Date();
+//        String authorization = Base64.getEncoder()
+//        String timeStamp = BaseDateUtils.format(new Date(),BaseDateUtils.YMDHMS);
+//
+//        return BaseRetrofitUtils2.newBuilder(appProperties.getJixinVoice().getVoiceUrl())
+//                .addConverterFactory(SimpleXmlConverterFactory.create())
+//                .headers(ImmutableMap.of(HttpHeaders.AUTHORIZATION,"").)
+//                .retryWhenTimeout(2)
+//                .build().create(JxVoiceApi.class);
+//    }
 }

@@ -178,6 +178,7 @@ public class BaseDateUtils {
                 if(var3.equals("ms")) {
                     var4 = 6;
                 }
+                default:break;
             }
 
             switch(var4) {

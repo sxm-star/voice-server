@@ -5,6 +5,8 @@ import com.mifa.cloud.voice.server.api.aliyun.AliyunVoiceApi;
 import com.mifa.cloud.voice.server.api.aliyun.dto.TtsReqDto;
 import com.mifa.cloud.voice.server.api.aliyun.enums.AliyunVoiceEnum;
 import com.mifa.cloud.voice.server.api.aliyun.enums.TtsDataEnum;
+import com.mifa.cloud.voice.server.api.jx.JxVoiceApi;
+import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.montnets.MontnetsVoiceApi;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceReqDto;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceRspDto;
@@ -36,6 +38,8 @@ public class TestOpenApi {
     AppProperties appProperties;
     @Autowired
     MontnetsVoiceApi montnetsVoiceApi;
+    @Autowired
+    JxVoiceApi jxVoiceApi;
 
     @Test
     public void testAliyunApi(){
@@ -75,5 +79,18 @@ public class TestOpenApi {
         reqDto.setCustid(cusId);
         TemplateVoiceRspDto rspDto = montnetsVoiceApi.templateVoiceSend(reqDto);
         System.out.println(BaseJsonUtils.writeValue(rspDto));
+    }
+
+    @Test
+    public void testJxVoiceApi(){
+        String sig = "";
+        String timestamp = BaseDateUtils.format(new Date(),BaseDateUtils.YMDHMS);
+
+        JxVoiceVcodeReqDto jxVoiceVcodeReqDto = new JxVoiceVcodeReqDto();
+       // jxVoiceVcodeReqDto.setData();
+//        JxVoiceVcodeReqDto. .setInfo(Info.builder().appID("111111").build());
+//        jxVoiceVcodeReqDto.setData("1111");
+//        jxVoiceVcodeReqDto.set
+//        jxVoiceApi.templateVoiceVcodeSend(sig,)
     }
 }
