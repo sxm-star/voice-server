@@ -3,7 +3,6 @@ package com.mifa.cloud.voice.server.aop;
 import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.enums.ErrorKeyEnums;
 import com.mifa.cloud.voice.server.commons.enums.SCOPE;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -138,7 +138,8 @@ public class LogAspect {
 		try {
 			resp = point.proceed(); // 执行目标方法内容，获取返回值
 		} catch (Exception e) {
-			log.error("业务处理过程出现异常:{}", e);
+
+			log.error("业务处理过程出现异常:{},class:{},methodName:{}", e.getCause(),evtClass,methodName);
 			exFlag = true;
 			ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
 					.getRequestAttributes();
@@ -149,7 +150,9 @@ public class LogAspect {
 				rsp.setCharacterEncoding("UTF-8");
 				rsp.setStatus(500);
 				printWriter = rsp.getWriter();
-				resp = new CommonResponse(CommonResponse.FALSE, ErrorKeyEnums.SERVICE_ERROR ,null );
+                String CORRELATION_ID = MDC.get("CORRELATION_ID");
+                MDC.clear();
+				resp = CommonResponse.failCommonResponse("400" ,e.getMessage()==null?"["+CORRELATION_ID+"]空指针异常": "["+CORRELATION_ID+"]"+e.getMessage());
 				printWriter.write(JSON.toJSONString(resp));
 			} catch (IOException ignored) {
 			} finally {

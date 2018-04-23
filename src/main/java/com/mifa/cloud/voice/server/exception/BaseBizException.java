@@ -3,7 +3,7 @@ package com.mifa.cloud.voice.server.exception;
 /**
  * @author songxm
  */
-public class BaseRuntimeException extends RuntimeException {
+public class BaseBizException extends RuntimeException {
     private static final long serialVersionUID = -7180599528683421531L;
 
     /**
@@ -32,9 +32,9 @@ public class BaseRuntimeException extends RuntimeException {
     }
 
     /**
-     * 构造一个 BaseRuntimeException
+     * 构造一个 BaseBizException
      */
-    public BaseRuntimeException() {
+    public BaseBizException() {
         super();
     }
 
@@ -43,7 +43,7 @@ public class BaseRuntimeException extends RuntimeException {
      *
      * @param message 消息代码
      */
-    public BaseRuntimeException(String message) {
+    public BaseBizException(String message) {
         super(message);
         this.message = message;
     }
@@ -54,7 +54,7 @@ public class BaseRuntimeException extends RuntimeException {
      * @param code    消息代码
      * @param message 详细消息
      */
-    public BaseRuntimeException(String code, String message) {
+    public BaseBizException(String code, String message) {
         super(message);
         this.code = code;
         this.message = message;
@@ -67,7 +67,7 @@ public class BaseRuntimeException extends RuntimeException {
      * @param message 详细消息
      * @param cause   原因
      */
-    public BaseRuntimeException(String code, String message, Throwable cause) {
+    public BaseBizException(String code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
         this.message = message;
@@ -79,7 +79,7 @@ public class BaseRuntimeException extends RuntimeException {
      * @param message 详细消息
      * @param cause   原因
      */
-    public BaseRuntimeException(String message, Throwable cause) {
+    public BaseBizException(String message, Throwable cause) {
         super(message, cause);
         this.message = message;
     }

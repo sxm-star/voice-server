@@ -335,4 +335,5 @@ public class BaseStringUtils {
         String random = String.valueOf(randomLong);
         return random.length() < len?StringUtils.leftPad(random, len, "0"):random.substring(0, len);
     }
+
 }

@@ -3,7 +3,7 @@ package com.mifa.cloud.voice.server.exception;
 /**
  * @author songxm
  */
-public class BusinessException extends BaseRuntimeException {
+public class BusinessException extends BaseBizException {
     private static final long serialVersionUID = 5848203255667327423L;
 
     public BusinessException() {

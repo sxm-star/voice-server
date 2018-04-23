@@ -6,6 +6,7 @@ import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
+import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -74,9 +75,12 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     public boolean delTemplateVoice(String contractNo,String templateId){
         VoiceTemplateDO voiceTemplateDO =  this.queryById(templateId);
+        if (voiceTemplateDO==null){
+            throw new BaseBizException("400","不存在的模板信息");
+        }
         if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.WAIT_AUDIT.getCode())){
             log.warn("等待审核的不能删除");
-            return Boolean.FALSE;
+            throw new BaseBizException("400","等待审核的不能删除");
         }
         voiceTemplateDO.setStatus(StatusEnum.BLOCK.getCode().toString());
        int cnt =  this.updateByIdSelective(voiceTemplateDO);
@@ -94,7 +98,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             return cnt>0?Boolean.TRUE:Boolean.FALSE;
         }else {
             log.warn("审核成功的和待审的不能修改");
-            return Boolean.FALSE;
+            throw new BaseBizException("400","审核成功的和待审的不能修改");
         }
     }
 }
