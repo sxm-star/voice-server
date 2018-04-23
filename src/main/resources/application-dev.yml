@@ -4,7 +4,7 @@ spring:
   session:
     store-type: none
   rabbitmq:
-    host: 10.105.85.56
+    host: 192.168.2.181
     port: 5672
     username: bmdb
     password: bmdb
