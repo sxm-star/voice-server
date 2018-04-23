@@ -10,7 +10,7 @@ appConfig:
   jixinVoice:
     accountId: b1a593ca514fd08adf922d205fecb18e
     authToken: fe2b66b47d4ca417005b0bf6da3918ae
-    voiceUrl: https://api.139130.com:9999/
+    voiceUrl: https://api.139130.com:9999/api/
 
     #梦网云通语音通道
   montnetsVoice:

@@ -160,7 +160,7 @@ public abstract class BaseService<T extends BaseDataDo> {
      * 
      * @param id
      */
-    public int deleteById(Long id) {
+    public int deleteById(Object id) {
        return this.getMapper().deleteByPrimaryKey(id);
     }
 

@@ -108,7 +108,7 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact-list",method = RequestMethod.GET)
     @Loggable(descp = "号码列表查询")
-    public CommonResponse<PageDto<ContactRspDto>> queryContactList(@ModelAttribute @Valid ContactQueryDto contactQueryDto,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "3") Integer pageSize){
+    public CommonResponse<PageDto<ContactRspDto>> queryContactList(@ModelAttribute @Valid ContactQueryDto contactQueryDto,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(contactsService.queryContactList(contactQueryDto,pageNum,pageSize));
     }
 

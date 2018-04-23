@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * @author 
@@ -18,7 +19,7 @@ public class VoiceTemplateDO extends BaseDataDo {
      * 语音模板id
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator="UUID")
     private String templateId;
 
     @Column(name = "template_name")
@@ -28,26 +29,31 @@ public class VoiceTemplateDO extends BaseDataDo {
      * 客户号
      */
     @NotEmpty
+    @Column(name = "contract_no")
     private String contractNo;
 
     /**
      * 模板类型 1:语音模板；2：文本模板
      */
+    @Column(name = "template_type")
     private String templateType;
 
     /**
      * 语音话术类目id
      */
+    @Column(name = "category_id")
     private Integer categoryId;
 
     /**
      * 语音话术类目名称
      */
+    @Column(name = "category_name")
     private String categoryName;
 
     /**
      * 设置的话术关键词
      */
+    @Column(name = "key_word")
     private String keyWord;
 
     /**
@@ -58,23 +64,42 @@ public class VoiceTemplateDO extends BaseDataDo {
     /**
      * 审核状态 0:待审核 1：审核通过；2:审核失败
      */
+    @Column(name = "audit_status")
     private String auditStatus;
 
     /**
      * 排列序号，表示同级类目的展现次序，如数值相等则按名称次序排列。取值范围:大于零的整数
      */
+    @Column(name = "sort_order")
     private Integer sortOrder;
 
     /**
      * 语音播放地址
      */
+    @Column(name = "voice_url")
     private String voiceUrl;
 
     /**
      * 话术语音转文本内容
      */
+    @Column(name = "voice_content")
     private String voiceContent;
 
+    /**
+     * 备注
+     */
+    private String remark;
 
+    /**
+     * 创建时间
+     */
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    /**
+     * 创建人
+     */
+    @Column(name = "created_by")
+    private String createdBy;
 
 }

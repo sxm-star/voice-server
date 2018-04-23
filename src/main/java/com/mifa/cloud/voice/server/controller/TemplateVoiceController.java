@@ -3,8 +3,7 @@ package com.mifa.cloud.voice.server.controller;
 import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.TemplateVoiceDto;
+import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,5 +34,32 @@ public class TemplateVoiceController {
     @Loggable(descp = "新增模板类目")
     public CommonResponse<Boolean> addTemplateVoice(@RequestBody @Valid TemplateVoiceDto voiceDto) {
         return CommonResponse.successCommonResponse(templateVoiceService.insertTemplateVoice(voiceDto));
+    }
+
+    @ApiOperation("语音模板列表")
+    @RequestMapping(value = "/template-voice-list", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板列表")
+    public CommonResponse<PageDto<VoiceTemplateRspDto>> queryTemplateVoiceList(@ModelAttribute @Valid VoiceTemplateQuery query, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10")  Integer pageSize){
+        return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceList(query,pageNum,pageSize));
+    }
+
+    @ApiOperation("语音模板删除")
+    @RequestMapping(value = "/template-voice", method = RequestMethod.DELETE)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板删除")
+    public CommonResponse<Boolean> delTemplateVoiceList(String contractNo,String templateId){
+        return CommonResponse.successCommonResponse(templateVoiceService.delTemplateVoice(contractNo,templateId));
+    }
+
+    @ApiOperation("语音模板编辑")
+    @RequestMapping(value = "/template-voice", method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板删除")
+    public CommonResponse<Boolean> alterTemplateVoice(@ModelAttribute @Valid VoiceTemplateAlterReqDto alterReqDto){
+        return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoice(alterReqDto));
     }
 }
