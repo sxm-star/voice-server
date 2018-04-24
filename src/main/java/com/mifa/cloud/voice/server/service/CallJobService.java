@@ -11,6 +11,7 @@ import com.mifa.cloud.voice.server.dao.CallJobDAO;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,9 @@ public class CallJobService extends BaseService<CallJobDO>{
             Example example = new Example(CallJobDO.class);
             // 声明条件
             Example.Criteria createCriteria = example.createCriteria();
-            createCriteria.andLike("jobName", jobName);
+            if (StringUtils.isNotEmpty(jobName)){
+                createCriteria.andLike("jobName", "%"+jobName+"%");
+            }
             createCriteria.andEqualTo("contractNo",contractNo);
             List<CallJobDO> listDOs = customerCallJobDAO.selectByExample (example);
             if (listDOs!=null&& listDOs.size()>0){

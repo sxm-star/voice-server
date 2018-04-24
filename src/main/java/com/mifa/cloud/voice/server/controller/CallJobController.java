@@ -39,7 +39,7 @@ public class CallJobController {
         return  CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
     }
 
-    @ApiOperation(value = "号码组的列表查询")
+    @ApiOperation(value = "任务列表查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
             ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
             @ApiImplicitParam(paramType = "query", name = "jobName", required = false, dataType = "string",value = "计划名"),
@@ -47,8 +47,8 @@ public class CallJobController {
             @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
     })
     @RequestMapping(value = "/call-job-list",method = RequestMethod.GET)
-    @Loggable(descp = "号码组的列表查询")
-    public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true)String contractNo, @RequestParam(required = false) String groupName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
-        return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo,groupName,pageNum,pageSize));
+    @Loggable(descp = "任务列表查询")
+    public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true)String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
+        return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo,jobName,pageNum,pageSize));
     }
 }
