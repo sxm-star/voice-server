@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                 doList.forEach(voiceTemplateItem -> {
                     VoiceTemplateRspDto voiceTemplateRspDto = BaseBeanUtils.convert(voiceTemplateItem, VoiceTemplateRspDto.class);
                     voiceTemplateRspDto.setTemplateType(voiceTemplateRspDto.getTemplateType().equals(VoiceTypeEnum.TEXT.name()) ? VoiceTypeEnum.TEXT.getDesc() : VoiceTypeEnum.VOICE.getDesc());
-                     ;
+                    ;
                     if (AuditEnum.WAIT_AUDIT.getCode().equals(voiceTemplateItem.getAuditStatus())) {
                         voiceTemplateRspDto.setAuditStatus(AuditEnum.WAIT_AUDIT.getDesc());
                     }
@@ -73,32 +74,67 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         }
     }
 
-    public boolean delTemplateVoice(String contractNo,String templateId){
-        VoiceTemplateDO voiceTemplateDO =  this.queryById(templateId);
-        if (voiceTemplateDO==null){
-            throw new BaseBizException("400","不存在的模板信息");
+    /**
+     * 测试页展示用 ,返回固定顶多5条
+     *
+     * @return
+     */
+    public List<VoiceTemplateSelectDto> queryTemplateVoiceSelectList(VoiceTemplateSelectQueryDto queryDto) {
+        try {
+            VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(queryDto, VoiceTemplateDO.class);
+            if (queryDto.isTest()) {
+                voiceTemplateDO.setContractNo(null);
+            }
+            voiceTemplateDO.setContractNo(null);
+            PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, 1, 5, null);
+            if (pageInfo != null && pageInfo.getList() != null) {
+                List<VoiceTemplateSelectDto> resList = new ArrayList<>();
+                pageInfo.getList().forEach(item -> {
+                    resList.add(BaseBeanUtils.convert(item, VoiceTemplateSelectDto.class));
+                });
+                return resList;
+            }
+            log.warn("客户:{},未查到任何测试的模板信息,", queryDto.getContractNo());
+            return Collections.emptyList();
+        } catch (Exception e) {
+            log.error("查询异常:");
+            throw new BaseBizException("400", "系统查询异常,请联系管理员");
         }
-        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.WAIT_AUDIT.getCode())){
-            log.warn("等待审核的不能删除");
-            throw new BaseBizException("400","等待审核的不能删除");
-        }
-        voiceTemplateDO.setStatus(StatusEnum.BLOCK.getCode().toString());
-       int cnt =  this.updateByIdSelective(voiceTemplateDO);
-        return cnt>0?Boolean.TRUE:Boolean.FALSE;
+
     }
 
-    public boolean alterTemplateVoice(VoiceTemplateAlterReqDto alterReqDto){
-        String templateID= alterReqDto.getTemplateId();
-        VoiceTemplateDO voiceTemplateDO =  this.queryById(templateID);
-        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_FAIL.getCode())){
-            VoiceTemplateDO alterVoiceTemplateDO = BaseBeanUtils.convert(alterReqDto,VoiceTemplateDO.class);
+    public boolean delTemplateVoice(String contractNo, String templateId) {
+        VoiceTemplateDO voiceTemplateDO = this.queryById(templateId);
+        if (voiceTemplateDO == null) {
+            throw new BaseBizException("400", "不存在的模板信息");
+        }
+        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.WAIT_AUDIT.getCode())) {
+            log.warn("等待审核的不能删除");
+            throw new BaseBizException("400", "等待审核的不能删除");
+        }
+        voiceTemplateDO.setStatus(StatusEnum.BLOCK.getCode().toString());
+        int cnt = this.updateByIdSelective(voiceTemplateDO);
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    public boolean alterTemplateVoice(VoiceTemplateAlterReqDto alterReqDto) {
+        String templateID = alterReqDto.getTemplateId();
+        VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
+        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_FAIL.getCode())) {
+            VoiceTemplateDO alterVoiceTemplateDO = BaseBeanUtils.convert(alterReqDto, VoiceTemplateDO.class);
             alterVoiceTemplateDO.setTemplateId(templateID);
             alterVoiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
             int cnt = this.updateByIdSelective(alterVoiceTemplateDO);
-            return cnt>0?Boolean.TRUE:Boolean.FALSE;
-        }else {
+            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+        } else {
             log.warn("审核成功的和待审的不能修改");
-            throw new BaseBizException("400","审核成功的和待审的不能修改");
+            throw new BaseBizException("400", "审核成功的和待审的不能修改");
         }
+    }
+
+    public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
+        VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
+        //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
+        return Boolean.TRUE;
     }
 }

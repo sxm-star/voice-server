@@ -1,113 +1,109 @@
-package com.mifa.cloud.voice.server.pojo;
+package com.mifa.cloud.voice.server.commons.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
 /**
- * @author 
+ * @author: songxm
+ * @date: 2018/4/24 08:40
+ * @version: v1.0.0
  */
-@Table(name="t_customer_call_job")
 @Data
-public class CallJobDO extends BaseDataDo {
+@ApiModel("执行计划列表信息")
+public class CallJobDto {
+
     /**
      * 主键
      */
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @ApiModelProperty("ID号")
     private Integer id;
 
     /**
      * 客户号
      */
-    @NotEmpty
+    @ApiModelProperty("客户号")
     private String contractNo;
 
     /**
      * 语音模板id
      */
-    @NotEmpty
+    @ApiModelProperty("语音模板id")
     private String templateId;
 
 
-    /**
-     * 语音模板类型 冗余
-     */
-    @NotEmpty
-    private String templateType;
 
-    /**
-     * 语音模板类目 冗余
-     */
-    @NotEmpty
-    private String templateCategory;
-
-    @Column(name = "contact_task_id")
+    @ApiModelProperty("批次号")
     private String contactTaskId;
 
     /**
      * 语音模板名称 冗余
      */
-    @NotEmpty
+    @ApiModelProperty("语音模板名称")
     private String templateName;
 
     /**
      * 计划内容
      */
-    @NotEmpty
+    @ApiModelProperty("计划名称")
+    @Column(name = "job_name")
     private String jobName;
 
     /**
      * 任务状态 ：0-待启动 1-运行中，02-暂停，03-停止
      */
-    private Integer jobStatus;
+    @ApiModelProperty("任务状态 ：0-待启动 1-运行中，02-暂停，03-停止")
+    private String jobStatus;
 
 
     /**
      * 任务执行表达式
      */
+    @ApiModelProperty("任务执行表达式")
     private String cronExpression;
 
     /**
      * 拨打开始时间段 格式 HH:mm
      */
+    @ApiModelProperty("拨打开始时间段 格式 HH:mm")
     private String callStartTime;
 
     /**
      * 拨打结束时间段 格式 HH:mm
      */
+    @ApiModelProperty("拨打结束时间段 格式 HH:mm")
     private String callEndTime;
 
     /**
      * 重试次数 冗余
      */
+    @ApiModelProperty("重试次数")
     private Integer retryCount;
 
     /**
      * 通讯簿组表 冗余
      */
+    @ApiModelProperty("通讯簿组表")
     private String groupName;
 
     /**
      * 通讯录组内成员数量 冗余
      */
+    @ApiModelProperty("通讯录组内成员数量")
     private Integer groupCnt;
 
     /**
      * 来源
      */
+    @ApiModelProperty("来源")
     private String source;
 
     /**
      * 备注
      */
+    @ApiModelProperty("备注")
     private String note;
-
-    /**
-     * 0:正常 ; 1:删除
-     */
-    private String status;
-
 
 }

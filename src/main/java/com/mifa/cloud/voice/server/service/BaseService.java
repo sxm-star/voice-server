@@ -216,9 +216,43 @@ public abstract class BaseService<T extends BaseDataDo> {
         for (Field field : fields) {
             // 设置为true，可以获取声明的私有字段的值
             field.setAccessible(true);
-            if (field.get(t) != null) {
+            if (field.get(t) != null&& StringUtils.isNotEmpty(field.get(t).toString())) {
                 // 非空的字段的值，加入到条件中
                 createCriteria.andEqualTo(field.getName(), field.get(t));
+            }
+        }
+
+        List<T> list = this.getMapper().selectByExample(example);
+        return new PageInfo<T>(list);
+    }
+
+    public PageInfo<T> queryListByPageAndOrderLike(T t, Integer page, Integer rows, String order)
+            throws Exception {
+        // 加入分页
+        PageHelper.startPage(page, rows);
+
+        // 声明一个example
+        Example example = new Example(this.clazz);
+        if (StringUtils.isNotBlank(order)) {
+            example.setOrderByClause(order);
+        }
+
+        // 如果条件为null，直接返回
+        if (t == null) {
+            List<T> list = this.getMapper().selectByExample(example);
+            return new PageInfo<T>(list);
+        }
+
+        // 声明条件
+        Criteria createCriteria = example.createCriteria();
+        // 获取t的字段
+        Field[] fields = t.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            // 设置为true，可以获取声明的私有字段的值
+            field.setAccessible(true);
+            if (field.get(t) != null) {
+                // 非空的字段的值，加入到条件中
+                createCriteria.andLike(field.getName(), field.get(t).toString());
             }
         }
 

@@ -5,6 +5,7 @@ import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
+import com.sun.tools.javac.util.List;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -45,6 +46,15 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceList(query,pageNum,pageSize));
     }
 
+    @ApiOperation("语音模板下拉框查询 三级联动")
+    @RequestMapping(value = "/template-voice-select-list", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板下拉框查询 三级联动")
+    public CommonResponse<List<VoiceTemplateSelectDto>> queryTemplateVoiceSelectList(@ModelAttribute @Valid VoiceTemplateSelectQueryDto queryDto ){
+        return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceSelectList(queryDto));
+    }
+
     @ApiOperation("语音模板删除")
     @RequestMapping(value = "/template-voice", method = RequestMethod.DELETE)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN),
@@ -63,5 +73,14 @@ public class TemplateVoiceController {
     @Loggable(descp = "语音模板删除")
     public CommonResponse<Boolean> alterTemplateVoice(@ModelAttribute @Valid VoiceTemplateAlterReqDto alterReqDto){
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoice(alterReqDto));
+    }
+
+    @ApiOperation("语音模板测试")
+    @RequestMapping(value = "/template-voice-test", method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板测试")
+    public CommonResponse<Boolean> testTemplateVoice(@RequestBody @Valid VoiceTemplateOpenDto templateOpenDto){
+        return CommonResponse.successCommonResponse(templateVoiceService.testTemplateVoice(templateOpenDto));
     }
 }
