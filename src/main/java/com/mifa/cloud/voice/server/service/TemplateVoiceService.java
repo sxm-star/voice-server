@@ -33,7 +33,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
         voiceTemplateDO.setCreatedBy(templateVoiceDto.getContractNo());
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
-        voiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.name());
+        voiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
         voiceTemplateDO.setTemplateType(templateVoiceDto.getTemplateType().toString());
         int cnt = templateVoiceDAO.insert(voiceTemplateDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;

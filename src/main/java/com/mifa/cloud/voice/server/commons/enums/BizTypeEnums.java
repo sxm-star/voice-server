@@ -25,7 +25,7 @@ public enum BizTypeEnums {
     ID_CARD_IMG,
 
     /**
-     * 语音模板
+     * 号码模板
      */
     MOBILE_TEMPLATE,
 
