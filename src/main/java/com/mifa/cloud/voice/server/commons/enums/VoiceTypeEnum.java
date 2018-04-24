@@ -1,5 +1,7 @@
 package com.mifa.cloud.voice.server.commons.enums;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 /**
@@ -8,9 +10,12 @@ import lombok.Getter;
  * @date: 2018/4/16 16:32
  * @version: v1.0.0
  */
+@ApiModel("模板类型")
 @Getter
 public enum VoiceTypeEnum {
+    @ApiModelProperty("文本类型")
     TEXT("文本类型"),
+    @ApiModelProperty("语音类型")
     VOICE("语音类型");
 
     private String desc;

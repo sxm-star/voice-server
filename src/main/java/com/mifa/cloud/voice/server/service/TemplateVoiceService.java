@@ -82,10 +82,11 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public List<VoiceTemplateSelectDto> queryTemplateVoiceSelectList(VoiceTemplateSelectQueryDto queryDto) {
         try {
             VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(queryDto, VoiceTemplateDO.class);
-            if (queryDto.isTest()) {
+            if (queryDto.getIsTest()) {
                 voiceTemplateDO.setContractNo(null);
             }
-            voiceTemplateDO.setContractNo(null);
+            voiceTemplateDO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getCode());
+            voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, 1, 5, null);
             if (pageInfo != null && pageInfo.getList() != null) {
                 List<VoiceTemplateSelectDto> resList = new ArrayList<>();
@@ -134,6 +135,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
+        if(voiceTemplateDO==null){
+            throw new BaseBizException("400","不存在的模板");
+        }
         //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
         return Boolean.TRUE;
     }

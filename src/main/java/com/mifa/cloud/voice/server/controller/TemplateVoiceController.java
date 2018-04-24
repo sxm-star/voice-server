@@ -49,6 +49,10 @@ public class TemplateVoiceController {
     @ApiOperation("语音模板下拉框查询 三级联动")
     @RequestMapping(value = "/template-voice-select-list", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+     , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号",example = "123456"),
+            @ApiImplicitParam(paramType = "query", name = "templateType", required = false, dataType = "VoiceTypeEnum",allowableValues = "TEXT,VOICE" ,value = "模板类型 VOICE:语音模板；TEXT：文本模板"),
+            @ApiImplicitParam(paramType = "query", name = "categoryName", required = false, dataType = "string",value = "业务类型名称"),
+            @ApiImplicitParam(paramType = "query", name = "isTest", required = true, dataType = "boolean",value = "标识位不能为空 true:测试语音发送查询"),
     })
     @Loggable(descp = "语音模板下拉框查询 三级联动")
     public CommonResponse<List<VoiceTemplateSelectDto>> queryTemplateVoiceSelectList(@ModelAttribute @Valid VoiceTemplateSelectQueryDto queryDto ){
