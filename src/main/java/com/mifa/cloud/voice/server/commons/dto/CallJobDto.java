@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.util.Date;
 
 /**
  * @author: songxm
@@ -106,4 +107,10 @@ public class CallJobDto {
     @ApiModelProperty("备注")
     private String note;
 
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty("创建时间")
+    private Date createdAt;
 }

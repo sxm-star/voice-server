@@ -83,3 +83,5 @@ pagehelper:
   supportMethodsArguments: true
   params: countSql
 
+mifa.cloud.https.poolSize: 5
+mifa.cloud.https.timeout: 10000

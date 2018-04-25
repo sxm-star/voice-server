@@ -14,5 +14,5 @@ import retrofit2.http.POST;
 public interface MontnetsVoiceApi {
 
     @POST("/voice/v2/std/template_send")
-    public TemplateVoiceRspDto templateVoiceSend(@Body TemplateVoiceReqDto templateVoiceReqDto);
+    TemplateVoiceRspDto templateVoiceSend(@Body TemplateVoiceReqDto templateVoiceReqDto);
 }

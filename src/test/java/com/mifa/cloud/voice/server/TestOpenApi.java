@@ -1,12 +1,16 @@
 package com.mifa.cloud.voice.server;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.ImmutableMap;
 import com.mifa.cloud.voice.server.api.aliyun.AliyunVoiceApi;
 import com.mifa.cloud.voice.server.api.aliyun.dto.TtsReqDto;
 import com.mifa.cloud.voice.server.api.aliyun.enums.AliyunVoiceEnum;
 import com.mifa.cloud.voice.server.api.aliyun.enums.TtsDataEnum;
 import com.mifa.cloud.voice.server.api.jx.JxVoiceApi;
+import com.mifa.cloud.voice.server.api.jx.JxVoiceManager;
+import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
+import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.api.montnets.MontnetsVoiceApi;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceReqDto;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceRspDto;
@@ -19,9 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author: sxm
@@ -30,6 +35,7 @@ import java.util.Date;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@ActiveProfiles("dev")
 public class TestOpenApi {
 
     @Autowired
@@ -40,17 +46,19 @@ public class TestOpenApi {
     MontnetsVoiceApi montnetsVoiceApi;
     @Autowired
     JxVoiceApi jxVoiceApi;
+    @Autowired
+    JxVoiceManager jxVoiceManager;
 
     @Test
-    public void testAliyunApi(){
-        System.out.println( AliyunVoiceEnum.SINGLECALLBYTTS);
+    public void testAliyunApi() {
+        System.out.println(AliyunVoiceEnum.SINGLECALLBYTTS);
         System.out.println(BaseDateUtils.STANDARD_FORMAT.format(new Date()));
 
         System.out.println(IdWorker.sequenceMask);
     }
 
     @Test
-    public void testAliyunVoiceApi(){
+    public void testAliyunVoiceApi() {
         TtsReqDto ttsReqDto = new TtsReqDto();
         ttsReqDto.setAction(AliyunVoiceEnum.SINGLECALLBYTTS.toString());
         ttsReqDto.setCalledNumber("13251022729");
@@ -67,13 +75,13 @@ public class TestOpenApi {
     }
 
     @Test
-    public void testMontnetsVoiceApi(){
+    public void testMontnetsVoiceApi() {
         TemplateVoiceReqDto reqDto = new TemplateVoiceReqDto();
         reqDto.setApikey("02973ba013ed3f1917fb80f8b194cbf9");
         reqDto.setMobile("13251022729");
         reqDto.setContent("您预购的宝贝即将过期，请您尽快付款，如已支付请忽略，谢谢！");
         reqDto.setTmplid("47791");
-        String cusId  = SeqProducerUtil.getContractNo();
+        String cusId = SeqProducerUtil.getContractNo();
         System.out.println("cusid:" + cusId);
         reqDto.setMsgtype("3");
         reqDto.setCustid(cusId);
@@ -82,15 +90,42 @@ public class TestOpenApi {
     }
 
     @Test
-    public void testJxVoiceApi(){
+    public void testJxVoiceApi() {
         String sig = "";
-        String timestamp = BaseDateUtils.format(new Date(),BaseDateUtils.YMDHMS);
+        String timestamp = jxVoiceManager.getTimeStamp();
+        String templateId = "10003";
+        String called = "13251022729";
+        String calledDisplay = "95776";
+        int playTimes = 1;
+        List<String> params = new ArrayList<>();
+        params.add("宋烜明");
 
-        JxVoiceVcodeReqDto jxVoiceVcodeReqDto = new JxVoiceVcodeReqDto();
-       // jxVoiceVcodeReqDto.setData();
-//        JxVoiceVcodeReqDto. .setInfo(Info.builder().appID("111111").build());
-//        jxVoiceVcodeReqDto.setData("1111");
-//        jxVoiceVcodeReqDto.set
-//        jxVoiceApi.templateVoiceVcodeSend(sig,)
+        JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
+                .info(Info.builder().appID("aac0430e5af2394a4035f635a6399702").build())
+                .subject(Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build())
+                .data("123").timestamp(String.valueOf(System.currentTimeMillis())).build();
+
+        System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
+    }
+
+    @Test
+    public void testJxVoiceApi2() {
+        String timestamp = jxVoiceManager.getTimeStamp();
+        Map<String,Object> map = new HashMap<>();
+        //jxVoiceManager.getResponse(map,jxVoiceManager.getHttpPost())
+        String templateId = "10003";
+        String called = "13251022729";
+        String calledDisplay = "95776";
+        int playTimes = 1;
+        List<String> params = new ArrayList<>();
+        params.add("宋烜明");
+
+        JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
+                .info(Info.builder().appID("aac0430e5af2394a4035f635a6399702").build())
+                .subject(Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build())
+                .data("123").timestamp(String.valueOf(System.currentTimeMillis())).build();
+
+        //jxVoiceManager.templateVoiceVcodeSend();
+        System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
     }
 }

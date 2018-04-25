@@ -9,15 +9,24 @@ import lombok.Getter;
  */
 @Getter
 public enum JobStatusEnum {
-    WAIT_START(0,"待启动"),
-    RUNNING(1,"运行中"),
-    PAUSE(2,"暂停"),
-    STOP(3,"停止");
+    WAIT_START("0","待启动"),
+    RUNNING("1","运行中"),
+    PAUSE("2","暂停"),
+    STOP("3","停止");
 
     private String desc;
-    private Integer code;
-    JobStatusEnum(Integer code,String desc){
+    private String code;
+    JobStatusEnum(String code,String desc){
         this.code = code;
         this.desc = desc;
+    }
+
+    public static String getDesc(String code){
+        for (JobStatusEnum itemEnum:JobStatusEnum.values()) {
+            if (itemEnum.getCode().equals(code)){
+                return  itemEnum.getDesc();
+            }
+        }
+        return code;
     }
 }

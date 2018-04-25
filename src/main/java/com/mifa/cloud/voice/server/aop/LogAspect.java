@@ -148,7 +148,7 @@ public class LogAspect {
 			try {
 				rsp.setHeader("Content-type", "text/html;charset=UTF-8");
 				rsp.setCharacterEncoding("UTF-8");
-				rsp.setStatus(500);
+				rsp.setStatus(200);
 				printWriter = rsp.getWriter();
                 String CORRELATION_ID = MDC.get("CORRELATION_ID");
                 MDC.clear();

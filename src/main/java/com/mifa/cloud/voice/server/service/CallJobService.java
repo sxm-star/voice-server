@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.CallJobDto;
 import com.mifa.cloud.voice.server.commons.dto.CustomerCallJobDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CallJobDAO;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
@@ -56,6 +57,7 @@ public class CallJobService extends BaseService<CallJobDO>{
 
                 listDOs.forEach(item -> {
                     CallJobDto callJobDto = BaseBeanUtils.convert(item, CallJobDto.class);
+                    callJobDto.setJobStatus(JobStatusEnum.getDesc(callJobDto.getJobStatus()));
                     rspList.add(callJobDto);
                 });
                 pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);

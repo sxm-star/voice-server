@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.config;
 
+import com.google.common.collect.ImmutableMap;
 import com.mifa.cloud.voice.server.api.aliyun.AliyunVoiceApi;
 import com.mifa.cloud.voice.server.api.jx.JxVoiceApi;
 import com.mifa.cloud.voice.server.api.montnets.MontnetsVoiceApi;
@@ -12,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-import java.util.Date;
-
 /**
  * @author: sxm
  * @date: 2018/4/10 12:34
@@ -22,6 +21,8 @@ import java.util.Date;
 @Configuration
 @PropertySource(value = {"classpath:application.properties"},ignoreResourceNotFound = true,encoding = "UTF-8")
 public class VoiceApiConfig {
+    private static final String JSON_CONTENT_TYPE = "application/json;charset=utf-8";
+
     @Autowired(required = false)
     AppProperties appProperties;
 
@@ -43,20 +44,9 @@ public class VoiceApiConfig {
 
     @Bean
     public JxVoiceApi jxVoiceApi(){
-        Date date  = new Date();
-        //String authorization =
-        //String timeStamp = BaseDateUtils.format(new Date(),BaseDateUtils.YMDHMS);
-
         return BaseRetrofitUtils2.newBuilder(appProperties.getJixinVoice().getVoiceUrl())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
-//                .addInterceptors(new Interceptor() {
-//                    @Override
-//                    public Response intercept(Chain chain) throws IOException {
-//                        chain.request().newBuilder().
-//                        return null;
-//                    }
-//                })
-                //.headers(ImmutableMap.of(HttpHeaders.AUTHORIZATION,"").)
+                .headers(ImmutableMap.of("Content-Type",JSON_CONTENT_TYPE,"Accept",JSON_CONTENT_TYPE))
                 .retryWhenTimeout(2)
                 .build().create(JxVoiceApi.class);
     }

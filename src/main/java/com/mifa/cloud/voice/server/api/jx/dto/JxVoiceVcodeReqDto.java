@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
  * @date: 2018/4/23 11:46
  * @version: v1.0.0
  */
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class JxVoiceVcodeReqDto {

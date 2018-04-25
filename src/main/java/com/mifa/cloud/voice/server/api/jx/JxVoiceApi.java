@@ -1,8 +1,8 @@
 package com.mifa.cloud.voice.server.api.jx;
 
-import com.mifa.cloud.voice.server.api.jx.dto.JxConmonErrorRspDto;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -18,6 +18,6 @@ public interface JxVoiceApi {
      * @param voiceVcodeReqDto  语音验证码
      * @return
      */
-    @POST("/v1.0.0/voice/verify")
-    JxConmonErrorRspDto templateVoiceVcodeSend(@Query("sigParameter") String sig , @Body JxVoiceVcodeReqDto voiceVcodeReqDto);
+    @POST("/api/v1.0.0/voice/verify")
+    String templateVoiceVcodeSend(@Header("Authorization") String authorization,@Header("Content-Length") String length,@Query("sig") String sig , @Body JxVoiceVcodeReqDto voiceVcodeReqDto);
 }
