@@ -20,4 +20,12 @@ public enum AuditEnum {
         this.desc = desc;
     }
 
+    public static String getDesc(String code){
+        for (JobStatusEnum itemEnum:JobStatusEnum.values()) {
+            if (itemEnum.getCode().equals(code)){
+                return  itemEnum.getDesc();
+            }
+        }
+        return code;
+    }
 }

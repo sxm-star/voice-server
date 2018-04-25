@@ -18,9 +18,18 @@ public enum StatusEnum {
     BLOCK(1,"停用");
 
     Integer code;
-    String  msg;
-     StatusEnum(Integer code,String msg){
+    String  desc;
+     StatusEnum(Integer code,String desc){
         this.code = code;
-        this.msg = msg;
+        this.desc = desc;
+    }
+
+    public static String getDesc(String code){
+        for (JobStatusEnum itemEnum:JobStatusEnum.values()) {
+            if (itemEnum.getCode().equals(code)){
+                return  itemEnum.getDesc();
+            }
+        }
+        return code;
     }
 }

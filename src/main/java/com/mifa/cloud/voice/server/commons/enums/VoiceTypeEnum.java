@@ -23,4 +23,12 @@ public enum VoiceTypeEnum {
         this.desc = desc;
     }
 
+    public static String getDesc(String name){
+        for (JobStatusEnum itemEnum:JobStatusEnum.values()) {
+            if (itemEnum.name().equals(name)){
+                return  itemEnum.name();
+            }
+        }
+        return name;
+    }
 }

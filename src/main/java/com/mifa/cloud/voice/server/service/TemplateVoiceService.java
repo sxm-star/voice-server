@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,23 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     }
 
 
-    public PageDto<VoiceTemplateRspDto> queryTemplateVoiceList(VoiceTemplateQuery query, Integer pageNum, Integer pageSize) {
+    public VoiceTemplateRspDto queryTemplateVoice(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
+        VoiceTemplateDO voiceTemplateDO = new VoiceTemplateDO();
+        voiceTemplateDO.setContractNo(contractNo);
+        voiceTemplateDO.setTemplateId(templateId);
+        voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        VoiceTemplateDO resDo = this.queryOne(voiceTemplateDO);
+        VoiceTemplateRspDto rspDto = null;
+        if (resDo!=null){
+            rspDto = BaseBeanUtils.convert(resDo,VoiceTemplateRspDto.class);
+            rspDto.setAuditStatus(AuditEnum.getDesc(resDo.getAuditStatus()));
+            rspDto.setTemplateType(VoiceTypeEnum.getDesc(resDo.getTemplateType()));
+
+        }
+        return rspDto;
+    }
+
+                                                       public PageDto<VoiceTemplateRspDto> queryTemplateVoiceList(VoiceTemplateQuery query, Integer pageNum, Integer pageSize) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         PageDto<VoiceTemplateRspDto> pageDto = null;

@@ -46,6 +46,15 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceList(query,pageNum,pageSize));
     }
 
+    @ApiOperation("获取单个语音模板")
+    @RequestMapping(value = "/template-voice", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "获取单个模板列表")
+    public CommonResponse<PageDto<VoiceTemplateRspDto>> queryTemplateVoice(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
+        return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoice(contractNo,templateId));
+    }
+
     @ApiOperation("语音模板下拉框查询 三级联动")
     @RequestMapping(value = "/template-voice-select-list", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
