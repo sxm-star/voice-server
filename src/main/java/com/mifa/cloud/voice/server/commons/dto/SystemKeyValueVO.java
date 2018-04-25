@@ -2,18 +2,16 @@ package com.mifa.cloud.voice.server.commons.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
- * Created by Administrator on 2018/4/12.
+ * Created by Administrator on 2018/4/25.
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 @ApiModel
-public class SystemkeyValueTypeVO {
+@Data
+public class SystemKeyValueVO {
 
     @ApiModelProperty("主键")
     private Long id;
@@ -30,4 +28,6 @@ public class SystemkeyValueTypeVO {
     @ApiModelProperty(value = "字典说明")
     private String remark;
 
+    @ApiModelProperty(value = "创建时间")
+    private Date createdAt;
 }
