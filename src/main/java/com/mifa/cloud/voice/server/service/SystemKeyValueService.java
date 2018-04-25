@@ -3,7 +3,8 @@ package com.mifa.cloud.voice.server.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
-import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueQueryAndEdit;
+import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueEditDTO;
+import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueQueryDTO;
 import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueVO;
 import com.mifa.cloud.voice.server.dao.SystemKeyValueMapper;
 import com.mifa.cloud.voice.server.pojo.SystemKeyValue;
@@ -58,7 +59,7 @@ public class SystemKeyValueService {
     /**
      * 分页查询字典列表
      */
-    public PageDto<SystemKeyValueVO> getSystemKeyValuePageList(SystemKeyValueQueryAndEdit query, Integer page, Integer rows) {
+    public PageDto<SystemKeyValueVO> getSystemKeyValuePageList(SystemKeyValueQueryDTO query, Integer page, Integer rows) {
         SystemKeyValueExample example = new SystemKeyValueExample();
         SystemKeyValueExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotEmpty(query.getContractNo())) {
@@ -85,7 +86,7 @@ public class SystemKeyValueService {
      * 编辑
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateByPrimaryKeySelective(SystemKeyValueQueryAndEdit record) {
+    public Boolean updateByPrimaryKeySelective(SystemKeyValueEditDTO record) {
         SystemKeyValue systemKeyValue = BaseBeanUtils.convert(record, SystemKeyValue.class);
         return mapper.updateByPrimaryKeySelective(systemKeyValue) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }

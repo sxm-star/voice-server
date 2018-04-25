@@ -12,11 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel
 @Data
-public class SystemKeyValueQueryAndEdit {
-
-    @ApiModelProperty("主键ID")
-    @NotNull(message = "ID不能为空")
-    private Long id;
+public class SystemKeyValueQueryDTO {
 
     @ApiModelProperty(value = "客户号", required = true)
     @NotEmpty(message = "客户号不能为空")
