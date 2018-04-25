@@ -25,7 +25,7 @@ public enum StatusEnum {
     }
 
     public static String getDesc(String code){
-        for (JobStatusEnum itemEnum:JobStatusEnum.values()) {
+        for (StatusEnum itemEnum:StatusEnum.values()) {
             if (itemEnum.getCode().equals(code)){
                 return  itemEnum.getDesc();
             }
