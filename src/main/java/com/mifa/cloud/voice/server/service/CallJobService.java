@@ -9,6 +9,7 @@ import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CallJobDAO;
+import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +27,52 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class CallJobService extends BaseService<CallJobDO>{
+public class CallJobService extends BaseService<CallJobDO> {
     @Autowired
     CallJobDAO customerCallJobDAO;
 
-    public Boolean addCallJob(CustomerCallJobDto customerCallJobDto){
-        CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto,CallJobDO.class);
+    public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
+        CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
         int cnt = customerCallJobDAO.insert(customerCallJobDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public PageDto<CallJobDto> queryCallJobList(String contractNo ,String  jobName, Integer pageNum, Integer pageize) {
+    public CallJobDto queryCallJob(String contractNo, Integer id) {
+        CallJobDO callJobDO = new CallJobDO();
+        callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        callJobDO.setContractNo(contractNo);
+        callJobDO.setId(id);
+        CallJobDO newCallJobDO = this.queryOne(callJobDO);
+        CallJobDto callJobDto = null;
+        if (newCallJobDO != null) {
+            callJobDto = BaseBeanUtils.convert(newCallJobDO, CallJobDto.class);
+            callJobDto.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
+
+        }
+        return callJobDto;
+    }
+
+    public Boolean delCallJob(String contracNo, Integer id) {
+        CallJobDO callJobDO = new CallJobDO();
+        callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        callJobDO.setContractNo(contracNo);
+        callJobDO.setId(id);
+
+        CallJobDO delcCallJobDO = this.queryOne(callJobDO);
+        if (null == delcCallJobDO) {
+            throw new BaseBizException("400", "不存在的拨打计划");
+        } else {
+            if (delcCallJobDO.getJobStatus().equals(JobStatusEnum.WAIT_START.getCode()) || delcCallJobDO.getJobStatus().equals(JobStatusEnum.STOP.getCode())) {
+                delcCallJobDO.setStatus(StatusEnum.BLOCK.getCode().toString());
+                int cnt = this.updateByIdSelective(delcCallJobDO);
+                return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+            } else {
+                throw new BaseBizException("501", JobStatusEnum.getDesc(delcCallJobDO.getJobStatus()) + "的计划不允许被删");
+            }
+        }
+    }
+
+    public PageDto<CallJobDto> queryCallJobList(String contractNo, String jobName, Integer pageNum, Integer pageize) {
         CallJobDO callJobDO = new CallJobDO();
         callJobDO.setJobName(jobName);
         callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
@@ -46,18 +82,18 @@ public class CallJobService extends BaseService<CallJobDO>{
             Example example = new Example(CallJobDO.class);
             // 声明条件
             Example.Criteria createCriteria = example.createCriteria();
-            if (StringUtils.isNotEmpty(jobName)){
-                createCriteria.andLike("jobName", "%"+jobName+"%");
+            if (StringUtils.isNotEmpty(jobName)) {
+                createCriteria.andLike("jobName", "%" + jobName + "%");
             }
-            createCriteria.andEqualTo("contractNo",contractNo);
-            List<CallJobDO> listDOs = customerCallJobDAO.selectByExample (example);
-            if (listDOs!=null&& listDOs.size()>0){
+            createCriteria.andEqualTo("contractNo", contractNo);
+            List<CallJobDO> listDOs = customerCallJobDAO.selectByExample(example);
+            if (listDOs != null && listDOs.size() > 0) {
                 PageInfo<CallJobDO> pageInfo = new PageInfo<CallJobDO>(listDOs);
                 List<CallJobDto> rspList = new ArrayList<>();
 
                 listDOs.forEach(item -> {
                     CallJobDto callJobDto = BaseBeanUtils.convert(item, CallJobDto.class);
-                    callJobDto.setJobStatus(JobStatusEnum.getDesc(callJobDto.getJobStatus()));
+                    callJobDto.setJobStatus(JobStatusEnum.getDesc(item.getJobStatus()));
                     rspList.add(callJobDto);
                 });
                 pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);

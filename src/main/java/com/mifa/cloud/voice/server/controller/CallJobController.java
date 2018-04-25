@@ -39,6 +39,42 @@ public class CallJobController {
         return  CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
     }
 
+    @ApiOperation("拨打任务修改")
+    @RequestMapping(value = "/call-job",method = RequestMethod.PUT)
+    @ResponseBody
+    @Loggable(descp = "拨打任务修改")
+    public CommonResponse<Boolean> alterCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto){
+
+        return  CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
+    }
+
+    @ApiOperation("单个拨打任务查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int",value = "计划ID号")
+    })
+    @RequestMapping(value = "/call-job",method = RequestMethod.GET)
+    @ResponseBody
+    @Loggable(descp = "单个拨打任务查询")
+    public CommonResponse<Boolean> queryCallJob(@RequestParam(required = true) String contractNo,@RequestParam(required = true) Integer id){
+
+        return  CommonResponse.successCommonResponse(callJobService.queryCallJob(contractNo,id));
+    }
+
+
+    @ApiOperation("拨打任务删除")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int",value = "计划ID号")
+    })
+    @RequestMapping(value = "/call-job",method = RequestMethod.DELETE)
+    @ResponseBody
+    @Loggable(descp = "拨打任务删除")
+    public CommonResponse<Boolean> delCallJob(@RequestParam(required = true) String contractNo,@RequestParam(required = true) Integer id){
+
+        return  CommonResponse.successCommonResponse(callJobService.delCallJob(contractNo,id));
+    }
+
     @ApiOperation(value = "任务列表查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
             ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),

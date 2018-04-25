@@ -52,6 +52,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         if (resDo!=null){
             rspDto = BaseBeanUtils.convert(resDo,VoiceTemplateRspDto.class);
             rspDto.setAuditStatus(AuditEnum.getDesc(resDo.getAuditStatus()));
+            rspDto.setTemplateTypeDesc(VoiceTypeEnum.getDesc(rspDto.getTemplateType()));
             rspDto.setTemplateType(VoiceTypeEnum.getDesc(resDo.getTemplateType()));
 
         }

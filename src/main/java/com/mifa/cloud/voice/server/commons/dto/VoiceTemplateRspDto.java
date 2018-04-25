@@ -35,6 +35,11 @@ public class VoiceTemplateRspDto {
     @ApiModelProperty("模板类型 VOICE:语音模板；TEXT：文本模板")
     private String templateType;
 
+    /**
+     * 模板类型描述
+     */
+    private String templateTypeDesc;
+
 
     /**
      * 语音话术类目名称
