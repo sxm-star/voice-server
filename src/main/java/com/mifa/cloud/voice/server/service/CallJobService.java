@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +65,8 @@ public class CallJobService extends BaseService<CallJobDO> {
         } else {
             if (delcCallJobDO.getJobStatus().equals(JobStatusEnum.WAIT_START.getCode()) || delcCallJobDO.getJobStatus().equals(JobStatusEnum.STOP.getCode())) {
                 delcCallJobDO.setStatus(StatusEnum.BLOCK.getCode().toString());
+                delcCallJobDO.setUpdatedAt(new Date());
+                delcCallJobDO.setUpdatedBy(contracNo);
                 int cnt = this.updateByIdSelective(delcCallJobDO);
                 return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
             } else {
@@ -73,12 +76,9 @@ public class CallJobService extends BaseService<CallJobDO> {
     }
 
     public PageDto<CallJobDto> queryCallJobList(String contractNo, String jobName, Integer pageNum, Integer pageize) {
-        CallJobDO callJobDO = new CallJobDO();
-        callJobDO.setJobName(jobName);
-        callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         PageDto<CallJobDto> pageDto = null;
         try {
-            PageHelper.startPage(pageNum, pageize);
+
             Example example = new Example(CallJobDO.class);
             // 声明条件
             Example.Criteria createCriteria = example.createCriteria();
@@ -86,6 +86,8 @@ public class CallJobService extends BaseService<CallJobDO> {
                 createCriteria.andLike("jobName", "%" + jobName + "%");
             }
             createCriteria.andEqualTo("contractNo", contractNo);
+            createCriteria.andEqualTo("status",StatusEnum.NORMAL.getCode().toString());
+            PageHelper.startPage(pageNum, pageize);
             List<CallJobDO> listDOs = customerCallJobDAO.selectByExample(example);
             if (listDOs != null && listDOs.size() > 0) {
                 PageInfo<CallJobDO> pageInfo = new PageInfo<CallJobDO>(listDOs);

@@ -3,11 +3,9 @@ package com.mifa.cloud.voice.server.controller;
 import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
-import com.mifa.cloud.voice.server.commons.dto.CustomerCallJobDto;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.service.CallJobService;
+import com.mifa.cloud.voice.server.service.CustomerTaskCallDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,62 +27,77 @@ import javax.validation.Valid;
 public class CallJobController {
     @Autowired
     CallJobService callJobService;
+    @Autowired
+    CustomerTaskCallDetailService taskCallDetailService;
 
     @ApiOperation("拨打任务添加")
-    @RequestMapping(value = "/call-job",method = RequestMethod.POST)
+    @RequestMapping(value = "/call-job", method = RequestMethod.POST)
     @ResponseBody
     @Loggable(descp = "拨打任务添加")
-    public CommonResponse<Boolean> addCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto){
+    public CommonResponse<Boolean> addCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto) {
 
-        return  CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
+        return CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
     }
 
     @ApiOperation("拨打任务修改")
-    @RequestMapping(value = "/call-job",method = RequestMethod.PUT)
+    @RequestMapping(value = "/call-job", method = RequestMethod.PUT)
     @ResponseBody
     @Loggable(descp = "拨打任务修改")
-    public CommonResponse<Boolean> alterCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto){
+    public CommonResponse<Boolean> alterCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto) {
 
-        return  CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
+        return CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
     }
 
     @ApiOperation("单个拨打任务查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
-            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int",value = "计划ID号")
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string", value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "计划ID号")
     })
-    @RequestMapping(value = "/call-job",method = RequestMethod.GET)
+    @RequestMapping(value = "/call-job", method = RequestMethod.GET)
     @ResponseBody
     @Loggable(descp = "单个拨打任务查询")
-    public CommonResponse<Boolean> queryCallJob(@RequestParam(required = true) String contractNo,@RequestParam(required = true) Integer id){
+    public CommonResponse<Boolean> queryCallJob(@RequestParam(required = true) String contractNo, @RequestParam(required = true) Integer id) {
 
-        return  CommonResponse.successCommonResponse(callJobService.queryCallJob(contractNo,id));
+        return CommonResponse.successCommonResponse(callJobService.queryCallJob(contractNo, id));
     }
 
 
     @ApiOperation("拨打任务删除")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
-            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int",value = "计划ID号")
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string", value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "int", value = "计划ID号")
     })
-    @RequestMapping(value = "/call-job",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/call-job", method = RequestMethod.DELETE)
     @ResponseBody
     @Loggable(descp = "拨打任务删除")
-    public CommonResponse<Boolean> delCallJob(@RequestParam(required = true) String contractNo,@RequestParam(required = true) Integer id){
+    public CommonResponse<Boolean> delCallJob(@RequestParam(required = true) String contractNo, @RequestParam(required = true) Integer id) {
 
-        return  CommonResponse.successCommonResponse(callJobService.delCallJob(contractNo,id));
+        return CommonResponse.successCommonResponse(callJobService.delCallJob(contractNo, id));
     }
 
     @ApiOperation(value = "任务列表查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
-            @ApiImplicitParam(paramType = "query", name = "jobName", required = false, dataType = "string",value = "计划名"),
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string", value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "jobName", required = false, dataType = "string", value = "计划名"),
             @ApiImplicitParam(paramType = "query", name = "pageNum", required = true, dataType = "int", value = "页码"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
     })
-    @RequestMapping(value = "/call-job-list",method = RequestMethod.GET)
+    @RequestMapping(value = "/call-job-list", method = RequestMethod.GET)
     @Loggable(descp = "任务列表查询")
-    public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true)String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
-        return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo,jobName,pageNum,pageSize));
+    public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true) String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+        return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo, jobName, pageNum, pageSize));
+    }
+
+
+    @ApiOperation(value = "任务拨打明细列表情况查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string", value = "客户号"),
+            @ApiImplicitParam(paramType = "query", name = "pageNum", required = true, dataType = "int", value = "页码"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
+    })
+    @RequestMapping(value = "/call-job-detail-list", method = RequestMethod.GET)
+    @Loggable(descp = "任务拨打明细列表情况查询")
+    public CommonResponse<PageDto<CustomerTaskCallDetailDto>> queryDetailList(@ModelAttribute CallDetailQueryDto callDetailQueryDto, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+        return CommonResponse.successCommonResponse(taskCallDetailService.queryTaskDetailList(callDetailQueryDto, pageNum, pageSize));
     }
 }
