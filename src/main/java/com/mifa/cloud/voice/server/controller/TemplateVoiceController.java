@@ -108,7 +108,7 @@ public class TemplateVoiceController {
     })
     @Loggable(descp = "业务类型列表")
     public CommonResponse<PageDto<SystemKeyValueVO>> getBusinessTypeList(
-            @ModelAttribute @Valid SystemKeyValueQueryAndEdit query,
+            @ModelAttribute @Valid SystemKeyValueQueryDTO query,
             @RequestParam(required = true, defaultValue = "1") Integer pageNum,
             @RequestParam(required = true,defaultValue = "10")  Integer pageSize) {
 
@@ -138,7 +138,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "业务类型编辑")
-    public CommonResponse<Boolean> editBusinessType(@ModelAttribute @Valid SystemKeyValueQueryAndEdit edit) {
+    public CommonResponse<Boolean> editBusinessType(@ModelAttribute @Valid SystemKeyValueEditDTO edit) {
         return CommonResponse.successCommonResponse(systemKeyValueService.updateByPrimaryKeySelective(edit));
     }
 
