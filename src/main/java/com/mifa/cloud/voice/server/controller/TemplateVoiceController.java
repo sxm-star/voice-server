@@ -4,6 +4,8 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.pojo.SystemKeyValue;
+import com.mifa.cloud.voice.server.service.SystemKeyValueService;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -27,6 +29,9 @@ import java.util.List;
 public class TemplateVoiceController {
     @Autowired
     TemplateVoiceService templateVoiceService;
+
+    @Autowired
+    private SystemKeyValueService systemKeyValueService;
 
     @ApiOperation("新增语音模板")
     @RequestMapping(value = "/template-voice", method = RequestMethod.POST)
@@ -96,4 +101,58 @@ public class TemplateVoiceController {
     public CommonResponse<Boolean> testTemplateVoice(@RequestBody @Valid VoiceTemplateOpenDto templateOpenDto){
         return CommonResponse.successCommonResponse(templateVoiceService.testTemplateVoice(templateOpenDto));
     }
+
+    @ApiOperation("业务类型列表")
+    @RequestMapping(value = "/business-type-list", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "业务类型列表")
+    public CommonResponse<PageDto<SystemKeyValueVO>> getBusinessTypeList(
+            @ModelAttribute @Valid SystemKeyValueQueryAndEdit query,
+            @RequestParam(required = true, defaultValue = "1") Integer pageNum,
+            @RequestParam(required = true,defaultValue = "10")  Integer pageSize) {
+
+        return CommonResponse.successCommonResponse(systemKeyValueService.getSystemKeyValuePageList(query, pageNum, pageSize));
+    }
+
+
+    @ApiOperation("业务类型添加")
+    @RequestMapping(value = "/business-type", method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "业务类型添加")
+    public CommonResponse<Boolean> addBusinessType(@RequestBody @Valid BusinessTyeAddDTO dto) {
+        SystemKeyValue systemKeyValue = SystemKeyValue.builder()
+                .bizType("BUSINESS_TYPE")
+                .paramKey(dto.getParamValue())
+                .paramValue(dto.getParamValue())
+                .remark(dto.getRemark())
+                .createdBy(dto.getContractNo())
+                .build();
+        int count = systemKeyValueService.insert(systemKeyValue);
+        return CommonResponse.successCommonResponse(count>0 ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    @ApiOperation("业务类型编辑")
+    @RequestMapping(value = "/business-type", method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "业务类型编辑")
+    public CommonResponse<Boolean> editBusinessType(@ModelAttribute @Valid SystemKeyValueQueryAndEdit edit) {
+        return CommonResponse.successCommonResponse(systemKeyValueService.updateByPrimaryKeySelective(edit));
+    }
+
+    @ApiOperation("业务类型删除")
+    @RequestMapping(value = "/business-type", method = RequestMethod.DELETE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "long",value = "业务类型ID")
+    })
+    @Loggable(descp = "业务类型删除")
+    public CommonResponse<Boolean> deleteBusinessType(@RequestParam(required = true) Long id) {
+        return CommonResponse.successCommonResponse(systemKeyValueService.deleteByPrimaryKey(id));
+    }
+
+
+
 }
