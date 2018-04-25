@@ -43,6 +43,11 @@ public class VoiceTemplateRspDto {
     private String categoryName;
 
     /**
+     * 语音话术类目ID
+     */
+    private String categoryId;
+
+    /**
      * 设置的话术关键词
      */
     @ApiModelProperty("设置的话术关键词")
