@@ -74,7 +74,7 @@ public class TemplateVoiceController {
     @RequestMapping(value = "/template-voice", method = RequestMethod.PUT)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
-    @Loggable(descp = "语音模板删除")
+    @Loggable(descp = "语音模板编辑")
     public CommonResponse<Boolean> alterTemplateVoice(@ModelAttribute @Valid VoiceTemplateAlterReqDto alterReqDto){
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoice(alterReqDto));
     }

@@ -10,6 +10,7 @@ import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -123,8 +124,16 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
         if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_FAIL.getCode())) {
             VoiceTemplateDO alterVoiceTemplateDO = BaseBeanUtils.convert(alterReqDto, VoiceTemplateDO.class);
+            alterVoiceTemplateDO.setTemplateName(StringUtils.isEmpty(alterVoiceTemplateDO.getTemplateName())?null:alterVoiceTemplateDO.getTemplateName());
+            alterVoiceTemplateDO.setTemplateType(StringUtils.isEmpty(alterVoiceTemplateDO.getTemplateType())?null:alterVoiceTemplateDO.getTemplateType());
+            alterVoiceTemplateDO.setCategoryName(StringUtils.isEmpty(alterVoiceTemplateDO.getCategoryName())?null:alterVoiceTemplateDO.getCategoryName());
+            alterVoiceTemplateDO.setVoiceContent(StringUtils.isEmpty(alterVoiceTemplateDO.getVoiceContent())?null:alterVoiceTemplateDO.getVoiceContent());
+            alterVoiceTemplateDO.setVoiceUrl(StringUtils.isEmpty(alterVoiceTemplateDO.getVoiceUrl())?null:alterVoiceTemplateDO.getVoiceUrl());
+            alterVoiceTemplateDO.setKeyWord(StringUtils.isEmpty(alterVoiceTemplateDO.getKeyWord())?null:alterVoiceTemplateDO.getKeyWord());
             alterVoiceTemplateDO.setTemplateId(templateID);
             alterVoiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
+            log.info("修改前数据 alterReqDto:{}",alterReqDto);
+            log.info("将入库修改的数据 alterVoiceTemplateDO:{}",alterVoiceTemplateDO);
             int cnt = this.updateByIdSelective(alterVoiceTemplateDO);
             return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
         } else {
