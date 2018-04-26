@@ -22,6 +22,7 @@ public class SystemKeyValueEditDTO {
     @NotEmpty(message = "客户号不能为空")
     private String contractNo;
 
+    @NotEmpty(message = "业务类型名称为空")
     private String paramValue;
 
     private String remark;
