@@ -9,8 +9,10 @@ import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CallJobDAO;
+import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
+import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,10 +34,24 @@ public class CallJobService extends BaseService<CallJobDO> {
     @Autowired
     CallJobDAO customerCallJobDAO;
 
+    @Autowired
+    CustomerTaskContactGroupDAO groupDAO;
+
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
         CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
         customerCallJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());
+        customerCallJobDO.setCreatedBy(customerCallJobDto.getContractNo());
+        CustomerTaskContactGroupDO taskContactGroupDO  = new CustomerTaskContactGroupDO();
+        taskContactGroupDO.setTaskId(customerCallJobDto.getTaskId());
+        taskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        CustomerTaskContactGroupDO temCustomerTaskContactGroupDO =  groupDAO.selectOne(taskContactGroupDO);
+        if (temCustomerTaskContactGroupDO!=null){
+            customerCallJobDO.setGroupCnt(temCustomerTaskContactGroupDO.getGroupCnt());
+            customerCallJobDO.setSource(temCustomerTaskContactGroupDO.getSource());
+            customerCallJobDO.setGroupName(temCustomerTaskContactGroupDO.getGroupName());
+
+        }
         int cnt = customerCallJobDAO.insert(customerCallJobDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
