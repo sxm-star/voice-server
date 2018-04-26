@@ -38,11 +38,14 @@ public class SystemKeyValueService {
     /**
      * 根据字典类型和key获得字典集合
      * */
-    public List<SystemKeyValue> getKeyValueListByType(String keyValueType, String key) {
+    public List<SystemKeyValue> getKeyValueListByType(String keyValueType, String key, String contractNo) {
         SystemKeyValueExample example = new SystemKeyValueExample();
         SystemKeyValueExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotEmpty(key)) {
             criteria.andParamKeyEqualTo(key);
+        }
+        if (StringUtils.isNotEmpty(contractNo)) {
+            criteria.andCreatedByEqualTo(contractNo);
         }
         criteria.andBizTypeEqualTo(keyValueType);
         return mapper.selectByExample(example);

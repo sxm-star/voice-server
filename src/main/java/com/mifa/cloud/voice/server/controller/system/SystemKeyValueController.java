@@ -40,7 +40,7 @@ public class SystemKeyValueController {
     public CommonResponse<Void> insertKeyValue(@RequestBody @Valid SystemKeyValueDTO param) {
 
         // 判断相同类型的key是否已经存在
-        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType(param.getBizType(), param.getParamKey());
+        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType(param.getBizType(), param.getParamKey(), param.getContractNo());
         if(!keyValueList.isEmpty()) {
             return CommonResponse.failCommonResponse("字典已存在");
         }
@@ -64,11 +64,12 @@ public class SystemKeyValueController {
     @Loggable(descp = "根据类型获得系统字典")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, dataType = "string", value = "service token"),
-            @ApiImplicitParam(paramType = "query", name = "keyValueType", required = true, dataType = "string", value = "系统功能类型,必填")
+            @ApiImplicitParam(paramType = "query", name = "keyValueType", required = true, dataType = "string", value = "系统功能类型,必填"),
+            @ApiImplicitParam(paramType = "query", name = "contractNo", required = false, dataType = "string",value = "客户号")
     })
-    public CommonResponse<List<SystemkeyValueTypeVO>> getKeyValueListByType(String keyValueType) {
+    public CommonResponse<List<SystemkeyValueTypeVO>> getKeyValueListByType(String keyValueType, String contractNo) {
 
-        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType(keyValueType, null);
+        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType(keyValueType, null, contractNo);
         List<SystemkeyValueTypeVO> voList = keyValueList.stream()
                 .map(
                         kv -> SystemkeyValueTypeVO.builder()
