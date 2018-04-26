@@ -118,12 +118,13 @@ public class TemplateVoiceController {
 
     @ApiOperation("业务类型添加")
     @RequestMapping(value = "/business-type", method = RequestMethod.POST)
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "业务类型添加")
     public CommonResponse<Boolean> addBusinessType(@RequestBody @Valid BusinessTyeAddDTO dto) {
         // 判断相同类型的key是否已经存在
-        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType("BUSINESS_TYPE", dto.getParamValue());
+        List<SystemKeyValue> keyValueList = systemKeyValueService.getKeyValueListByType("BUSINESS_TYPE", dto.getParamValue(), dto.getContractNo());
         if(!keyValueList.isEmpty()) {
             return CommonResponse.failCommonResponse("字典已存在");
         }
