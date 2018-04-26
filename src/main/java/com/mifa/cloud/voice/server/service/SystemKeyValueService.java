@@ -91,7 +91,9 @@ public class SystemKeyValueService {
         return mapper.updateByPrimaryKeySelective(systemKeyValue) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-
+    public SystemKeyValue selectByPrimaryKey(Long id) {
+        return mapper.selectByPrimaryKey(id);
+    }
 
 
 

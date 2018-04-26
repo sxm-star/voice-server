@@ -158,6 +158,15 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(systemKeyValueService.deleteByPrimaryKey(id));
     }
 
-
+    @ApiOperation("获得单个业务类型")
+    @RequestMapping(value = "business-type-detail", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN),
+            @ApiImplicitParam(paramType = "query", name = "id", required = true, dataType = "long",value = "业务类型ID")
+    })
+    @Loggable(descp = "获得单个业务类型")
+    public CommonResponse<SystemKeyValueVO> getBusinessType(Long id) {
+        return CommonResponse.successCommonResponse(systemKeyValueService.selectByPrimaryKey(id));
+    }
 
 }
