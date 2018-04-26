@@ -66,10 +66,10 @@ public class SystemKeyValueService {
             criteria.andCreatedByEqualTo(query.getContractNo());
         }
         if(StringUtils.isNotEmpty(query.getParamValue())) {
-            criteria.andParamKeyEqualTo(query.getParamValue());
+            criteria.andParamKeyLike("%" + query.getParamValue() + "%");
         }
         if(StringUtils.isNotEmpty(query.getRemark())) {
-            criteria.andRemarkEqualTo(query.getRemark());
+            criteria.andRemarkLike("%" + query.getRemark() + "%");
         }
         // 加入分页
         PageHelper.startPage(page, rows);
