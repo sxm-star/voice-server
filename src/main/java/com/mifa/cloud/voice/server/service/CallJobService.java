@@ -34,6 +34,8 @@ public class CallJobService extends BaseService<CallJobDO> {
 
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
         CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
+        customerCallJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());
         int cnt = customerCallJobDAO.insert(customerCallJobDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }

@@ -37,7 +37,8 @@ public class CustomerCallJobDto {
     private VoiceTypeEnum templateType;
 
     @ApiModelProperty(value = "号码组批次taskId",required = true)
-    private String contactTaskId;
+    @NotEmpty(message = "taskId不能为空")
+    private String taskId;
     /**
      * 语音模板类目 冗余
      */
