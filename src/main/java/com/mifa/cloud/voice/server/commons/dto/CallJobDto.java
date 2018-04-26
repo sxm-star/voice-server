@@ -113,4 +113,6 @@ public class CallJobDto {
      */
     @ApiModelProperty("创建时间")
     private Date createdAt;
+    @ApiModelProperty("任务ID")
+    private String taskId;
 }

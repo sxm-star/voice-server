@@ -20,6 +20,10 @@ public class CallDetailQueryDto {
     @ApiModelProperty(value = "客户号",required = true)
     private String contractNo;
 
+    @NotEmpty(message = "任务号ID不能为空")
+    @ApiModelProperty(value = "任务号ID",required = true)
+    private String taskId;
+
     /**
      * 手机号
      */

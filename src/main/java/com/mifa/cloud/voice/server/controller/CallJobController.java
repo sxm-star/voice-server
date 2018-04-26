@@ -97,7 +97,7 @@ public class CallJobController {
     })
     @RequestMapping(value = "/call-job-detail-list", method = RequestMethod.GET)
     @Loggable(descp = "任务拨打明细列表情况查询")
-    public CommonResponse<PageDto<CustomerTaskCallDetailDto>> queryDetailList(@ModelAttribute CallDetailQueryDto callDetailQueryDto, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+    public CommonResponse<PageDto<CustomerTaskCallDetailDto>> queryDetailList(@ModelAttribute @Valid CallDetailQueryDto callDetailQueryDto, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
         return CommonResponse.successCommonResponse(taskCallDetailService.queryTaskDetailList(callDetailQueryDto, pageNum, pageSize));
     }
 }

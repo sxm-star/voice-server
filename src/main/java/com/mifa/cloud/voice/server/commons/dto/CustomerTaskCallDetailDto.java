@@ -55,6 +55,8 @@ public class CustomerTaskCallDetailDto {
     @ApiModelProperty("用户姓名")
     private String  userName;
 
+    @ApiModelProperty("公司名称")
+    private String orgName;
     /**
      * 拨打次数
      */

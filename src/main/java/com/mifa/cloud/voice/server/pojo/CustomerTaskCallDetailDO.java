@@ -2,7 +2,6 @@ package com.mifa.cloud.voice.server.pojo;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,6 +47,11 @@ public class CustomerTaskCallDetailDO extends BaseDataDo {
      * 用户名
      */
     private String userName;
+
+    /**
+     * 公司名称
+     */
+    private String orgName;
 
     /**
      * 拨打次数

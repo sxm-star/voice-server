@@ -43,8 +43,8 @@ public class CallJobDO extends BaseDataDo {
     @NotEmpty
     private String templateCategory;
 
-    @Column(name = "contact_task_id")
-    private String contactTaskId;
+    @Column(name = "task_id")
+    private String taskId;
 
     /**
      * 语音模板名称 冗余
