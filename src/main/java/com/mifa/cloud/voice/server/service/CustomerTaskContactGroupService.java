@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupPostDto;
 import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
 import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
@@ -31,14 +32,14 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
     @Autowired
     CustomerTaskContactGroupDAO groupDAO;
 
-    public Boolean addContactGroup(String groupName, String source, String contractNo) {
+    public Boolean addContactGroup(ContactGroupPostDto contactGroupPostDto) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setTaskId(BaseStringUtils.uuid());
-        customerTaskContactGroupDO.setSource(source);
-        customerTaskContactGroupDO.setGroupName(groupName);
+        customerTaskContactGroupDO.setSource(contactGroupPostDto.getSource());
+        customerTaskContactGroupDO.setGroupName(contactGroupPostDto.getGroupName());
         customerTaskContactGroupDO.setGroupCnt(0);//默认0
         customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
-        customerTaskContactGroupDO.setCreatedBy(contractNo);
+        customerTaskContactGroupDO.setCreatedBy(contactGroupPostDto.getContractNo());
         this.save(customerTaskContactGroupDO);
         return Boolean.TRUE;
     }

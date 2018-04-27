@@ -36,17 +36,12 @@ public class ContactsController {
 
     @ApiOperation(value = "增加号码组")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-            , @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号必填"),
-            @ApiImplicitParam(paramType = "query", name = "groupName", required = true, dataType = "string",value = "组名必填"),
-            @ApiImplicitParam(paramType = "query", name = "source", required = false, dataType = "string", value = "来源选填")
     })
     @RequestMapping(value = "/contact-group",method = RequestMethod.POST)
     @Loggable(descp = "增加号码组")
-    public CommonResponse<Boolean> addContactGroup(String contractNo,String groupName,String source){
-        if(StringUtils.isEmpty(groupName) || StringUtils.isEmpty(contractNo)){
-            return CommonResponse.failCommonResponse("400","组名和客户号必填,不能为空");
-        }
-     return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(groupName,source,contractNo));
+    public CommonResponse<Boolean> addContactGroup(@RequestBody @Valid ContactGroupPostDto contactGroupPostDto){
+
+     return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(contactGroupPostDto));
     }
 
     @ApiOperation(value = "编辑号码组")

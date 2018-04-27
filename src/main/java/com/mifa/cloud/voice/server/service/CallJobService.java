@@ -76,7 +76,7 @@ public class CallJobService extends BaseService<CallJobDO> {
         callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         callJobDO.setContractNo(contracNo);
         callJobDO.setId(id);
-
+        callJobDO.setUpdatedAt(new Date());
         CallJobDO delcCallJobDO = this.queryOne(callJobDO);
         if (null == delcCallJobDO) {
             throw new BaseBizException("400", "不存在的拨打计划");

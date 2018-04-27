@@ -38,7 +38,7 @@ jedis:
 
 #文件上传
 upload:
-  path: /usr/local/nginx/html
+  path: /home/voice/tem-contact
 
 #h5地址
 h5:

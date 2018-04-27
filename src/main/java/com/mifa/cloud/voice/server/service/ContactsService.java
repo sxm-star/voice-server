@@ -3,6 +3,7 @@ package com.mifa.cloud.voice.server.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.commons.enums.SexEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
@@ -99,9 +100,11 @@ public class ContactsService {
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
         contactDo.setCreatedBy(contactDto.getContractNo());
+        contactDo.setCreatedAt(new Date());
         contactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
         contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
         contactDo.setSalt(appProperties.getSalt());
+        contactDo.setUserSex(SexEnum.getDesc(contactDo.getUserSex()));
         int cnt = contactsDAO.insert(contactDo);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -115,6 +118,7 @@ public class ContactsService {
         CustomerTaskUserContactsDO pre_ContactsDo = contactsDAO.selectByPrimaryKey(contactQueryDto.getId());
         BaseBeanUtils.copyNoneNullProperties(contactQueryDto, pre_ContactsDo);
         pre_ContactsDo.setUpdatedBy(contactQueryDto.getContractNo());
+        pre_ContactsDo.setUpdatedAt(new Date());
         try {
             pre_ContactsDo.setUserPhone(EncodesUtils.selfEncrypt(contactQueryDto.getUserPhone(),appProperties.getSalt()));
         }catch (Exception e){
@@ -126,6 +130,7 @@ public class ContactsService {
 
     public boolean deleteByContactNoAndId(String contactNo,Long id){
         CustomerTaskUserContactsDO contactsDO =  contactsDAO.selectByPrimaryKey(id);
+        contactsDO.setUpdatedAt(new Date());
         if (contactsDO!=null&&contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
             contactsDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = contactsDAO.updateByPrimaryKeySelective(contactsDO);
