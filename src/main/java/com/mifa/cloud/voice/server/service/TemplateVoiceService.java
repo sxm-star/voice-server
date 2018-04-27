@@ -1,14 +1,22 @@
 package com.mifa.cloud.voice.server.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.mifa.cloud.voice.server.api.jx.VoiceApi;
+import com.mifa.cloud.voice.server.api.jx.dto.Info;
+import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
+import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
+import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
+import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
+import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +39,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     @Autowired
     TemplateVoiceDAO templateVoiceDAO;
+    @Autowired
+    CustomerTaskCallDetailDAO taskCallDetailDAO;
 
     public Boolean insertTemplateVoice(TemplateVoiceDto templateVoiceDto) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
@@ -170,6 +180,40 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             throw new BaseBizException("400", "不存在的模板");
         }
         //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
+        String templateId = "20325"; // TODO: 2018/4/27 目前是唯一一个可测试的模板
+        String called = openDto.getPhone();
+        //String calledDisplay = "95776";
+        String calledDisplay = "";
+        String data = BaseStringUtils.uuid();
+        int playTimes = 1;
+        List<String> params = new ArrayList<>();
+        params.add("先生");
+        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call001").sessionID("session001").build();
+        Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
+        System.out.println("info " + JSON.toJSONString(info));
+        System.out.println("subject " + JSON.toJSONString(subject));
+        JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
+                .data(data).timestamp(String.valueOf(System.currentTimeMillis())).build();
+        jxVoiceVcodeReqDto.setInfo(info);
+        jxVoiceVcodeReqDto.setSubject(subject);
+        log.info(JSON.toJSONString(jxVoiceVcodeReqDto));
+        try {
+            VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
+            CustomerTaskCallDetailDO customerTaskCallDetailDO = new CustomerTaskCallDetailDO();
+            customerTaskCallDetailDO.setPhone(called);
+            customerTaskCallDetailDO.setTaskId(BaseStringUtils.uuid());
+            customerTaskCallDetailDO.setNote("测试接口记录");
+            customerTaskCallDetailDO.setCreatedAt(new Date());
+            customerTaskCallDetailDO.setCallCnt(1);
+            customerTaskCallDetailDO.setContractNo(openDto.getContractNo());
+            customerTaskCallDetailDO.setTemplateId(templateId);
+            customerTaskCallDetailDO.setCreatedBy(openDto.getContractNo());
+            customerTaskCallDetailDO.setUserName(openDto.getName());
+            customerTaskCallDetailDO.setOrgName(openDto.getOrgName());
+            taskCallDetailDAO.insert(customerTaskCallDetailDO);
+        }catch (Exception e){
+            log.error("发送异常:{}",e);
+        }
         return Boolean.TRUE;
     }
 }

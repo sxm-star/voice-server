@@ -8,6 +8,7 @@ import com.mifa.cloud.voice.server.api.aliyun.enums.AliyunVoiceEnum;
 import com.mifa.cloud.voice.server.api.aliyun.enums.TtsDataEnum;
 import com.mifa.cloud.voice.server.api.jx.JxVoiceApi;
 import com.mifa.cloud.voice.server.api.jx.JxVoiceManager;
+import com.mifa.cloud.voice.server.api.jx.VoiceApi;
 import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
@@ -109,23 +110,29 @@ public class TestOpenApi {
     }
 
     @Test
-    public void testJxVoiceApi2() {
-        String timestamp = jxVoiceManager.getTimeStamp();
-        Map<String,Object> map = new HashMap<>();
-        //jxVoiceManager.getResponse(map,jxVoiceManager.getHttpPost())
-        String templateId = "10003";
+    public void testJxVoiceApi2() throws Exception{
+        String templateId = "20325";
         String called = "13251022729";
-        String calledDisplay = "95776";
+        //String calledDisplay = "95776";
+        String calledDisplay = "";
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         params.add("宋烜明");
-
+        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call001").sessionID("session001").build();
+        Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
+        System.out.println("info " + JSON.toJSONString(info));
+        System.out.println("subject " + JSON.toJSONString(subject));
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
-                .info(Info.builder().appID("aac0430e5af2394a4035f635a6399702").build())
-                .subject(Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build())
                 .data("123").timestamp(String.valueOf(System.currentTimeMillis())).build();
+        jxVoiceVcodeReqDto.setInfo(info);
+        jxVoiceVcodeReqDto.setSubject(subject);
 
+        System.out.println(JSON.toJSONString(jxVoiceVcodeReqDto));
+       // jxVoiceManager.templateVoiceVcodeSend(jxVoiceVcodeReqDto);
+       // VoiceApi.sendVoiceCaptcha(jxVoiceVcodeReqDto);
+
+        VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
         //jxVoiceManager.templateVoiceVcodeSend();
-        System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
+       // System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
     }
 }

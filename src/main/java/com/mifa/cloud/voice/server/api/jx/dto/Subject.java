@@ -2,6 +2,7 @@ package com.mifa.cloud.voice.server.api.jx.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * 消息主题
  */
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Subject {
