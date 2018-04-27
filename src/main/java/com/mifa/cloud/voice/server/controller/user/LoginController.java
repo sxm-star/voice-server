@@ -5,18 +5,23 @@ import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.UserLoginDTO;
 import com.mifa.cloud.voice.server.commons.dto.UserLoginVO;
+import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.utils.JwtTokenUtil;
 import com.mifa.cloud.voice.server.utils.PasswordUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -33,6 +38,9 @@ public class LoginController {
 
     @Autowired
     private PasswordUtil passwordUtil;
+
+    @Autowired
+    private KeyValueDao keyValueDao;
 
     @PostMapping("/user-login")
     @ApiOperation(value = "登陆")
@@ -73,5 +81,17 @@ public class LoginController {
         return CommonResponse.successCommonResponse(userLoginVO);
     }
 
+    @GetMapping("/user-logout")
+    @ApiOperation(value = "注销")
+    @Loggable(descp = "用户注销")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string")
+    })
+    public CommonResponse<Boolean> logout(HttpServletRequest request) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.info("token:[{}]", token);
+        keyValueDao.set(token, token, 30 * 60);
+        return CommonResponse.successCommonResponse(Boolean.TRUE);
+    }
 
 }
