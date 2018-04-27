@@ -6,13 +6,16 @@ import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.CallJobDto;
 import com.mifa.cloud.voice.server.commons.dto.CustomerCallJobDto;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CallJobDAO;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
+import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
+import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +40,14 @@ public class CallJobService extends BaseService<CallJobDO> {
     @Autowired
     CustomerTaskContactGroupDAO groupDAO;
 
+    @Autowired
+    TemplateVoiceDAO templateVoiceDAO;
+
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
+        VoiceTemplateDO voiceTemplateDO = templateVoiceDAO.selectByPrimaryKey(customerCallJobDto.getTemplateId());
+        if(voiceTemplateDO==null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())){
+            throw new BaseBizException("401","当前模板没有审核通过,不允许被添加至任务列表");
+        }
         CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
         customerCallJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());

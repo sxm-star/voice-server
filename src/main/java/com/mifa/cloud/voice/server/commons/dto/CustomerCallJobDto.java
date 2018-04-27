@@ -19,20 +19,20 @@ public class CustomerCallJobDto {
     /**
      * 客户号
      */
-    @NotEmpty
+    @NotEmpty(message = "客户号不能为空")
     @ApiModelProperty(value = "客户号",required = true)
     private String contractNo;
 
     /**
      * 语音模板id
      */
-    @NotEmpty
+    @NotEmpty(message = "模板ID不能为空")
     @ApiModelProperty(value = "语音模板ID",required = true)
     private String templateId;
     /**
      * 语音模板类型 冗余
      */
-    @NotNull
+    @NotNull(message = "请填写模板类型")
     @ApiModelProperty(value = "语音模板类型",required = true,example = "VOICE")
     private VoiceTypeEnum templateType;
 
@@ -42,7 +42,7 @@ public class CustomerCallJobDto {
     /**
      * 语音模板类目 冗余
      */
-    @NotEmpty
+    @NotEmpty(message = "语音类目不能为空")
     @ApiModelProperty("语音模板类目")
     private String templateCategory;
 
