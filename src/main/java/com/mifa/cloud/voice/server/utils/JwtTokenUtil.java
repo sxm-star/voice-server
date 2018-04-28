@@ -91,7 +91,7 @@ public class JwtTokenUtil {
      * @param token
      * @return Map<String, Object>
      */
-    public static Map<String, Object> validToken(String token, String cur_uid) {
+       public static Map<String, Object> validToken(String token, String cur_uid) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             JWSObject jwsObject = JWSObject.parse(token);
@@ -136,6 +136,51 @@ public class JwtTokenUtil {
         return resultMap;
     }
 
+    public static Map<String, Object> validToken(String token) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            JWSObject jwsObject = JWSObject.parse(token);
+            Payload payload = jwsObject.getPayload();
+            JWSVerifier verifier = new MACVerifier(SECRET);
+
+            if (jwsObject.verify(verifier)) {
+                JSONObject jsonOBj = payload.toJSONObject();
+                // token校验成功（此时没有校验是否过期）
+                resultMap.put("state", TokenState.VALID.toString());
+                // 若payload包含ext字段，则校验是否过期
+                if (jsonOBj.containsKey("ext")) {
+                    long extTime = Long.valueOf(jsonOBj.get("ext").toString());
+                    long curTime = System.currentTimeMillis();
+                    log.info("当前时间 curTime:{}", curTime);
+                    // 过期了
+                    if (curTime > extTime) {
+                        resultMap.clear();
+                        resultMap.put("state", TokenState.EXPIRED.toString());
+                    }
+                }
+                if (!jsonOBj.containsKey("uid")) {
+                    log.warn("缺少了关键要素 uid");
+                    resultMap.put("state", TokenState.INVALID.toString());
+                }
+                if (jsonOBj.containsKey("uid")) {
+                    log.warn("关键要素 uid 信息:{}",jsonOBj.get("uid"));
+                   // resultMap.put("state", TokenState.INVALID.toString());
+                }
+                resultMap.put("data", jsonOBj);
+
+            } else {
+                // 校验失败
+                resultMap.put("state", TokenState.INVALID.toString());
+            }
+
+        } catch (Exception e) {
+            log.error("无效的token,异常信息:{}", e);
+            resultMap.clear();
+            resultMap.put("state", TokenState.INVALID.toString());
+        }
+        return resultMap;
+    }
+
     /**
      * 示例使用
      *
@@ -143,10 +188,14 @@ public class JwtTokenUtil {
      */
     public static void main(String[] args) {
 
-        //String token = JwtTokenUtil.createToken("0000001", 30);
-        //System.out.println("token:" + token);
-        String userToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE1MjMzMjgzMjY4NTksInVpZCI6IjAwMDAwMDEiLCJpYXQiOjE1MjMzMjY1MjY4NTl9.xKghrc8BE5l1GECcy0k5O4ROg_XiwZY4gZtQbVnL2BY";
-        Map<String, Object> map = validToken(userToken, "0000001");
-        System.out.println(com.alibaba.fastjson.JSONObject.toJSONString(map));
+        String token = JwtTokenUtil.createToken("0000001", 2);
+        System.out.println(token);
+        String tokenTest = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE1MjQ4ODIwMzkxNTksInVpZCI6IjAwMDAwMDEiLCJpYXQiOjE1MjQ4ODE5MTkxNTl9.eIaA9lZXkRj9Y2EzfQ1zQ-0-TWrJmblERikivRfbcf8";
+//        //System.out.println("token:" + token);
+//        String userToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE1MjMzMjgzMjY4NTksInVpZCI6IjAwMDAwMDEiLCJpYXQiOjE1MjMzMjY1MjY4NTl9.xKghrc8BE5l1GECcy0k5O4ROg_XiwZY4gZtQbVnL2BY";
+//        Map<String, Object> map = validToken(userToken, "0000001");
+//        System.out.println(com.alibaba.fastjson.JSONObject.toJSONString(map));
+
+        System.out.println(JwtTokenUtil.validToken(tokenTest,"0000001"));
     }
 }

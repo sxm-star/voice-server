@@ -72,7 +72,7 @@ public class LoginController {
         loginInfoService.updateByPrimaryKeySelective(loginInfo);
 
         // 生成token返回
-        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 30);
+        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 5);
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .contractNo(loginInfo.getContractNo())
                 .token(token)

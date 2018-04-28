@@ -187,11 +187,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         String data = BaseStringUtils.uuid();
         int playTimes = 1;
         List<String> params = new ArrayList<>();
-        params.add("先生");
-        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call001").sessionID("session001").build();
+        params.add(openDto.getName());
+        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
         Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
-        System.out.println("info " + JSON.toJSONString(info));
-        System.out.println("subject " + JSON.toJSONString(subject));
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
                 .data(data).timestamp(String.valueOf(System.currentTimeMillis())).build();
         jxVoiceVcodeReqDto.setInfo(info);

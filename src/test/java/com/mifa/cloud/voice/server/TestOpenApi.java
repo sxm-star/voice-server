@@ -16,10 +16,7 @@ import com.mifa.cloud.voice.server.api.montnets.MontnetsVoiceApi;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceReqDto;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceRspDto;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
-import com.mifa.cloud.voice.server.utils.BaseDateUtils;
-import com.mifa.cloud.voice.server.utils.BaseJsonUtils;
-import com.mifa.cloud.voice.server.utils.IdWorker;
-import com.mifa.cloud.voice.server.utils.SeqProducerUtil;
+import com.mifa.cloud.voice.server.utils.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author: sxm
@@ -118,7 +117,7 @@ public class TestOpenApi {
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         params.add("宋烜明");
-        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call001").sessionID("session001").build();
+        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
         Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
         System.out.println("info " + JSON.toJSONString(info));
         System.out.println("subject " + JSON.toJSONString(subject));
@@ -131,7 +130,7 @@ public class TestOpenApi {
        // jxVoiceManager.templateVoiceVcodeSend(jxVoiceVcodeReqDto);
        // VoiceApi.sendVoiceCaptcha(jxVoiceVcodeReqDto);
 
-        VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
+        System.out.println(VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto));
         //jxVoiceManager.templateVoiceVcodeSend();
        // System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
     }

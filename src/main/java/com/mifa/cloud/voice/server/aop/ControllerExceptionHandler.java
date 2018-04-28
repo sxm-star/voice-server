@@ -5,15 +5,15 @@ import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 /**
  * Created by Administrator on 2018/4/9.
  */
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
 

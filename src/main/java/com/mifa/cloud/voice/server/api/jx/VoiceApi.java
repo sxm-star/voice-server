@@ -18,7 +18,7 @@ import java.util.*;
 public class VoiceApi {
 
     private static final String ACCOUNT_SID = "b1a593ca514fd08adf922d205fecb18e";
-    private static final String AUTH_TOKEN = "fe2b66b47d4ca417005b0bf6da3918ae";
+    private static final String AUTH_TOKEN = "00343a5a9e1db212774dff67b4f0cc14";
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String BASE_URL = "https://api.139130.com:9999";
     private static final String CAPTCHA_URL = "/api/v1.0.0/voice/verify";
@@ -168,7 +168,4 @@ private static final String CHARSET_UTF8 = "UTF-8";
         }
         return response.toString();
     }
-
-
-
 }
