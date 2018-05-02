@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 @RestController
 @Api(value = "认证审核相关", description = "认证审核相关", produces = MediaType.APPLICATION_JSON)
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
+@CrossOrigin
 public class CustomerAuthAuditController {
 
     @Autowired

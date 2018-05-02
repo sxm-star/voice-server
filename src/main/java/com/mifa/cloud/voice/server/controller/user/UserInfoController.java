@@ -35,6 +35,7 @@ import javax.ws.rs.core.MediaType;
 @Api(value = "用户信息管理", description = "用户信息管理", produces = MediaType.APPLICATION_JSON)
 @Slf4j
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
+@CrossOrigin
 public class UserInfoController {
 
     @Autowired

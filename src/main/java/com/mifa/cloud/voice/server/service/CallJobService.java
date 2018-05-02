@@ -19,6 +19,7 @@ import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class CallJobService extends BaseService<CallJobDO> {
     @Autowired
     TemplateVoiceDAO templateVoiceDAO;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
         VoiceTemplateDO voiceTemplateDO = templateVoiceDAO.selectByPrimaryKey(customerCallJobDto.getTemplateId());
         if(voiceTemplateDO==null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())){
@@ -50,7 +54,8 @@ public class CallJobService extends BaseService<CallJobDO> {
         }
         CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
         customerCallJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
-        customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());
+       // customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());
+        customerCallJobDO.setJobStatus(JobStatusEnum.RUNNING.getCode());  //默认设置好启动状态
         customerCallJobDO.setCreatedBy(customerCallJobDto.getContractNo());
         CustomerTaskContactGroupDO taskContactGroupDO  = new CustomerTaskContactGroupDO();
         taskContactGroupDO.setTaskId(customerCallJobDto.getTaskId());
@@ -63,6 +68,8 @@ public class CallJobService extends BaseService<CallJobDO> {
 
         }
         int cnt = customerCallJobDAO.insert(customerCallJobDO);
+        log.info("发送mq----->  拨打任务的ID:{}",customerCallJobDO.getId());
+        rabbitTemplate.convertAndSend("q_voice_job_pool",customerCallJobDO.getId());
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
@@ -81,12 +88,25 @@ public class CallJobService extends BaseService<CallJobDO> {
         return callJobDto;
     }
 
+    public CallJobDto queryCallJobByID(Integer id) {
+        CallJobDO callJobDO = new CallJobDO();
+        callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        callJobDO.setId(id);
+        CallJobDO newCallJobDO = this.queryOne(callJobDO);
+        CallJobDto callJobDto = null;
+        if (newCallJobDO != null) {
+            callJobDto = BaseBeanUtils.convert(newCallJobDO, CallJobDto.class);
+            callJobDto.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
+
+        }
+        return callJobDto;
+    }
+
     public Boolean delCallJob(String contracNo, Integer id) {
         CallJobDO callJobDO = new CallJobDO();
         callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         callJobDO.setContractNo(contracNo);
         callJobDO.setId(id);
-        callJobDO.setUpdatedAt(new Date());
         CallJobDO delcCallJobDO = this.queryOne(callJobDO);
         if (null == delcCallJobDO) {
             throw new BaseBizException("400", "不存在的拨打计划");

@@ -27,6 +27,7 @@ import java.util.Map;
 @Api(value = "用户注册",description = "用户注册",produces = MediaType.APPLICATION_JSON)
 @Slf4j
 @RequestMapping(AppConst.BASE_PATH + "v1")
+@CrossOrigin
 public class RegisterController {
     @Autowired
     private PasswordUtil passwordUtil;

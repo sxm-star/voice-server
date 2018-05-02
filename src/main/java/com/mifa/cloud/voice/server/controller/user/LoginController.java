@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 @Api(value = "用户登陆",description = "用户登陆",produces = MediaType.APPLICATION_JSON)
 @Slf4j
 @RequestMapping(AppConst.BASE_PATH + "v1")
+@CrossOrigin
 public class LoginController {
 
     @Autowired
@@ -72,7 +73,7 @@ public class LoginController {
         loginInfoService.updateByPrimaryKeySelective(loginInfo);
 
         // 生成token返回
-        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 5);
+        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 1);
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .contractNo(loginInfo.getContractNo())
                 .token(token)

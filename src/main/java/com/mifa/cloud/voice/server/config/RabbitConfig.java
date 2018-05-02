@@ -16,4 +16,11 @@ public class RabbitConfig {
     public Queue fanoutVQueue() {
         return new Queue("q_analysis_mobile_list");
     }
+
+    @Bean
+    public Queue jobQueue() {
+        return new Queue("q_voice_job_pool");
+    }
+
+
 }

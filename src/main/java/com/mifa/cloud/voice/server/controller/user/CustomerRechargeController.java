@@ -3,18 +3,15 @@ package com.mifa.cloud.voice.server.controller.user;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.commons.dto.CustomerRechargeVO;
+import com.mifa.cloud.voice.server.commons.dto.PageDto;
 import com.mifa.cloud.voice.server.service.CustomerRechargeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -25,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 @RestController
 @Api(value = "用户充值记录", description = "用户充值记录", produces = MediaType.APPLICATION_JSON)
 @RequestMapping(AppConst.BASE_AUTH_PATH + "v1")
+@CrossOrigin
 public class CustomerRechargeController {
 
 
