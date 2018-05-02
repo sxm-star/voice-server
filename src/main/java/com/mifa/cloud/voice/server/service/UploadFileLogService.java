@@ -35,13 +35,13 @@ public class UploadFileLogService {
         criteria.andBizTypeEqualTo(bizType);
         criteria.andFileStatusEqualTo(status);
         List<UploadFileLog> fileLogs = mapper.selectByExample(example);
-        if(fileLogs.isEmpty()) {
+        if (fileLogs.isEmpty()) {
             return Collections.emptyList();
         }
         return fileLogs;
     }
 
-    public List<UploadFileLog> selectByFileTypeAndBizType(String fileType, String bizType, String status,String groupId) {
+    public List<UploadFileLog> selectByFileTypeAndBizType(String fileType, String bizType, String status, String groupId) {
         UploadFileLogExample example = new UploadFileLogExample();
         UploadFileLogExample.Criteria criteria = example.createCriteria();
         criteria.andFileTypeEqualTo(fileType);
@@ -49,9 +49,18 @@ public class UploadFileLogService {
         criteria.andBizTypeEqualTo(bizType);
         criteria.andFileStatusEqualTo(status);
         List<UploadFileLog> fileLogs = mapper.selectByExample(example);
-        if(fileLogs.isEmpty()) {
+        if (fileLogs.isEmpty()) {
             return Collections.emptyList();
         }
         return fileLogs;
     }
+
+    public Boolean updateByPrimaryKeySelective(UploadFileLog record) {
+        return mapper.updateByPrimaryKeySelective(record) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    public Boolean deleteByPrimaryKey(Long id) {
+        return mapper.deleteByPrimaryKey(id) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
 }

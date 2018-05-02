@@ -40,6 +40,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         customerTaskContactGroupDO.setGroupCnt(0);//默认0
         customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         customerTaskContactGroupDO.setCreatedBy(contactGroupPostDto.getContractNo());
+        customerTaskContactGroupDO.setCreatedAt(new Date());
         this.save(customerTaskContactGroupDO);
         return Boolean.TRUE;
     }
