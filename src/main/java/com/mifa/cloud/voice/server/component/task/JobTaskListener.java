@@ -93,7 +93,7 @@ public class JobTaskListener {
                         detailDO.setCreatedBy(item.getContractNo());
                         detailDO.setUserName(item.getUserName());
                         detailDO.setCallCnt(1);
-                        detailDO.setPhone(item.getUserPhone());
+                        detailDO.setPhone(called);
                         detailDO.setCreatedAt(new Date());
                         taskCallDetailService.save(detailDO);
                         log.info("保存拨打电话入库:{}",detailDO);
