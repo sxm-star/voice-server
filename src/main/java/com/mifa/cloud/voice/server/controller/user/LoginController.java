@@ -78,6 +78,8 @@ public class LoginController {
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .contractNo(loginInfo.getContractNo())
                 .token(token)
+                .isManager(loginInfo.getIsManager())
+                .contractNoRoleId(loginInfo.getContractNoRoleId())
                 .build();
 
         return CommonResponse.successCommonResponse(userLoginVO);

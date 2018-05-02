@@ -21,6 +21,10 @@ public class UserLoginVO {
     @ApiModelProperty("token")
     private String token;
 
+    @ApiModelProperty("是否是管理员（0：否；1：是）")
+    private String isManager;
 
+    @ApiModelProperty("客户角色ID")
+    private Long contractNoRoleId;
 
 }

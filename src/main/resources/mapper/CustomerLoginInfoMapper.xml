@@ -17,6 +17,7 @@
     <result column="active_code" property="activeCode" jdbcType="VARCHAR" />
     <result column="active_status" property="activeStatus" jdbcType="CHAR" />
     <result column="regist_type" property="registType" jdbcType="CHAR" />
+    <result column="is_manager" property="isManager" jdbcType="VARCHAR" />
     <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
     <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
@@ -83,7 +84,7 @@
   <sql id="Base_Column_List" >
     contract_no, contract_type, login_name, mobile, contract_no_role_id, login_passwd, 
     avatar_url, salt, nick_name, login_status, last_login_ip, last_login_time, active_code, 
-    active_status, regist_type, created_by, created_at, updated_by, updated_at
+    active_status, regist_type, is_manager, created_by, created_at, updated_by, updated_at
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfoExample" >
     select
@@ -121,15 +122,15 @@
       avatar_url, salt, nick_name, 
       login_status, last_login_ip, last_login_time, 
       active_code, active_status, regist_type, 
-      created_by, created_at, updated_by, 
-      updated_at)
+      is_manager, created_by, created_at, 
+      updated_by, updated_at)
     values (#{contractNo,jdbcType=VARCHAR}, #{contractType,jdbcType=CHAR}, #{loginName,jdbcType=VARCHAR}, 
       #{mobile,jdbcType=VARCHAR}, #{contractNoRoleId,jdbcType=BIGINT}, #{loginPasswd,jdbcType=VARCHAR}, 
       #{avatarUrl,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
       #{loginStatus,jdbcType=CHAR}, #{lastLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=BIGINT}, 
       #{activeCode,jdbcType=VARCHAR}, #{activeStatus,jdbcType=CHAR}, #{registType,jdbcType=CHAR}, 
-      #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+      #{isManager,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
     insert into t_customer_login_info
@@ -178,6 +179,9 @@
       </if>
       <if test="registType != null" >
         regist_type,
+      </if>
+      <if test="isManager != null" >
+        is_manager,
       </if>
       <if test="createdBy != null" >
         created_by,
@@ -237,6 +241,9 @@
       </if>
       <if test="registType != null" >
         #{registType,jdbcType=CHAR},
+      </if>
+      <if test="isManager != null" >
+        #{isManager,jdbcType=VARCHAR},
       </if>
       <if test="createdBy != null" >
         #{createdBy,jdbcType=VARCHAR},
@@ -306,6 +313,9 @@
       <if test="record.registType != null" >
         regist_type = #{record.registType,jdbcType=CHAR},
       </if>
+      <if test="record.isManager != null" >
+        is_manager = #{record.isManager,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdBy != null" >
         created_by = #{record.createdBy,jdbcType=VARCHAR},
       </if>
@@ -340,6 +350,7 @@
       active_code = #{record.activeCode,jdbcType=VARCHAR},
       active_status = #{record.activeStatus,jdbcType=CHAR},
       regist_type = #{record.registType,jdbcType=CHAR},
+      is_manager = #{record.isManager,jdbcType=VARCHAR},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_by = #{record.updatedBy,jdbcType=VARCHAR},
@@ -393,6 +404,9 @@
       <if test="registType != null" >
         regist_type = #{registType,jdbcType=CHAR},
       </if>
+      <if test="isManager != null" >
+        is_manager = #{isManager,jdbcType=VARCHAR},
+      </if>
       <if test="createdBy != null" >
         created_by = #{createdBy,jdbcType=VARCHAR},
       </if>
@@ -424,6 +438,7 @@
       active_code = #{activeCode,jdbcType=VARCHAR},
       active_status = #{activeStatus,jdbcType=CHAR},
       regist_type = #{registType,jdbcType=CHAR},
+      is_manager = #{isManager,jdbcType=VARCHAR},
       created_by = #{createdBy,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_by = #{updatedBy,jdbcType=VARCHAR},

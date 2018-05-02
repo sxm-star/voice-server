@@ -20,76 +20,40 @@ public class CustomerLoginInfoExample {
      */
     protected List<Criteria> oredCriteria;
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public CustomerLoginInfoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public String getOrderByClause() {
         return orderByClause;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public boolean isDistinct() {
         return distinct;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -98,19 +62,11 @@ public class CustomerLoginInfoExample {
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
-    /**
-     *
-     * @mbggenerated 2018-04-10
-     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
@@ -118,7 +74,7 @@ public class CustomerLoginInfoExample {
     }
 
     /**
-     * t_customer_login_info 2018-04-10
+     * t_customer_login_info 2018-05-02
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -1191,6 +1147,76 @@ public class CustomerLoginInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsManagerIsNull() {
+            addCriterion("is_manager is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerIsNotNull() {
+            addCriterion("is_manager is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerEqualTo(String value) {
+            addCriterion("is_manager =", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerNotEqualTo(String value) {
+            addCriterion("is_manager <>", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerGreaterThan(String value) {
+            addCriterion("is_manager >", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerGreaterThanOrEqualTo(String value) {
+            addCriterion("is_manager >=", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerLessThan(String value) {
+            addCriterion("is_manager <", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerLessThanOrEqualTo(String value) {
+            addCriterion("is_manager <=", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerLike(String value) {
+            addCriterion("is_manager like", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerNotLike(String value) {
+            addCriterion("is_manager not like", value, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerIn(List<String> values) {
+            addCriterion("is_manager in", values, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerNotIn(List<String> values) {
+            addCriterion("is_manager not in", values, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerBetween(String value1, String value2) {
+            addCriterion("is_manager between", value1, value2, "isManager");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsManagerNotBetween(String value1, String value2) {
+            addCriterion("is_manager not between", value1, value2, "isManager");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedByIsNull() {
             addCriterion("created_by is null");
             return (Criteria) this;
@@ -1452,9 +1478,6 @@ public class CustomerLoginInfoExample {
         }
     }
 
-    /**
-     * t_customer_login_info
-     */
     public static class Criteria extends GeneratedCriteria {
 
         protected Criteria() {
@@ -1463,7 +1486,7 @@ public class CustomerLoginInfoExample {
     }
 
     /**
-     * t_customer_login_info 2018-04-10
+     * t_customer_login_info 2018-05-02
      */
     public static class Criterion {
         private String condition;
