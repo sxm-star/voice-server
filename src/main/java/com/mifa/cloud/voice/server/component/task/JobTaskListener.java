@@ -13,6 +13,7 @@ import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
+import com.mifa.cloud.voice.server.utils.EncodesUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -68,7 +69,7 @@ public class JobTaskListener {
                 for (CustomerTaskUserContactsDO item: list){
 
                     String templateId = "20325";
-                    String called = item.getUserPhone();
+                    String called = EncodesUtils.selfDecrypt(item.getUserPhone(),item.getSalt());
                     //String calledDisplay = "95776";
                     String calledDisplay = "";
                     int playTimes = 1;
@@ -101,6 +102,12 @@ public class JobTaskListener {
                     }
 
                 }
+
+                callJobDO.setJobStatus(JobStatusEnum.STOP.getCode());
+                callJobDO.setUpdatedAt(new Date());
+                callJobDO.setUpdatedBy(callJobDO.getCreatedBy());
+                jobService.updateByIdSelective(callJobDO);
+
             }
 
 
