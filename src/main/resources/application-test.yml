@@ -44,7 +44,7 @@ upload:
 h5:
  app:
   url:
-   path: http://192.168.2.122
+   path: http://192.168.2.186
 #redis
 jedis:
   host: 127.0.0.1
