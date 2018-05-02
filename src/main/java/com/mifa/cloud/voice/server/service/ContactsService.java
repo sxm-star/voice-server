@@ -196,9 +196,9 @@ public class ContactsService {
                 taskUserContactsDO.setCreatedAt(new Date());
                 taskUserContactsDO.setCreatedBy(contractNo);
                 contactsDOs.add(taskUserContactsDO);
-                log.info("批量保存 size: {}", contactsDOs.size());
             });
             int cnt = contactsDAO.insertBatch(contactsDOs);
+            log.info("实际批量保存 size: {}", cnt);
             if (cnt > 0) {
                 UploadFileLog uploadFileLog = uploadFileLogMapper.selectByPrimaryKey(fileId);
                 uploadFileLog.setFileStatus(StatusEnum.BLOCK.getCode().toString());
