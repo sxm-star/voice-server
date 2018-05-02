@@ -14,7 +14,6 @@ import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +51,9 @@ public class JobTaskListener {
 
     @RabbitListener(queues = "q_voice_job_pool")
     @RabbitHandler
-    public void contactTask(String jobId) {
+    public void contactTask(Integer jobId) {
         log.info("接收到任务ID :{}",jobId);
-        if (StringUtils.isEmpty(jobId)) {
+        if (null==jobId) {
             log.warn("拨打任务ID为空!");
             return;
         }
