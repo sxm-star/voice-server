@@ -139,6 +139,7 @@ public class ContactsService {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteByContactNoAndId(String contactNo,Long id,Integer groupId){
         CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(groupId);
         if (taskContactGroupDO==null){
