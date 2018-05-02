@@ -171,10 +171,11 @@ public class ContactsService {
      * @param taskId
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addContancts(List<Map<String, Object>> list, String contractNo, String taskId, Long fileId) {
+    public Integer addContancts(List<Map<String, Object>> list, String contractNo, String taskId, Long fileId) {
         log.info("list size:{},contractNo:{},taskId:{},salt:{}", list.size(), contractNo, taskId,appProperties.getSalt());
         if (CollectionUtils.isNotEmpty(list)) {
             List<CustomerTaskUserContactsDO> contactsDOs = new ArrayList<>();
+            final Integer total = new Integer(0);
             list.forEach(map -> {
                 CustomerTaskUserContactsDO taskUserContactsDO = BaseBeanUtils.convert(map, CustomerTaskUserContactsDO.class);
                 taskUserContactsDO.setTaskId(taskId);
@@ -185,6 +186,7 @@ public class ContactsService {
                 try {
                     taskUserContactsDO.setUserPhone(EncodesUtils.selfEncrypt(phone,appProperties.getSalt()));
                     if (null!=contactsDAO.selectOne(taskUserContactsDO)){
+                        list.remove(map);
                         return;
                     }
                 } catch (Exception e) {
@@ -203,11 +205,11 @@ public class ContactsService {
                 uploadFileLog.setUpdateAt(new Date());
                 uploadFileLogMapper.updateByPrimaryKeySelective(uploadFileLog);
                 log.info("上传文件日志更新");
-                return Boolean.TRUE;
+                return cnt;
             }
 
         }
-        return Boolean.FALSE;
+        return 0;
     }
 
 }
