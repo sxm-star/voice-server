@@ -56,8 +56,12 @@ public class RegisterController {
         }
         // 验证账号是否已经注册
         CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginName(param.getLoginName());
+        CustomerLoginInfo loginInfoMobile = customerLoginInfoService.findByLoginMobile(param.getMobile());
         if(loginInfo != null) {
             return CommonResponse.failCommonResponse("该账号已被注册");
+        }
+        if(loginInfoMobile != null) {
+            return CommonResponse.failCommonResponse("该手机号已被注册");
         }
 
         // 密码加密处理
