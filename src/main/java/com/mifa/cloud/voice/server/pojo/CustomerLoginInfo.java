@@ -87,6 +87,11 @@ public class CustomerLoginInfo implements Serializable {
     private String registType;
 
     /**
+     * 是否是管理员（0：否；1：是）
+     */
+    private String isManager;
+
+    /**
      * 创建人
      */
     private String createdBy;

@@ -77,6 +77,7 @@ public class RegisterController {
                 .salt(generateMap.get("salt"))
                 .loginStatus("1")
                 .registType(param.getRegistType())
+                .isManager("0")
                 .build();
         int count = customerLoginInfoService.insertSelective(customerLoginInfo);
         if (count > 0) {
