@@ -8,6 +8,7 @@ import com.mifa.cloud.voice.server.commons.dto.UserLoginVO;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
+import com.mifa.cloud.voice.server.utils.IPUtil;
 import com.mifa.cloud.voice.server.utils.JwtTokenUtil;
 import com.mifa.cloud.voice.server.utils.PasswordUtil;
 import io.swagger.annotations.Api;
@@ -45,7 +46,7 @@ public class LoginController {
     @PostMapping("/user-login")
     @ApiOperation(value = "登陆")
     @Loggable(descp = "用户登陆")
-    public CommonResponse<UserLoginVO> login(@RequestBody @Valid UserLoginDTO param) {
+    public CommonResponse<UserLoginVO> login(@RequestBody @Valid UserLoginDTO param, HttpServletRequest request) {
 
         CustomerLoginInfo loginInfo = null;
         // 判断登陆类型，手机号登陆或用户名登陆
@@ -68,7 +69,7 @@ public class LoginController {
 
         //修改登陆时间、登陆ip
         loginInfo.setLastLoginTime(System.currentTimeMillis());
-        loginInfo.setLastLoginIp(StringUtils.isNotEmpty(param.getLastLoginIp()) ? param.getLastLoginIp() : loginInfo.getLastLoginIp());
+        loginInfo.setLastLoginIp(StringUtils.isNotEmpty(IPUtil.getRequestIp(request)) ? IPUtil.getRequestIp(request) : loginInfo.getLastLoginIp());
         loginInfoService.updateByPrimaryKeySelective(loginInfo);
 
         // 生成token返回
