@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -46,6 +47,12 @@ public class UploadFileUtil {
                 vo = UploadFileVO.builder()
                         .halfPath(pathDTO.getInitPath() + File.separator + pathDTO.getRandomFilename())
                         .build();
+
+                List<UploadFileLog> fileLogs = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.name(), BizTypeEnums.MOBILE_TEMPLATE.name(), FileStatusEnum.EFFECTIVE.getCode());
+
+                // 删除重复的模板文件
+                fileLogs.stream().forEach(item -> uploadFileLogService.deleteByPrimaryKey(item.getId()));
+
                 // 插入上传记录表
                 UploadFileLog uploadFileLog = UploadFileLog.builder()
                         .fileName(pathDTO.getRandomFilename())

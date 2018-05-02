@@ -26,12 +26,4 @@ public class UserLoginDTO {
     @NotEmpty(message = "密码不能为空")
     private String loginPasswd;
 
-    /**
-     * 最后登录IP
-     * */
-    @ApiModelProperty("最后登录IP")
-    private String lastLoginIp;
-
-
-
 }
