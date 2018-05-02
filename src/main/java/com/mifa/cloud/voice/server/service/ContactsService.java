@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.*;
@@ -175,7 +176,6 @@ public class ContactsService {
         log.info("list size:{},contractNo:{},taskId:{},salt:{}", list.size(), contractNo, taskId,appProperties.getSalt());
         if (CollectionUtils.isNotEmpty(list)) {
             List<CustomerTaskUserContactsDO> contactsDOs = new ArrayList<>();
-            final Integer total = new Integer(0);
             list.forEach(map -> {
                 CustomerTaskUserContactsDO taskUserContactsDO = BaseBeanUtils.convert(map, CustomerTaskUserContactsDO.class);
                 taskUserContactsDO.setTaskId(taskId);
@@ -187,6 +187,7 @@ public class ContactsService {
                     taskUserContactsDO.setUserPhone(EncodesUtils.selfEncrypt(phone,appProperties.getSalt()));
                     if (null!=contactsDAO.selectOne(taskUserContactsDO)){
                         list.remove(map);
+                        log.warn("批次taskId:{},重复号码记录:{},时间戳:{}",taskId, JSON.toJSONString(map),System.currentTimeMillis());
                         return;
                     }
                 } catch (Exception e) {

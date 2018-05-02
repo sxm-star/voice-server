@@ -103,9 +103,9 @@ public class TestService {
                         if (CollectionUtils.isEmpty(list)) {
                             return;
                         }
-                        boolean flag =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),uploadFileLog.getId());
+                        Integer batchCnt =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), BaseStringUtils.uuid(),uploadFileLog.getId());
                         Integer  cnt  = taskContactGroupDO.getGroupCnt()==null?0:taskContactGroupDO.getGroupCnt();
-                        taskContactGroupDO.setGroupCnt(cnt+list.size());
+                        taskContactGroupDO.setGroupCnt(cnt+batchCnt);
                         taskContactGroupDO.setUpdatedAt(new Date());
                         taskContactGroupDO.setUpdatedBy("system");
                         taskContactGroupService.updateByIdSelective(taskContactGroupDO);
