@@ -15,6 +15,8 @@ public interface CustomerTaskUserContactsDAO {
 
     int insert(CustomerTaskUserContactsDO record);
 
+    CustomerTaskUserContactsDO selectOne(CustomerTaskUserContactsDO record);
+
     int insertSelective(CustomerTaskUserContactsDO record);
 
     int insertBatch(List<CustomerTaskUserContactsDO> list);

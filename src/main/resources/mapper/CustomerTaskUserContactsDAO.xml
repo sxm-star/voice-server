@@ -103,6 +103,41 @@
       </if>
     </if>
   </select>
+
+    <select id="selectOne" parameterType="com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_customer_task_user_contacts
+        where 1=1
+        <if test="id != null">
+            and id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="contractNo != null">
+            AND contract_no = #{contractNo,jdbcType=VARCHAR}
+        </if>
+        <if test="taskId != null">
+            and task_id = #{taskId,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="userPhone != null">
+            AND  user_phone = #{userPhone,jdbcType=VARCHAR}
+        </if>
+
+        <if test="orgName != null">
+            AND  org_name = #{orgName,jdbcType=VARCHAR}
+        </if>
+
+        <if test="salt != null">
+            AND  salt = #{salt,jdbcType=VARCHAR}
+        </if>
+
+        <if test="createdBy != null">
+            AND   created_by = #{createdBy,jdbcType=VARCHAR}
+        </if>
+
+    </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

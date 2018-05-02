@@ -95,8 +95,13 @@ public class ContactsService {
      *
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public Boolean insertContact(ContactDto contactDto) {
         CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(contactDto.getGroupId());
+        if (taskContactGroupDO==null){
+            log.warn("不存在的号码组信息 groupId = {},插入号码无效",contactDto.getGroupId());
+            return Boolean.FALSE;
+        }
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
         contactDo.setCreatedBy(contactDto.getContractNo());
@@ -106,7 +111,13 @@ public class ContactsService {
         contactDo.setSalt(appProperties.getSalt());
         contactDo.setUserSex(SexEnum.getDesc(contactDo.getUserSex()));
         int cnt = contactsDAO.insert(contactDo);
-        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+
+        int groupCnt = taskContactGroupDO.getGroupCnt() + 1;
+        taskContactGroupDO.setGroupCnt(groupCnt);
+        taskContactGroupDO.setUpdatedAt(new Date());
+        taskContactGroupDO.setUpdatedBy(contactDto.getContractNo());
+        int groupUpdateCnt = taskContactGroupDAO.updateByPrimaryKeySelective(taskContactGroupDO);
+        return cnt > 0 && groupUpdateCnt>0? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -128,14 +139,26 @@ public class ContactsService {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public boolean deleteByContactNoAndId(String contactNo,Long id){
+    public boolean deleteByContactNoAndId(String contactNo,Long id,Integer groupId){
+        CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(groupId);
+        if (taskContactGroupDO==null){
+            log.warn("该号码id={} ,不存在这个组groupId ={}下",id,groupId);
+            return Boolean.FALSE;
+        }
         CustomerTaskUserContactsDO contactsDO =  contactsDAO.selectByPrimaryKey(id);
         contactsDO.setUpdatedAt(new Date());
         if (contactsDO!=null&&contactsDO.getCreatedBy() != null && contactsDO.getCreatedBy().equals(contactNo)) {
             contactsDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = contactsDAO.updateByPrimaryKeySelective(contactsDO);
-            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+
+            int groupCnt = taskContactGroupDO.getGroupCnt()-1;
+            taskContactGroupDO.setGroupCnt(groupCnt);
+            taskContactGroupDO.setUpdatedAt(new Date());
+            taskContactGroupDO.setUpdatedBy(contactNo);
+            int groupUpdateCnt = taskContactGroupDAO.updateByPrimaryKeySelective(taskContactGroupDO);
+            return cnt > 0 && groupUpdateCnt>0 ? Boolean.TRUE : Boolean.FALSE;
         }
+        log.warn("该组groupID = {},不存在的号码id={}",groupId,id);
         return Boolean.FALSE;
     }
 
@@ -160,6 +183,9 @@ public class ContactsService {
                 String phone = taskUserContactsDO.getUserPhone();
                 try {
                     taskUserContactsDO.setUserPhone(EncodesUtils.selfEncrypt(phone,appProperties.getSalt()));
+                    if (null!=contactsDAO.selectOne(taskUserContactsDO)){
+                        return;
+                    }
                 } catch (Exception e) {
                     log.info("手机号:{}加密失败:{}", phone, e);
                 }
