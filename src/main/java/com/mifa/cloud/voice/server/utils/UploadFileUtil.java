@@ -48,10 +48,11 @@ public class UploadFileUtil {
                         .halfPath(pathDTO.getInitPath() + File.separator + pathDTO.getRandomFilename())
                         .build();
 
-                List<UploadFileLog> fileLogs = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.name(), BizTypeEnums.MOBILE_TEMPLATE.name(), FileStatusEnum.EFFECTIVE.getCode());
-
-                // 删除重复的模板文件
-                fileLogs.stream().forEach(item -> uploadFileLogService.deleteByPrimaryKey(item.getId()));
+                if(FileTypeEnums.EXCEL.name().equals(fileType.name()) && BizTypeEnums.MOBILE_TEMPLATE.name().equals(bizType.name())) {
+                    List<UploadFileLog> fileLogs = uploadFileLogService.selectByFileTypeAndBizType(FileTypeEnums.EXCEL.name(), BizTypeEnums.MOBILE_TEMPLATE.name(), FileStatusEnum.EFFECTIVE.getCode());
+                    // 删除重复的模板文件
+                    fileLogs.stream().forEach(item -> uploadFileLogService.deleteByPrimaryKey(item.getId()));
+                }
 
                 // 插入上传记录表
                 UploadFileLog uploadFileLog = UploadFileLog.builder()
