@@ -141,7 +141,7 @@ public class ContactsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteByContactNoAndId(String contactNo,Long id,Integer groupId){
+    public boolean deleteByContactNoAndId(String contactNo,Long id,Long groupId){
         CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(groupId);
         if (taskContactGroupDO==null){
             log.warn("该号码id={} ,不存在这个组groupId ={}下",id,groupId);

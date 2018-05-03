@@ -133,12 +133,12 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact",method = RequestMethod.DELETE)
     @Loggable(descp = "删除单个号码")
-    public CommonResponse<Boolean> delContact(String contractNo,Integer id,Integer groupId){
+    public CommonResponse<Boolean> delContact(String contractNo,Long id,Long groupId){
         if(StringUtils.isEmpty(contractNo) || id==null || groupId==null){
             return CommonResponse.failCommonResponse("400","ID和客户号,组号groupId必填,不能为空");
         }
 
-        return CommonResponse.successCommonResponse(contactsService.deleteByContactNoAndId(contractNo,Long.parseLong(String.valueOf(id)),groupId));
+        return CommonResponse.successCommonResponse(contactsService.deleteByContactNoAndId(contractNo,id,groupId));
     }
 
 }
