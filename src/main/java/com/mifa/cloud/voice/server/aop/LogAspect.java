@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.enums.SCOPE;
+import com.mifa.cloud.voice.server.utils.IPUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -103,7 +104,7 @@ public class LogAspect {
 
         // 记录下请求内容
         log.info("请求URL : {}", request.getRequestURL().toString());
-        log.info("请求IP : " + request.getRemoteAddr());
+        log.info("请求IP : " + IPUtil.getRequestIp(request));
         // log.info("CLASS_METHOD : " +
         // joinPoint.getSignature().getDeclaringTypeName() + "." +
         // joinPoint.getSignature().getName());
