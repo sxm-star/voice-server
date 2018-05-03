@@ -11,6 +11,11 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 #datasource config
 ds:
  driverClassName: com.mysql.jdbc.Driver
