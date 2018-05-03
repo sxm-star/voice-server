@@ -199,7 +199,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
             CustomerTaskCallDetailDO customerTaskCallDetailDO = new CustomerTaskCallDetailDO();
             customerTaskCallDetailDO.setPhone(called);
-            customerTaskCallDetailDO.setTaskId(BaseStringUtils.uuid());
+            customerTaskCallDetailDO.setTaskId(data);
             customerTaskCallDetailDO.setNote("测试接口记录");
             customerTaskCallDetailDO.setCreatedAt(new Date());
             customerTaskCallDetailDO.setCallCnt(1);
