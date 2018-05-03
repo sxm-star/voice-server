@@ -27,6 +27,9 @@ public class AuthCompanyDTO {
     @ApiModelProperty("经营年限")
     private String businessLife;
 
+    @ApiModelProperty("企业规模")
+    private String scale;
+
     @ApiModelProperty("行业")
     private String profession;
 
