@@ -91,6 +91,18 @@ public class VoiceTemplateDO extends BaseDataDo {
     private String remark;
 
     /**
+     * 供应商三方平台模板ID审核回填渠道商名称
+     */
+    @Column(name = "out_channel_name")
+    private String outChannelName;
+
+    /**
+     * 供应商三方平台模板ID回填
+     */
+    @Column(name = "out_template_id")
+    private String outTemplateId;
+
+    /**
      * 创建时间
      */
     @Column(name = "created_at")

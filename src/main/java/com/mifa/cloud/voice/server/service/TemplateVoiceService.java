@@ -146,6 +146,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         }
         voiceTemplateDO.setStatus(StatusEnum.BLOCK.getCode().toString());
         voiceTemplateDO.setUpdatedAt(new Date());
+        voiceTemplateDO.setUpdatedBy(contractNo);
         int cnt = this.updateByIdSelective(voiceTemplateDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -164,6 +165,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             alterVoiceTemplateDO.setTemplateId(templateID);
             alterVoiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
             alterVoiceTemplateDO.setUpdatedAt(new Date());
+            alterVoiceTemplateDO.setUpdatedBy(alterReqDto.getContractNo());
             log.info("修改前数据 alterReqDto:{}", alterReqDto);
             log.info("将入库修改的数据 alterVoiceTemplateDO:{}", alterVoiceTemplateDO);
             int cnt = this.updateByIdSelective(alterVoiceTemplateDO);
@@ -176,11 +178,11 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
-        if (voiceTemplateDO == null) {
-            throw new BaseBizException("400", "不存在的模板");
+        if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId()==null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
+            throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
         }
         //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
-        String templateId = "20325"; // TODO: 2018/4/27 目前是唯一一个可测试的模板
+        String templateId = voiceTemplateDO.getOutTemplateId();
         String called = openDto.getPhone();
         //String calledDisplay = "95776";
         String calledDisplay = "";
