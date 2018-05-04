@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 /**
  * @author: songxm
  * @date: 2018/4/12 10:13
@@ -111,6 +113,7 @@ public class ContactsService {
         queryContactDo.setContractNo(contactDto.getContractNo());
         queryContactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
         queryContactDo.setTaskId(taskContactGroupDO.getTaskId());
+        queryContactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
         if (contactsDAO.selectOne(queryContactDo)!=null){
             throw new BaseBizException("400","已存在用户号,不允许重复添加");
         }
@@ -176,6 +179,18 @@ public class ContactsService {
         return Boolean.FALSE;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchDeleteByContactNoAndGroupId(String contactNo,Long groupId){
+        CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(groupId);
+        if (taskContactGroupDO==null){
+            log.warn("该号码id={} ,不存在这个组groupId ={}下",id,groupId);
+            return Boolean.FALSE;
+        }
+        CustomerTaskUserContactsDOExample example =  new CustomerTaskUserContactsDOExample();
+        example.createCriteria().andContractNoEqualTo(contactNo).andTaskIdEqualTo(taskContactGroupDO.getTaskId());
+        int cnt = contactsDAO.deleteByExample(example);
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
     /**
      * 解析号码入库
      *

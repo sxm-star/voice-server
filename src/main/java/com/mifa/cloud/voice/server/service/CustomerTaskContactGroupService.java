@@ -31,6 +31,8 @@ import java.util.List;
 public class CustomerTaskContactGroupService extends BaseService<CustomerTaskContactGroupDO> {
     @Autowired
     CustomerTaskContactGroupDAO groupDAO;
+    @Autowired
+    ContactsService contactsService;
 
     public Boolean addContactGroup(ContactGroupPostDto contactGroupPostDto) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
@@ -119,7 +121,8 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         if (this.queryOne(customerTaskContactGroupDO) != null) {
             customerTaskContactGroupDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = this.updateByIdSelective(customerTaskContactGroupDO);
-            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+            boolean flag = contactsService.batchDeleteByContactNoAndGroupId(contactNo,id);
+            return cnt > 0 && flag ? Boolean.TRUE : Boolean.FALSE;
         }
         return Boolean.FALSE;
     }
