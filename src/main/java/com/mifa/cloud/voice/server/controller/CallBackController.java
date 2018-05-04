@@ -1,18 +1,17 @@
 package com.mifa.cloud.voice.server.controller;
 
-import com.mifa.cloud.voice.server.annotation.Loggable;
-import com.mifa.cloud.voice.server.api.jx.dto.CallBackDto;
+import com.alibaba.fastjson.JSON;
+import com.mifa.cloud.voice.server.api.jx.dto.CallBackV2Dto;
+import com.mifa.cloud.voice.server.api.jx.enums.NotifyEnum;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.enums.CallFlagEnum;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
 import com.mifa.cloud.voice.server.service.CustomerTaskCallDetailService;
-import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static com.mifa.cloud.voice.server.api.jx.enums.NotifyEnum.*;
 
 /**
  * @author: songxm
@@ -32,24 +31,59 @@ public class CallBackController {
     @ApiOperation("即信语音通知回调开始")
     @RequestMapping(value = "/jx/call-back", method = RequestMethod.POST)
     @ResponseBody
-    @Loggable(descp = "即信语音通知回调开始")
-    public CommonResponse<Boolean> callBack(@RequestBody  CallBackDto callBackDto) {
-         if (callBackDto!=null && callBackDto.getReportList()!=null)
-         {
-             CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
-             callBackDto.getReportList().forEach(report->{
-                 taskCallDetailDO.setTaskId(report.getExtend());
-                 taskCallDetailDO.setPhone(report.getPhone());
-                 String flag = report.getResult().equals("0")? CallFlagEnum.HAS_CALLED.getCode():CallFlagEnum.NO_CALLED.getCode();
-                 taskCallDetailDO.setCallFlag(flag);
-                 CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
-                 taskCallDetailService.updateByIdSelective(updateTaskCallDO);
-             });
-             log.info("即信语音通知 size:{}",callBackDto.getReportList().size());
-             return CommonResponse.successCommonResponse();
-         }
+    public void callBack(@RequestBody CallBackV2Dto callBackDto) {
+         log.info(callBackDto.getNotify() + "开始" + NotifyEnum.getDesc(callBackDto.getNotify()));
 
-        return CommonResponse.failCommonResponse("400","回调信息体空列表:"+callBackDto.getReportList()+"", BaseStringUtils.uuid());
+        switch (NotifyEnum.getEnum(callBackDto.getNotify())){
+            case CALLSTATE:
+            {
+               log.info(CALLSTATE.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            case CALLCREATE:
+            {
+                log.info(CALLCREATE.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            case CALLPROCESS:
+            {
+                log.info(CALLPROCESS.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            case CALLANSWER:
+            {
+                log.info(CALLANSWER.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            case CALLEND:
+            {
+                log.info(CALLEND.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            case CDR:
+            {
+                log.info(CDR.getDesc() + "--" + JSON.toJSONString(callBackDto));
+            }
+            break;
+            default:
+                log.warn("通知结果 未知类型");
+                break;
+        }
+
+//         if (callBackDto!=null && callBackDto.getReportList()!=null)
+//         {
+//             CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
+//             callBackDto.getReportList().forEach(report->{
+//                 taskCallDetailDO.setTaskId(report.getExtend());
+//                 taskCallDetailDO.setPhone(report.getPhone());
+//                 String flag = report.getResult().equals("0")? CallFlagEnum.HAS_CALLED.getCode():CallFlagEnum.NO_CALLED.getCode();
+//                 taskCallDetailDO.setCallFlag(flag);
+//                 CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
+//                 taskCallDetailService.updateByIdSelective(updateTaskCallDO);
+//             });
+//             log.info("即信语音通知 size:{}",callBackDto.getReportList().size());
+//             return CommonResponse.successCommonResponse();
+//         }
     }
 
 }

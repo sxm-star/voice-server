@@ -14,5 +14,7 @@ public class CallBackItemDto {
     private String phone;
     private String extend;
     private String reportTime;
+    private String dest;
+    private Integer durationTime;
     private String result;
 }
