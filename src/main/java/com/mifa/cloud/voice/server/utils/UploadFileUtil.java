@@ -9,6 +9,7 @@ import com.mifa.cloud.voice.server.commons.dto.UpLoadFilePathDTO;
 import com.mifa.cloud.voice.server.commons.dto.UploadFileVO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
+import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -163,18 +164,19 @@ public class UploadFileUtil {
     /**
      * 文件格式校验
      */
-    public boolean fileTypeReg(@RequestParam("fileType") FileTypeEnums fileType, String filename) {
+    public static boolean fileTypeReg(@RequestParam("fileType") FileTypeEnums fileType, String filename) {
         Pattern pattern = null;
-        // 如果上传的是excel文件
+        // 如果上传的是excel文件.+(.JPEG|.jpeg|.JPG|.jpg)$
         if(FileTypeEnums.EXCEL.name().equals(fileType.name()))
-            pattern = Pattern.compile("^(?:\\w+\\.xlsx|\\w+\\.xls)$");
+            pattern = Pattern.compile("^.+(.xlsx|.xls)$");
         // 如果上传的事音频
         if(FileTypeEnums.VOICE.name().equals(fileType.name()))
-            pattern = Pattern.compile("^(?:\\w+\\.wav)$");
+            pattern = Pattern.compile("^.+(.wav)$");
         // 如果上传的事音频
         if(FileTypeEnums.IMAGE.name().equals(fileType.name()))
-            pattern = Pattern.compile("^(?:\\w+\\.jpg|\\w+\\.jpeg|\\w+\\.bmp|\\w+\\.png|\\w+\\.gif|\\w+\\.pdf)$");
+            pattern = Pattern.compile("^.+(.jpg|.jpeg|.bmp|.png|.gif|.pdf)$");
         Matcher matcher = pattern.matcher(filename);
         return matcher.matches();
     }
+
 }
