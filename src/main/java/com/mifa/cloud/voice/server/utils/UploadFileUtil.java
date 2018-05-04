@@ -78,6 +78,7 @@ public class UploadFileUtil {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                log.error("文件上传异常", e);
             }
         } else {
             log.error("上传文件为空");
