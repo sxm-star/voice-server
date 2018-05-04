@@ -133,6 +133,9 @@ public class ContactsService {
         pre_ContactsDo.setUpdatedAt(new Date());
         try {
             pre_ContactsDo.setUserPhone(EncodesUtils.selfEncrypt(contactQueryDto.getUserPhone(),appProperties.getSalt()));
+            pre_ContactsDo.setUserSex(SexEnum.getDesc(contactQueryDto.getUserSex()));
+            pre_ContactsDo.setUpdatedAt(new Date());
+            pre_ContactsDo.setUpdatedBy(contactQueryDto.getContractNo());
         }catch (Exception e){
             log.error("数据修改 加密失败:{}",e);
         }

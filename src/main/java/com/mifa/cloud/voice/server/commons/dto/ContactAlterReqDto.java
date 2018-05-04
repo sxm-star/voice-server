@@ -48,4 +48,21 @@ public class ContactAlterReqDto {
      */
     @ApiModelProperty("公司名字")
     private String orgName;
+
+    /**
+     * 用户地址
+     */
+    @ApiModelProperty("用户地址")
+    private String userAddress;
+
+    /**
+     * 用户职位
+     */
+    @ApiModelProperty("用户职位")
+    private String userJob;
+
+    /**
+     * M:男性; W:女性; N:未知
+     */
+    private String userSex;
 }
