@@ -57,7 +57,7 @@ public class UpDownFileController {
             @RequestParam(value = "groupId", required = false) String groupId
     ) throws Exception {
         String originalFilename = file.getOriginalFilename();
-        Boolean flag = uploadFileUtil.fileTypeReg(fileType, originalFilename);
+        boolean flag = uploadFileUtil.fileTypeReg(fileType, originalFilename);
         if (!flag) return CommonResponse.failCommonResponse("请选择正确的格式");
         return CommonResponse.successCommonResponse(uploadFileUtil.upload(file, fileType, bizType, contractNo, groupId, aconst));
     }

@@ -162,38 +162,18 @@ public class UploadFileUtil {
     /**
      * 文件格式校验
      */
-    public Boolean fileTypeReg(@RequestParam("fileType") FileTypeEnums fileType, String filename) {
+    public boolean fileTypeReg(@RequestParam("fileType") FileTypeEnums fileType, String filename) {
+        Pattern pattern = null;
         // 如果上传的是excel文件
-        if(FileTypeEnums.EXCEL.name().equals(fileType.name())) {
-            // 表达式对象
-            Pattern excelPattern = Pattern.compile("^(?:\\w+\\.xlsx|\\w+\\.xls)$");
-            // 创建 Matcher 对象
-            Matcher excelMatcher = excelPattern.matcher(filename);
-            if(!excelMatcher.matches()) {
-                return Boolean.FALSE;
-            }
-        }
+        if(FileTypeEnums.EXCEL.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.xlsx|\\w+\\.xls)$");
         // 如果上传的事音频
-        if(FileTypeEnums.VOICE.name().equals(fileType.name())) {
-            // 表达式对象
-            Pattern voicePattern = Pattern.compile("^(?:\\w+\\.wav)$");
-            // 创建 Matcher 对象
-            Matcher voiceMatcher = voicePattern.matcher(filename);
-            if(!voiceMatcher.matches()) {
-                return Boolean.FALSE;
-            }
-        }
-
+        if(FileTypeEnums.VOICE.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.wav)$");
         // 如果上传的事音频
-        if(FileTypeEnums.IMAGE.name().equals(fileType.name())) {
-            // 表达式对象
-            Pattern imagePattern = Pattern.compile("^(?:\\w+\\.jpg|\\w+\\.jpeg|\\w+\\.bmp|\\w+\\.png|\\w+\\.gif|\\w+\\.pdf)$");
-            // 创建 Matcher 对象
-            Matcher imageMatcher = imagePattern.matcher(filename);
-            if(!imageMatcher.matches()) {
-                return Boolean.FALSE;
-            }
-        }
-        return Boolean.TRUE;
+        if(FileTypeEnums.IMAGE.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.jpg|\\w+\\.jpeg|\\w+\\.bmp|\\w+\\.png|\\w+\\.gif|\\w+\\.pdf)$");
+        Matcher matcher = pattern.matcher(filename);
+        return matcher.matches();
     }
 }
