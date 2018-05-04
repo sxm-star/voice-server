@@ -10,6 +10,7 @@ import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.dao.UploadFileLogMapper;
+import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
@@ -105,6 +106,14 @@ public class ContactsService {
         }
         CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
+
+        CustomerTaskUserContactsDO queryContactDo = new CustomerTaskUserContactsDO();
+        queryContactDo.setContractNo(contactDto.getContractNo());
+        queryContactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
+        queryContactDo.setTaskId(taskContactGroupDO.getTaskId());
+        if (contactsDAO.selectOne(queryContactDo)!=null){
+            throw new BaseBizException("400","已存在用户号,不允许重复添加");
+        }
         contactDo.setCreatedBy(contactDto.getContractNo());
         contactDo.setCreatedAt(new Date());
         contactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
