@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -23,6 +24,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2018/4/9.
@@ -156,4 +159,21 @@ public class UploadFileUtil {
         return initPath;
     }
 
+    /**
+     * 文件格式校验
+     */
+    public boolean fileTypeReg(@RequestParam("fileType") FileTypeEnums fileType, String filename) {
+        Pattern pattern = null;
+        // 如果上传的是excel文件
+        if(FileTypeEnums.EXCEL.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.xlsx|\\w+\\.xls)$");
+        // 如果上传的事音频
+        if(FileTypeEnums.VOICE.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.wav)$");
+        // 如果上传的事音频
+        if(FileTypeEnums.IMAGE.name().equals(fileType.name()))
+            pattern = Pattern.compile("^(?:\\w+\\.jpg|\\w+\\.jpeg|\\w+\\.bmp|\\w+\\.png|\\w+\\.gif|\\w+\\.pdf)$");
+        Matcher matcher = pattern.matcher(filename);
+        return matcher.matches();
+    }
 }
