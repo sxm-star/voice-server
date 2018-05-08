@@ -113,7 +113,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public PageDto<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
         PageDto<VoiceTemplateAuditVO> pageDto = null;
         VoiceTemplateDO templateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
-        templateDO.setTemplateType(query.getVoiceType().name());
+        if(query.getVoiceType() != null) {
+            templateDO.setTemplateType(query.getVoiceType().name());
+        }
         if(StringUtils.isNotEmpty(query.getMerMobile())) {
             CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginMobile(query.getMerMobile());
             if(loginInfo != null) {
