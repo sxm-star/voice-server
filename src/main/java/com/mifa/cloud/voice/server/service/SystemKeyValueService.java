@@ -102,6 +102,9 @@ public class SystemKeyValueService {
      * 根据key查询字典
      */
     public SystemKeyValue selectByKey(String key) {
+        if(StringUtils.isEmpty(key)) {
+            return null;
+        }
         SystemKeyValueExample example = new SystemKeyValueExample();
         SystemKeyValueExample.Criteria criteria = example.createCriteria();
         criteria.andParamKeyEqualTo(key);
