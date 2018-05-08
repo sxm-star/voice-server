@@ -62,7 +62,7 @@ public class VoiceTemplateDO extends BaseDataDo {
     private String status;
 
     /**
-     * 审核状态 0:待审核 1：审核通过；2:审核失败
+     * 审核状态 0:待审核 1：审核通过；2:审核失败；3:审核中
      */
     @Column(name = "audit_status")
     private String auditStatus;

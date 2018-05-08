@@ -2,22 +2,18 @@ package com.mifa.cloud.voice.server.controller.user;
 
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.AuthCheckDTO;
-import com.mifa.cloud.voice.server.commons.dto.AuthCompanyDTO;
-import com.mifa.cloud.voice.server.commons.dto.AuthPersionDTO;
+import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
-import com.mifa.cloud.voice.server.service.CustomerAauthPersonService;
-import com.mifa.cloud.voice.server.service.CustomerAuthAuditService;
-import com.mifa.cloud.voice.server.service.CustomerAuthCompanyService;
-import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
+import com.mifa.cloud.voice.server.pojo.SystemKeyValue;
+import com.mifa.cloud.voice.server.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +42,9 @@ public class UserAuthController {
 
     @Autowired
     private CustomerAuthAuditService customerAuthAuditService;
+
+    @Autowired
+    private SystemKeyValueService systemKeyValueService;
 
     @PostMapping("/person")
     @ApiOperation(value = "个人认证")
@@ -140,6 +139,45 @@ public class UserAuthController {
         }
         return CommonResponse.failCommonResponse("审核失败");
 
+    }
+
+    @GetMapping("/person/{contractNo}")
+    @ApiOperation(value = "获得个人认证审核信息")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    @Loggable(descp = "获得个人认证审核信息")
+    public CommonResponse<AuthPersionDetailVO> getPersonAuthDetail(@PathVariable("contractNo") String contractNo) {
+        CustomerAauthPerson authPersonDetail = customerAauthPersonService.selectByPrimaryKey(contractNo);
+        AuthPersionDetailVO vo = new AuthPersionDetailVO();
+        if(authPersonDetail != null) {
+            SystemKeyValue systemKeyValue = systemKeyValueService.selectByKey(authPersonDetail.getProfession());
+            authPersonDetail.setProfession(systemKeyValue.getParamValue());
+            BeanUtils.copyProperties(authPersonDetail, vo);
+        }
+        return CommonResponse.successCommonResponse(vo);
+    }
+
+    @GetMapping("/company/{contractNo}")
+    @ApiOperation(value = "获得企业认证审核信息")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    @Loggable(descp = "获得企业认证审核信息")
+    public CommonResponse<AuthCompanyDetailVO> getCompanyAuthDetail(@PathVariable("contractNo") String contractNo) {
+        CustomerAuthCompany authCompanyDetail = customerAuthCompanyService.selectByPrimaryKey(contractNo);
+        AuthCompanyDetailVO vo = new AuthCompanyDetailVO();
+        if(authCompanyDetail != null) {
+            // 此处可改为从枚举中获得
+            SystemKeyValue profession = systemKeyValueService.selectByKey(authCompanyDetail.getProfession());
+            SystemKeyValue scale = systemKeyValueService.selectByKey(authCompanyDetail.getScale());
+            SystemKeyValue businessLife = systemKeyValueService.selectByKey(authCompanyDetail.getBusinessLife());
+            authCompanyDetail.setProfession(profession.getParamValue());
+            authCompanyDetail.setScale(scale.getParamValue());
+            authCompanyDetail.setBusinessLife(businessLife.getParamValue());
+            BeanUtils.copyProperties(authCompanyDetail, vo);
+        }
+        return CommonResponse.successCommonResponse(vo);
     }
 
 

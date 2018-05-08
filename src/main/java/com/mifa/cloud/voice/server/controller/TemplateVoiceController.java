@@ -93,6 +93,15 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoice(alterReqDto));
     }
 
+    @ApiOperation("管理员语音模板编辑")
+    @RequestMapping(value = "/template-voice-admin", method = RequestMethod.PUT)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "管理员语音模板编辑")
+    public CommonResponse<Boolean> alterTemplateVoiceByAdmin(@ModelAttribute @Valid VoiceTemplateAdminAlterReqDto alterReqDto){
+        return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoiceAdmin(alterReqDto));
+    }
+
     @ApiOperation("语音模板测试")
     @RequestMapping(value = "/template-voice-test", method = RequestMethod.POST)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
