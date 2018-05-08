@@ -95,6 +95,7 @@ public class CustomerAauthPersonService {
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
         customerAuthAudit.setUpdatedAt(new Date());
+        customerAuthAudit.setAutitTime(new Date());
         int count = customerAuthAuditMapper.updateByPrimaryKeySelective(customerAuthAudit);
 
         customerAauthPerson.setRemark(param.getRemark());

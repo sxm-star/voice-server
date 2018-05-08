@@ -92,6 +92,7 @@ public class CustomerAuthCompanyService {
         CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo());
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
+        customerAuthAudit.setAutitTime(new Date());
         int count = customerAuthAuditService.updateByPrimaryKeySelective(customerAuthAudit);
 
         customerAuthCompany.setRemark(param.getRemark());

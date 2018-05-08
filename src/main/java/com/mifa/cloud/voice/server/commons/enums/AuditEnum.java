@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum AuditEnum {
     WAIT_AUDIT("0","待审核"),
     AUDIT_SUCCESS("1","审核通过"),
-    AUDIT_FAIL("2","审核失败");
+    AUDIT_FAIL("2","审核失败"),
+    AUDIT_ING("3","审核中");
     String code;
     String desc;
 

@@ -176,6 +176,22 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         }
     }
 
+    public boolean alterTemplateVoiceAdmin(VoiceTemplateAdminAlterReqDto alterReqDto) {
+        String templateID = alterReqDto.getTemplateId();
+        VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
+        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_ING.getCode())) {
+            voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
+            voiceTemplateDO.setOutTemplateId(StringUtils.isNotEmpty(alterReqDto.getOutTemplateId()) ? alterReqDto.getOutTemplateId() : voiceTemplateDO.getTemplateId());
+            voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? alterReqDto.getAuditStatus() : voiceTemplateDO.getAuditStatus());
+            log.info("将入库修改的数据 alterVoiceTemplateDO:{}", voiceTemplateDO);
+            int cnt = this.updateByIdSelective(voiceTemplateDO);
+            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
+        } else {
+            log.warn("只允许修改审核中的数据");
+            throw new BaseBizException("400", "只允许修改审核中的数据");
+        }
+    }
+
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
         if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId()==null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {

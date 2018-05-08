@@ -98,7 +98,17 @@ public class SystemKeyValueService {
         return mapper.selectByPrimaryKey(id);
     }
 
-
+    /**
+     * 根据key查询字典
+     */
+    public SystemKeyValue selectByKey(String key) {
+        SystemKeyValueExample example = new SystemKeyValueExample();
+        SystemKeyValueExample.Criteria criteria = example.createCriteria();
+        criteria.andParamKeyEqualTo(key);
+        List<SystemKeyValue> values = mapper.selectByExample(example);
+        if (values.isEmpty()) return null;
+        return values.get(0);
+    }
 
 
 
