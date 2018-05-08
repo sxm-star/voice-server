@@ -139,7 +139,7 @@ public class LogAspect {
         try {
             resp = point.proceed(); // 执行目标方法内容，获取返回值
         } catch (Exception e) {
-
+            log.error("", e);
             log.error("业务处理过程出现异常:{},class:{},methodName:{}", e.getCause(), evtClass, methodName);
             exFlag = true;
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder

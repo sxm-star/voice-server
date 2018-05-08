@@ -13,7 +13,9 @@ import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
+import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
+import com.mifa.cloud.voice.server.commons.dto.VoiceTemplateAuditVO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
@@ -41,6 +43,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     TemplateVoiceDAO templateVoiceDAO;
     @Autowired
     CustomerTaskCallDetailDAO taskCallDetailDAO;
+
+    @Autowired
+    private CustomerLoginInfoService customerLoginInfoService;
 
     public Boolean insertTemplateVoice(TemplateVoiceDto templateVoiceDto) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
@@ -104,6 +109,51 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             return pageDto;
         }
     }
+
+    public PageDto<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
+        PageDto<VoiceTemplateAuditVO> pageDto = null;
+        VoiceTemplateDO templateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
+        templateDO.setTemplateType(query.getVoiceType().name());
+        if(StringUtils.isNotEmpty(query.getMerMobile())) {
+            CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginMobile(query.getMerMobile());
+            if(loginInfo != null) {
+                templateDO.setContractNo(loginInfo.getContractNo());
+            }
+        }
+        try {
+            List<VoiceTemplateAuditVO> voList = new ArrayList<>();
+            PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(templateDO, pageNum, pageSize, " created_at desc");
+            pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
+            if(pageInfo != null && !pageInfo.getList().isEmpty()) {
+                pageInfo.getList().stream().forEach(item -> {
+                    VoiceTemplateAuditVO auditVO = BaseBeanUtils.convert(item, VoiceTemplateAuditVO.class);
+                    CustomerLoginInfo customerInfo = customerLoginInfoService.selectByPrimaryKey(item.getContractNo());
+                    auditVO.setMerMobile(customerInfo != null ? customerInfo.getMobile() : "");
+                    if (AuditEnum.WAIT_AUDIT.getCode().equals(auditVO.getAuditStatus())) {
+                        auditVO.setAuditStatus(AuditEnum.WAIT_AUDIT.getDesc());
+                    }
+                    if (AuditEnum.AUDIT_SUCCESS.getCode().equals(auditVO.getAuditStatus())) {
+                        auditVO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getDesc());
+                    }
+                    if (AuditEnum.AUDIT_FAIL.getCode().equals(auditVO.getAuditStatus())) {
+                        auditVO.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
+                    }
+                    // 创建人
+                    if(StringUtils.isNotEmpty(item.getCreatedBy())) {
+                        CustomerLoginInfo creater = customerLoginInfoService.selectByPrimaryKey(item.getCreatedBy());
+                        auditVO.setAuditer("0".equals(creater.getIsManager()) ? "商户" : "管理员");
+                    }
+                    voList.add(auditVO);
+                });
+            }
+            pageDto.setList(voList);
+        } catch (Exception e) {
+            log.error("语音模板审核列表分页查询错误:{}", e);
+            e.printStackTrace();
+        }
+        return pageDto;
+    }
+
 
     /**
      * 测试页展示用 ,返回固定顶多5条

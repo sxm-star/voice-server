@@ -3,6 +3,7 @@ package com.mifa.cloud.voice.server.controller.user;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +47,9 @@ public class UserAuthController {
 
     @Autowired
     private SystemKeyValueService systemKeyValueService;
+
+    @Autowired
+    private ConstConfig aconst;
 
     @PostMapping("/person")
     @ApiOperation(value = "个人认证")
@@ -153,6 +158,9 @@ public class UserAuthController {
         if(authPersonDetail != null) {
             SystemKeyValue systemKeyValue = systemKeyValueService.selectByKey(authPersonDetail.getProfession());
             authPersonDetail.setProfession(systemKeyValue.getParamValue());
+            authPersonDetail.setIdCardImgBackUrl(StringUtils.isNoneEmpty(authPersonDetail.getIdCardImgBackUrl()) ? aconst.H5_URL_PATH + authPersonDetail.getIdCardImgBackUrl() : "");
+            authPersonDetail.setIdCardImgHandheldUrl(StringUtils.isNoneEmpty(authPersonDetail.getIdCardImgHandheldUrl()) ? aconst.H5_URL_PATH + authPersonDetail.getIdCardImgHandheldUrl() : "");
+            authPersonDetail.setIdCardImgUpUrl(StringUtils.isNoneEmpty(authPersonDetail.getIdCardImgUpUrl()) ? aconst.H5_URL_PATH + authPersonDetail.getIdCardImgUpUrl() : "");
             BeanUtils.copyProperties(authPersonDetail, vo);
         }
         return CommonResponse.successCommonResponse(vo);
@@ -175,6 +183,7 @@ public class UserAuthController {
             authCompanyDetail.setProfession(profession.getParamValue());
             authCompanyDetail.setScale(scale.getParamValue());
             authCompanyDetail.setBusinessLife(businessLife.getParamValue());
+            authCompanyDetail.setBusinessLicenseUrl(StringUtils.isNotEmpty(authCompanyDetail.getBusinessLicenseUrl()) ? aconst.H5_URL_PATH + authCompanyDetail.getBusinessLicenseUrl() : "");
             BeanUtils.copyProperties(authCompanyDetail, vo);
         }
         return CommonResponse.successCommonResponse(vo);

@@ -39,6 +39,9 @@ public class CustomerLoginInfoService {
      * 根据手机号查询
      */
     public CustomerLoginInfo findByLoginMobile(String mobile) {
+        if(StringUtils.isEmpty(mobile)) {
+            return null;
+        }
         CustomerLoginInfoExample example = new CustomerLoginInfoExample();
         CustomerLoginInfoExample.Criteria criteria = example.createCriteria();
         criteria.andMobileEqualTo(mobile);
