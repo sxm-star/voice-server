@@ -113,7 +113,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public PageDto<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
         PageDto<VoiceTemplateAuditVO> pageDto = null;
         VoiceTemplateDO templateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
-        templateDO.setTemplateType(query.getVoiceType().name());
+        if(query.getVoiceType() != null) {
+            templateDO.setTemplateType(query.getVoiceType().name());
+        }
         if(StringUtils.isNotEmpty(query.getMerMobile())) {
             CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginMobile(query.getMerMobile());
             if(loginInfo != null) {
@@ -233,6 +235,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
             voiceTemplateDO.setOutTemplateId(StringUtils.isNotEmpty(alterReqDto.getOutTemplateId()) ? alterReqDto.getOutTemplateId() : voiceTemplateDO.getTemplateId());
             voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? alterReqDto.getAuditStatus() : voiceTemplateDO.getAuditStatus());
+            voiceTemplateDO.setRemark(alterReqDto.getRemark());
             log.info("将入库修改的数据 alterVoiceTemplateDO:{}", voiceTemplateDO);
             int cnt = this.updateByIdSelective(voiceTemplateDO);
             return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;

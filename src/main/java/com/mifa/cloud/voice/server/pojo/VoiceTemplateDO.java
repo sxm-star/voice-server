@@ -88,6 +88,7 @@ public class VoiceTemplateDO extends BaseDataDo {
     /**
      * 备注
      */
+    @Column(name = "remark")
     private String remark;
 
     /**

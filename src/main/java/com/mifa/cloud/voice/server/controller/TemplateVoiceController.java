@@ -57,8 +57,8 @@ public class TemplateVoiceController {
     @RequestMapping(value = "/template-voice", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
-    @Loggable(descp = "获取单个模板列表")
-    public CommonResponse<PageDto<VoiceTemplateRspDto>> queryTemplateVoice(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
+    @Loggable(descp = "获取单个语音模板")
+    public CommonResponse<VoiceTemplateRspDto> queryTemplateVoice(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoice(contractNo,templateId));
     }
 

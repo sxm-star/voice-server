@@ -81,7 +81,7 @@ public class VoiceTemplateRspDto {
     /**
      * 备注
      */
-    @ApiModelProperty("备注")
+    @ApiModelProperty("备注/拒绝原因")
     private String remark;
 
     /**
@@ -95,5 +95,11 @@ public class VoiceTemplateRspDto {
      */
     @ApiModelProperty("创建人")
     private String createdBy;
+
+    @ApiModelProperty("供应商三方平台模板ID审核回填渠道商名称")
+    private String outChannelName;
+
+    @ApiModelProperty("供应商三方平台模板ID")
+    private String outTemplateId;
 
 }
