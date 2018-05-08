@@ -4,7 +4,9 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
 import com.mifa.cloud.voice.server.pojo.SystemKeyValue;
+import com.mifa.cloud.voice.server.commons.dto.VoiceTemplateAuditVO;
 import com.mifa.cloud.voice.server.service.SystemKeyValueService;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
 import io.swagger.annotations.Api;
@@ -178,5 +180,21 @@ public class TemplateVoiceController {
     public CommonResponse<SystemKeyValueVO> getBusinessType(Long id) {
         return CommonResponse.successCommonResponse(systemKeyValueService.selectByPrimaryKey(id));
     }
+
+    @ApiOperation("语音模版审核列表")
+    @RequestMapping(value = "voiceTemplate-autid-list", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模版审核列表")
+    public CommonResponse<PageDto<VoiceTemplateAuditVO>> getVoiceTemplateAutidList(
+            @ModelAttribute @Valid VoiceTemplateAuditQuery query,
+            @RequestParam(required = true, defaultValue = "1") Integer pageNum,
+            @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+
+
+        return CommonResponse.successCommonResponse(templateVoiceService.queryAuditList(query, pageNum, pageSize));
+    }
+
 
 }

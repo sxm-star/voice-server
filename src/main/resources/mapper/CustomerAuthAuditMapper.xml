@@ -10,7 +10,7 @@
     <result column="auth_time" property="authTime" jdbcType="TIMESTAMP" />
     <result column="audit_status" property="auditStatus" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="autit_time" property="autitTime" jdbcType="TIME" />
+    <result column="autit_time" property="autitTime" jdbcType="TIMESTAMP" />
     <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
     <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
@@ -116,7 +116,7 @@
       updated_at)
     values (#{id,jdbcType=BIGINT}, #{contractNo,jdbcType=VARCHAR}, #{authType,jdbcType=VARCHAR}, 
       #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{authTime,jdbcType=TIMESTAMP}, 
-      #{auditStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{autitTime,jdbcType=TIME}, 
+      #{auditStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{autitTime,jdbcType=TIMESTAMP}, 
       #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
@@ -189,7 +189,7 @@
         #{remark,jdbcType=VARCHAR},
       </if>
       <if test="autitTime != null" >
-        #{autitTime,jdbcType=TIME},
+        #{autitTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createdBy != null" >
         #{createdBy,jdbcType=VARCHAR},
@@ -239,7 +239,7 @@
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.autitTime != null" >
-        autit_time = #{record.autitTime,jdbcType=TIME},
+        autit_time = #{record.autitTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createdBy != null" >
         created_by = #{record.createdBy,jdbcType=VARCHAR},
@@ -268,7 +268,7 @@
       auth_time = #{record.authTime,jdbcType=TIMESTAMP},
       audit_status = #{record.auditStatus,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      autit_time = #{record.autitTime,jdbcType=TIME},
+      autit_time = #{record.autitTime,jdbcType=TIMESTAMP},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_by = #{record.updatedBy,jdbcType=VARCHAR},
@@ -302,7 +302,7 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="autitTime != null" >
-        autit_time = #{autitTime,jdbcType=TIME},
+        autit_time = #{autitTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createdBy != null" >
         created_by = #{createdBy,jdbcType=VARCHAR},
@@ -328,7 +328,7 @@
       auth_time = #{authTime,jdbcType=TIMESTAMP},
       audit_status = #{auditStatus,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      autit_time = #{autitTime,jdbcType=TIME},
+      autit_time = #{autitTime,jdbcType=TIMESTAMP},
       created_by = #{createdBy,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_by = #{updatedBy,jdbcType=VARCHAR},
