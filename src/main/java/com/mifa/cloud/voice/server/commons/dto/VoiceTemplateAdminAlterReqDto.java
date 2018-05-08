@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Column;
+
 /**
  * @author: songxm
  * @date: 2018/4/23 15:41
@@ -28,5 +30,8 @@ public class VoiceTemplateAdminAlterReqDto {
 
     @ApiModelProperty(value = "审核状态 0:待审核 1：审核通过；2:审核失败；3:审核中")
     private String auditStatus;
+
+    @ApiModelProperty(value = "拒绝原因")
+    private String remark;
 
 }
