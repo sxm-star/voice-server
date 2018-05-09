@@ -103,6 +103,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                     if (AuditEnum.AUDIT_FAIL.getCode().equals(voiceTemplateItem.getAuditStatus())) {
                         voiceTemplateRspDto.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
                     }
+                    if (AuditEnum.AUDIT_ING.getCode().equals(voiceTemplateItem.getAuditStatus())) {
+                        voiceTemplateRspDto.setAuditStatus(AuditEnum.AUDIT_ING.getDesc());
+                    }
                     rspList.add(voiceTemplateRspDto);
                 });
                 pageDto.setList(rspList);
