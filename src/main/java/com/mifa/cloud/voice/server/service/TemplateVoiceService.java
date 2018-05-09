@@ -10,6 +10,7 @@ import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
@@ -46,6 +47,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     @Autowired
     private CustomerLoginInfoService customerLoginInfoService;
+
+    @Autowired
+    private ConstConfig aconst;
 
     public Boolean insertTemplateVoice(TemplateVoiceDto templateVoiceDto) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
@@ -145,6 +149,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                         CustomerLoginInfo creater = customerLoginInfoService.selectByPrimaryKey(item.getCreatedBy());
                         auditVO.setAuditer("0".equals(creater.getIsManager()) ? "商户" : "管理员");
                     }
+                    auditVO.setVoiceUrl(StringUtils.isNoneEmpty(auditVO.getVoiceUrl()) ? aconst.H5_URL_PATH + auditVO.getVoiceUrl() : auditVO.getVoiceUrl());
                     voList.add(auditVO);
                 });
             }
