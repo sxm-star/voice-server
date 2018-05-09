@@ -61,4 +61,10 @@ public class VoiceTemplateAuditVO {
 
     @ApiModelProperty("话术语音转文本内容")
     private String voiceContent;
+
+    @ApiModelProperty("语音话术类目名称")
+    private String categoryName;
+
+    @ApiModelProperty("语音话术类目id")
+    private Integer categoryId;
 }
