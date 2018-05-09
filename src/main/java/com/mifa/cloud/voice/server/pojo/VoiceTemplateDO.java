@@ -33,7 +33,7 @@ public class VoiceTemplateDO extends BaseDataDo {
     private String contractNo;
 
     /**
-     * 模板类型 1:语音模板；2：文本模板
+     * 模板类型 VOICE:语音模板；TEXT：文本模板
      */
     @Column(name = "template_type")
     private String templateType;

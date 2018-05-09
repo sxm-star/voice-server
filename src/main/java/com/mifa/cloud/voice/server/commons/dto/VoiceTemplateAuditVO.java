@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 /**
@@ -52,4 +53,12 @@ public class VoiceTemplateAuditVO {
     @ApiModelProperty("审核时间")
     private Date updatedAt;
 
+    @ApiModelProperty("模板类型 VOICE:语音模板；TEXT：文本模板")
+    private String templateType;
+
+    @ApiModelProperty("语音播放地址")
+    private String voiceUrl;
+
+    @ApiModelProperty("话术语音转文本内容")
+    private String voiceContent;
 }
