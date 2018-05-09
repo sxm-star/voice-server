@@ -117,12 +117,12 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public PageDto<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
         PageDto<VoiceTemplateAuditVO> pageDto = null;
         VoiceTemplateDO templateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
-        if(query.getVoiceType() != null) {
+        if (query.getVoiceType() != null) {
             templateDO.setTemplateType(query.getVoiceType().name());
         }
-        if(StringUtils.isNotEmpty(query.getMerMobile())) {
+        if (StringUtils.isNotEmpty(query.getMerMobile())) {
             CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginMobile(query.getMerMobile());
-            if(loginInfo != null) {
+            if (loginInfo != null) {
                 templateDO.setContractNo(loginInfo.getContractNo());
             }
         }
@@ -130,7 +130,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             List<VoiceTemplateAuditVO> voList = new ArrayList<>();
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(templateDO, pageNum, pageSize, " created_at desc");
             pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
-            if(pageInfo != null && !pageInfo.getList().isEmpty()) {
+            if (pageInfo != null && !pageInfo.getList().isEmpty()) {
                 pageInfo.getList().stream().forEach(item -> {
                     VoiceTemplateAuditVO auditVO = BaseBeanUtils.convert(item, VoiceTemplateAuditVO.class);
                     CustomerLoginInfo customerInfo = customerLoginInfoService.selectByPrimaryKey(item.getContractNo());
@@ -145,7 +145,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                         auditVO.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
                     }
                     // 创建人
-                    if(StringUtils.isNotEmpty(item.getCreatedBy())) {
+                    if (StringUtils.isNotEmpty(item.getCreatedBy())) {
                         CustomerLoginInfo creater = customerLoginInfoService.selectByPrimaryKey(item.getCreatedBy());
                         auditVO.setAuditer("0".equals(creater.getIsManager()) ? "商户" : "管理员");
                     }
@@ -236,23 +236,19 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public boolean alterTemplateVoiceAdmin(VoiceTemplateAdminAlterReqDto alterReqDto) {
         String templateID = alterReqDto.getTemplateId();
         VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
-        if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_ING.getCode())) {
-            voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
-            voiceTemplateDO.setOutTemplateId(StringUtils.isNotEmpty(alterReqDto.getOutTemplateId()) ? alterReqDto.getOutTemplateId() : voiceTemplateDO.getTemplateId());
-            voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? alterReqDto.getAuditStatus() : voiceTemplateDO.getAuditStatus());
-            voiceTemplateDO.setRemark(alterReqDto.getRemark());
-            log.info("将入库修改的数据 alterVoiceTemplateDO:{}", voiceTemplateDO);
-            int cnt = this.updateByIdSelective(voiceTemplateDO);
-            return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
-        } else {
-            log.warn("只允许修改审核中的数据");
-            throw new BaseBizException("400", "只允许修改审核中的数据");
-        }
+        voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
+        voiceTemplateDO.setOutTemplateId(StringUtils.isNotEmpty(alterReqDto.getOutTemplateId()) ? alterReqDto.getOutTemplateId() : voiceTemplateDO.getTemplateId());
+        voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? alterReqDto.getAuditStatus() : voiceTemplateDO.getAuditStatus());
+        voiceTemplateDO.setRemark(alterReqDto.getRemark());
+        log.info("将入库修改的数据 alterVoiceTemplateDO:{}", voiceTemplateDO);
+        int cnt = this.updateByIdSelective(voiceTemplateDO);
+        return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
+
 
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
-        if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId()==null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
+        if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
             throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
         }
         //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
@@ -264,8 +260,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         params.add(openDto.getName());
-        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
-        Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
+        Info info = Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
+        Subject subject = Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
                 .data(data).timestamp(String.valueOf(System.currentTimeMillis())).build();
         jxVoiceVcodeReqDto.setInfo(info);
@@ -285,8 +281,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             customerTaskCallDetailDO.setUserName(openDto.getName());
             customerTaskCallDetailDO.setOrgName(openDto.getOrgName());
             taskCallDetailDAO.insert(customerTaskCallDetailDO);
-        }catch (Exception e){
-            log.error("发送异常:{}",e);
+        } catch (Exception e) {
+            log.error("发送异常:{}", e);
         }
         return Boolean.TRUE;
     }
