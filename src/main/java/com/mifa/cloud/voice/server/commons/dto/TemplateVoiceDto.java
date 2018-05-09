@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Column;
+
 /**
  * @author: songxm
  * @date: 2018/4/16 16:24
@@ -74,4 +76,7 @@ public class TemplateVoiceDto {
      */
     @ApiModelProperty("话术语音转文本内容")
     private String voiceContent;
+
+    @ApiModelProperty("创建人")
+    private String createdBy;
 }
