@@ -249,7 +249,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
         voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
         voiceTemplateDO.setOutTemplateId(StringUtils.isNotEmpty(alterReqDto.getOutTemplateId()) ? alterReqDto.getOutTemplateId() : voiceTemplateDO.getTemplateId());
-        voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? alterReqDto.getAuditStatus() : voiceTemplateDO.getAuditStatus());
+        voiceTemplateDO.setAuditStatus(StringUtils.isNotEmpty(alterReqDto.getAuditStatus()) ? AuditEnum.getCode(alterReqDto.getAuditStatus()) : voiceTemplateDO.getAuditStatus());
         voiceTemplateDO.setRemark(alterReqDto.getRemark());
         voiceTemplateDO.setUpdatedBy(alterReqDto.getUpdatedBy());
         voiceTemplateDO.setUpdatedAt(new Date());
