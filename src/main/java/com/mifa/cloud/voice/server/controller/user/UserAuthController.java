@@ -3,6 +3,7 @@ package com.mifa.cloud.voice.server.controller.user;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
@@ -65,7 +66,7 @@ public class UserAuthController {
     public CommonResponse<Void> authPersion(@RequestBody @Valid AuthPersionDTO param) {
 
         CustomerAauthPerson customerAauthPerson = customerAauthPersonService.selectByPrimaryKey(param.getContractNo());
-        if (customerAauthPerson != null) {
+        if (customerAauthPerson != null && !AuthEnum.AUTH_FAIL.getCode().equals(customerAauthPerson.getAuthStatus())) {
             return CommonResponse.failCommonResponse("认证信息已经存在");
         }
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(param.getContractNo());
@@ -89,7 +90,7 @@ public class UserAuthController {
     @Loggable(descp = "企业认证")
     public CommonResponse<Void> authCompany(@RequestBody @Valid AuthCompanyDTO param) {
         CustomerAuthCompany customerAuthCompany = customerAuthCompanyService.selectByPrimaryKey(param.getContractNo());
-        if (customerAuthCompany != null) {
+        if (customerAuthCompany != null && !AuthEnum.AUTH_FAIL.getCode().equals(customerAuthCompany.getAuthStatus())) {
             return CommonResponse.failCommonResponse("认证信息已经存在");
         }
         CustomerLoginInfo customerInfo = infoService.selectByPrimaryKey(param.getContractNo());
