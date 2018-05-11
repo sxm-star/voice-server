@@ -1,8 +1,6 @@
 package com.mifa.cloud.voice.server.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.persistence.Column;
 import java.io.Serializable;
@@ -11,9 +9,7 @@ import java.util.Date;
 /**
  * 公共字段
  */
-@Setter
-@Getter
-@ToString
+@Data
 public class BaseDataDo implements Serializable {
 
 	/**

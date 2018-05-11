@@ -12,12 +12,12 @@ import javax.persistence.Table;
 /**
  * @author 
  */
-@Table(name="t_voice_notify_log")
+@Table(name="t_voice_check_bill_log")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoiceNotifyLogDO extends BaseDataDo {
+public class VoiceCheckBillLogDO extends BaseDataDo{
     /**
      * 主键ID
      */
@@ -46,14 +46,18 @@ public class VoiceNotifyLogDO extends BaseDataDo {
     private String notify;
 
     /**
+     * 费用字段 单位分
+     */
+    private Integer cost;
+
+    /**
+     * 拨打时长 单位秒 
+     */
+    private Integer duration;
+
+    /**
      * 手机号
      */
     private String called;
-
-    /**
-     * 通知结果
-     */
-    private String callResponse;
-
 
 }

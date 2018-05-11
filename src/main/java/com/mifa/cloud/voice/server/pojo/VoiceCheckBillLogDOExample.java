@@ -3,15 +3,20 @@ package com.mifa.cloud.voice.server.pojo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.validator.constraints.NotEmpty;
 
-public class VoiceNotifyLogDOExample {
+public class VoiceCheckBillLogDOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public VoiceNotifyLogDOExample() {
+    public VoiceCheckBillLogDOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -445,6 +450,126 @@ public class VoiceNotifyLogDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andCostIsNull() {
+            addCriterion("cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIsNotNull() {
+            addCriterion("cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostEqualTo(Integer value) {
+            addCriterion("cost =", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotEqualTo(Integer value) {
+            addCriterion("cost <>", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostGreaterThan(Integer value) {
+            addCriterion("cost >", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cost >=", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostLessThan(Integer value) {
+            addCriterion("cost <", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostLessThanOrEqualTo(Integer value) {
+            addCriterion("cost <=", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIn(List<Integer> values) {
+            addCriterion("cost in", values, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotIn(List<Integer> values) {
+            addCriterion("cost not in", values, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostBetween(Integer value1, Integer value2) {
+            addCriterion("cost between", value1, value2, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotBetween(Integer value1, Integer value2) {
+            addCriterion("cost not between", value1, value2, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIsNull() {
+            addCriterion("duration is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIsNotNull() {
+            addCriterion("duration is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationEqualTo(Integer value) {
+            addCriterion("duration =", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotEqualTo(Integer value) {
+            addCriterion("duration <>", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationGreaterThan(Integer value) {
+            addCriterion("duration >", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationGreaterThanOrEqualTo(Integer value) {
+            addCriterion("duration >=", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationLessThan(Integer value) {
+            addCriterion("duration <", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationLessThanOrEqualTo(Integer value) {
+            addCriterion("duration <=", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIn(List<Integer> values) {
+            addCriterion("duration in", values, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotIn(List<Integer> values) {
+            addCriterion("duration not in", values, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationBetween(Integer value1, Integer value2) {
+            addCriterion("duration between", value1, value2, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotBetween(Integer value1, Integer value2) {
+            addCriterion("duration not between", value1, value2, "duration");
+            return (Criteria) this;
+        }
+
         public Criteria andCalledIsNull() {
             addCriterion("called is null");
             return (Criteria) this;
@@ -512,76 +637,6 @@ public class VoiceNotifyLogDOExample {
 
         public Criteria andCalledNotBetween(String value1, String value2) {
             addCriterion("called not between", value1, value2, "called");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseIsNull() {
-            addCriterion("call_response is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseIsNotNull() {
-            addCriterion("call_response is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseEqualTo(String value) {
-            addCriterion("call_response =", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseNotEqualTo(String value) {
-            addCriterion("call_response <>", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseGreaterThan(String value) {
-            addCriterion("call_response >", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseGreaterThanOrEqualTo(String value) {
-            addCriterion("call_response >=", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseLessThan(String value) {
-            addCriterion("call_response <", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseLessThanOrEqualTo(String value) {
-            addCriterion("call_response <=", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseLike(String value) {
-            addCriterion("call_response like", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseNotLike(String value) {
-            addCriterion("call_response not like", value, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseIn(List<String> values) {
-            addCriterion("call_response in", values, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseNotIn(List<String> values) {
-            addCriterion("call_response not in", values, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseBetween(String value1, String value2) {
-            addCriterion("call_response between", value1, value2, "callResponse");
-            return (Criteria) this;
-        }
-
-        public Criteria andCallResponseNotBetween(String value1, String value2) {
-            addCriterion("call_response not between", value1, value2, "callResponse");
             return (Criteria) this;
         }
 

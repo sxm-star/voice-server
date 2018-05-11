@@ -74,7 +74,7 @@ public class SubjectV2Dto {
     /**
      * 总费用
      */
-    private Integer cost;
+    private Float cost;
 
     /**
      * 录音文件名

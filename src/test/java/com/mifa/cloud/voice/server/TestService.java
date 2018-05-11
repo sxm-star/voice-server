@@ -15,10 +15,7 @@ import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
-import com.mifa.cloud.voice.server.service.ContactsService;
-import com.mifa.cloud.voice.server.service.CustomerTaskContactGroupService;
-import com.mifa.cloud.voice.server.service.OpenapiConfigService;
-import com.mifa.cloud.voice.server.service.UploadFileLogService;
+import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +64,9 @@ public class TestService {
     AsyncTaskExecutor asyncTaskExecutor;
     @Autowired
     OpenapiConfigService openapiConfigService;
+
+    @Autowired
+    VoiceNotifyLogService voiceNotifyLogService;
 
     @Test
     public void testRedis() {
@@ -153,28 +153,8 @@ public class TestService {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Test
+    public void testNotify() {
+       // voiceNotifyLogService.save(VoiceNotifyLogDO.builder().callTime(new Date()).callResponse("test").called("18720987088").data("123456").build());
+    }
 }
