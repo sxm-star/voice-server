@@ -68,6 +68,7 @@ public class VerficationCodeController {
         try {
             int w = 92, h = 40;
             String verifyCode = imageUtil.generateVerifyCode(4);
+            log.info("手机号：{}，图形验证码：{}", mobilePhone, verifyCode);
             //保存验证码
             keyValueDao.set(StaticConst.IMG_IDENTIFY_CODE + mobilePhone,verifyCode,60*3);
             imageUtil.outputImage(w, h, response.getOutputStream(), verifyCode);
