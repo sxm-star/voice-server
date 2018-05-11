@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * Created by Administrator on 2018/4/11.
  */
@@ -23,6 +25,7 @@ public class AuthPersionDTO {
 
     @ApiModelProperty("身份证号码")
     @NotEmpty(message = "身份证号码不能为空")
+    @Pattern(regexp = "^\\d{15}$|^\\d{17}[0-9Xx]$", message = "请输入正确的身份证")
     private String idCard;
 
 
