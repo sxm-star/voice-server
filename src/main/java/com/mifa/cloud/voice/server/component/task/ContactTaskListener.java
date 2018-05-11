@@ -69,7 +69,7 @@ public class ContactTaskListener {
                         Integer  cnt  = taskContactGroupDO.getGroupCnt()==null?0:taskContactGroupDO.getGroupCnt();
                         taskContactGroupDO.setGroupCnt(cnt+batchCnt);
                         taskContactGroupDO.setUpdatedAt(new Date());
-                        taskContactGroupDO.setUpdatedBy("system");
+                        taskContactGroupDO.setUpdatedBy(uploadFileLog.getCreateBy());
                         taskContactGroupService.updateByIdSelective(taskContactGroupDO);
                     }
                 });

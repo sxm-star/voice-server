@@ -3,6 +3,7 @@ package com.mifa.cloud.voice.server.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.dao.CustomerAuthAuditMapper;
 import com.mifa.cloud.voice.server.commons.dto.AuthCheckListDTO;
 import com.mifa.cloud.voice.server.commons.dto.CustomerAuthAuditVO;
@@ -39,11 +40,11 @@ public class CustomerAuthAuditService {
      * 根据contractNo查询审核中的数据
      * auditStatus 1:认证中
      * */
-    public CustomerAuthAudit selectByContractNo(String contractNo) {
+    public CustomerAuthAudit selectByContractNo(String contractNo, AuthEnum authEnum) {
         CustomerAuthAuditExample example = new CustomerAuthAuditExample();
         CustomerAuthAuditExample.Criteria criteria = example.createCriteria();
         criteria.andContractNoEqualTo(contractNo);
-        criteria.andAuditStatusEqualTo("1");
+        criteria.andAuditStatusEqualTo(authEnum.getCode());
         List<CustomerAuthAudit> authAuditList = mapper.selectByExample(example);
         if(authAuditList.isEmpty()) {
             return null;
