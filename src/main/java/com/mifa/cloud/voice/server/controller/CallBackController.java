@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.api.jx.dto.CallBackV2Dto;
 import com.mifa.cloud.voice.server.api.jx.enums.NotifyEnum;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.pojo.VoiceNotifyLogDO;
 import com.mifa.cloud.voice.server.service.CustomerTaskCallDetailService;
+import com.mifa.cloud.voice.server.service.VoiceNotifyLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 import static com.mifa.cloud.voice.server.api.jx.enums.NotifyEnum.*;
 
@@ -27,41 +31,37 @@ public class CallBackController {
 
     @Autowired
     CustomerTaskCallDetailService taskCallDetailService;
+    @Autowired
+    VoiceNotifyLogService voiceNotifyLogService;
 
     @ApiOperation("即信语音通知回调开始")
     @RequestMapping(value = "/jx/call-back", method = RequestMethod.POST)
     @ResponseBody
     public void callBack(@RequestBody CallBackV2Dto callBackDto) {
-         log.info(callBackDto.getNotify() + "开始" + NotifyEnum.getDesc(callBackDto.getNotify()));
-
-        switch (NotifyEnum.getEnum(callBackDto.getNotify())){
-            case CALLSTATE:
-            {
-               log.info(CALLSTATE.getDesc() + "--" + JSON.toJSONString(callBackDto));
+        log.info(callBackDto.getNotify() + "开始" + NotifyEnum.getDesc(callBackDto.getNotify()));
+        voiceNotifyLogService.save(VoiceNotifyLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).data(callBackDto.getData()).called(callBackDto.getSubject().getCalled()).callResponse(JSON.toJSONString(callBackDto)).callTime(new Date()).build());
+        switch (NotifyEnum.getEnum(callBackDto.getNotify())) {
+            case CALLSTATE: {
+                log.info(CALLSTATE.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
-            case CALLCREATE:
-            {
+            case CALLCREATE: {
                 log.info(CALLCREATE.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
-            case CALLPROCESS:
-            {
+            case CALLPROCESS: {
                 log.info(CALLPROCESS.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
-            case CALLANSWER:
-            {
+            case CALLANSWER: {
                 log.info(CALLANSWER.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
-            case CALLEND:
-            {
+            case CALLEND: {
                 log.info(CALLEND.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
-            case CDR:
-            {
+            case CDR: {
                 log.info(CDR.getDesc() + "--" + JSON.toJSONString(callBackDto));
             }
             break;
