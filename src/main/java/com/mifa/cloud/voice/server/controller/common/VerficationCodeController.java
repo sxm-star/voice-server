@@ -62,9 +62,11 @@ public class VerficationCodeController {
             log.error("获取图形验证码时mobilePhone参数为空");
             return;
         }
+
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0L);
+        response.setContentType("image/jpeg");
         try {
             int w = 92, h = 40;
             String verifyCode = imageUtil.generateVerifyCode(4);
