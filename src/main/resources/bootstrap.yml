@@ -9,9 +9,9 @@ appConfig:
   #即信语音通道
   jixinVoice:
     accountId: b1a593ca514fd08adf922d205fecb18e
-    #authToken: fe2b66b47d4ca417005b0bf6da3918ae
     authToken: 00343a5a9e1db212774dff67b4f0cc14
     voiceUrl: https://api.139130.com:9999/
+    appId: 9b45108124879810c3b081a8aabff9f0
 
     #梦网云通语音通道
   montnetsVoice:
@@ -21,3 +21,4 @@ appConfig:
     voiceUrl: http://api01.monyun.cn:7901
 
   salt: RcHd65KfaB+bFVvbPQzvtA==
+  appkeyGenerator: 6ZV0BnzHQFvKgUjHEwS1FA==

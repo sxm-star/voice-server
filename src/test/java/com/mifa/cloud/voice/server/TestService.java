@@ -1,10 +1,15 @@
 package com.mifa.cloud.voice.server;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDto;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDto;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDto;
 import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.commons.enums.TimeUnitEnum;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
@@ -12,6 +17,7 @@ import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.ContactsService;
 import com.mifa.cloud.voice.server.service.CustomerTaskContactGroupService;
+import com.mifa.cloud.voice.server.service.OpenapiConfigService;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
@@ -59,6 +65,8 @@ public class TestService {
     UploadFileLogService uploadFileLogService;
     @Autowired
     AsyncTaskExecutor asyncTaskExecutor;
+    @Autowired
+    OpenapiConfigService openapiConfigService;
 
     @Test
     public void testRedis() {
@@ -115,6 +123,36 @@ public class TestService {
 
         }
     }
+
+    @Test
+    public void testOpenApiService(){
+        OpenApiConfigDto openApiConfigDto = new OpenApiConfigDto();
+        openApiConfigDto.setContractNo("123456");
+        openApiConfigDto.setCreatedBy("admin");
+        openApiConfigDto.setTimeUnit(TimeUnitEnum.MONTH);
+        openApiConfigDto.setExpireValue(1);
+        openapiConfigService.addOpenapiConfig(openApiConfigDto);
+    }
+
+
+    @Test
+    public void testGetOpenApiService(){
+        OpenApiConfigRspDto openApiConfigRspDto = openapiConfigService.getOpenApiConfig("123456");
+        System.out.println(openApiConfigRspDto);
+    }
+
+    @Test
+    public void testParam(){
+        OpenApiVoiceReqDto openApiVoiceReqDto = new OpenApiVoiceReqDto();
+        openApiVoiceReqDto.setMobile("13251022729");
+        openApiVoiceReqDto.setTemplateId("6d9c4f7ae25f4782823b7aefc5968962");
+        Map<String,Object> map = new HashMap<>();
+        map.put("${name}","风清扬");
+        openApiVoiceReqDto.setParamsValue(map);
+        System.out.println(JSON.toJSONString(openApiVoiceReqDto));
+
+    }
+
 
 
 

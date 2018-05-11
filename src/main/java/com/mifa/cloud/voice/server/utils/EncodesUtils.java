@@ -95,6 +95,10 @@ public class EncodesUtils {
         return generateAesKey(128);
     }
 
+    public static String getAppkey(){
+        return String.valueOf(generateAesKey());
+    }
+
     public static byte[] generateAesKey(int keysize) {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
@@ -187,5 +191,10 @@ public class EncodesUtils {
 
         System.out.println("加密之后---" + securePhone);
         System.out.println(aesDecrypt(decodeBase64(securePhone), decodeBase64(salt)));
+
+        System.out.println(SeqProducerUtil.getContractNo());
+
+       // System.out.println(selfEncrypt(SeqProducerUtil.getContractNo(),"6ZV0BnzHQFvKgUjHEwS1FA=="));
+        System.out.println(selfDecrypt("J5y//QdAIHn8QlAVonCPz4LbDxX3iZj3Vg7jfjh8c8Y=","6ZV0BnzHQFvKgUjHEwS1FA=="));
     }
 }

@@ -10,6 +10,7 @@ import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
+import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
@@ -50,6 +51,10 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     @Autowired
     private ConstConfig aconst;
+    @Autowired
+    private AppProperties appProperties;
+
+
 
     public Boolean insertTemplateVoice(TemplateVoiceDto templateVoiceDto) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
@@ -257,7 +262,6 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
             throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
         }
-        //走消息队列发送  // TODO: 2018/4/24  走消息队列发送,补充队列
         String templateId = voiceTemplateDO.getOutTemplateId();
         String called = openDto.getPhone();
         //String calledDisplay = "95776";
@@ -266,7 +270,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         params.add(openDto.getName());
-        Info info = Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
+        Info info = Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
         Subject subject = Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
                 .data(data).timestamp(String.valueOf(System.currentTimeMillis())).build();

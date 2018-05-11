@@ -1,6 +1,9 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -14,6 +17,9 @@ import java.util.Date;
  */
 @Table(name="t_voice_template")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VoiceTemplateDO extends BaseDataDo {
     /**
      * 语音模板id

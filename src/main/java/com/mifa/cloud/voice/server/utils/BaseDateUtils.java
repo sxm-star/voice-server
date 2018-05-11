@@ -356,6 +356,13 @@ public class BaseDateUtils {
     public static String getCurrent(String pattern) {
         return DateTime.now().toString(pattern);
     }
+
+    public static Date getPeriodDateByCalendar(Date baseDate,Integer timeUnit, Integer periodValue){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(baseDate);
+        calendar.add(timeUnit, periodValue == null ? 0 : periodValue);
+        return calendar.getTime();
+    }
     static {
         DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd", CHINA_TIMEZONE);
         TIME_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss", CHINA_TIMEZONE);

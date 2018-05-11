@@ -1,7 +1,7 @@
 package com.mifa.cloud.voice.server.controller;
 
 import com.google.common.net.HttpHeaders;
-import com.mifa.cloud.voice.server.annotation.AuthQScope;
+import com.mifa.cloud.voice.server.annotation.AuthScope;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
@@ -38,7 +38,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job", method = RequestMethod.POST)
     @ResponseBody
     @Loggable(descp = "拨打任务添加")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<Boolean> addCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto) {
 
         return CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
@@ -52,7 +52,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job", method = RequestMethod.PUT)
     @ResponseBody
     @Loggable(descp = "拨打任务修改")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<Boolean> alterCallJob(@RequestBody @Valid CustomerCallJobDto customerCallJobDto) {
 
         return CommonResponse.successCommonResponse(callJobService.addCallJob(customerCallJobDto));
@@ -66,7 +66,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job", method = RequestMethod.GET)
     @ResponseBody
     @Loggable(descp = "单个拨打任务查询")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<Boolean> queryCallJob(@RequestParam(required = true) String contractNo, @RequestParam(required = true) Integer id) {
 
         return CommonResponse.successCommonResponse(callJobService.queryCallJob(contractNo, id));
@@ -81,7 +81,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job", method = RequestMethod.DELETE)
     @ResponseBody
     @Loggable(descp = "拨打任务删除")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<Boolean> delCallJob(@RequestParam(required = true) String contractNo, @RequestParam(required = true) Integer id) {
 
         return CommonResponse.successCommonResponse(callJobService.delCallJob(contractNo, id));
@@ -96,7 +96,7 @@ public class CallJobController {
     })
     @RequestMapping(value = "/call-job-list", method = RequestMethod.GET)
     @Loggable(descp = "任务列表查询")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true) String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
         return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo, jobName, pageNum, pageSize));
     }
@@ -110,7 +110,7 @@ public class CallJobController {
     })
     @RequestMapping(value = "/call-job-detail-list", method = RequestMethod.GET)
     @Loggable(descp = "任务拨打明细列表情况查询")
-    @AuthQScope(AuthQRole.QIU_SERVICE)
+    @AuthScope(AuthQRole.MF_SERVICE)
     public CommonResponse<PageDto<CustomerTaskCallDetailDto>> queryDetailList(@ModelAttribute @Valid CallDetailQueryDto callDetailQueryDto, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
         return CommonResponse.successCommonResponse(taskCallDetailService.queryTaskDetailList(callDetailQueryDto, pageNum, pageSize));
     }

@@ -1,7 +1,5 @@
 package com.mifa.cloud.voice.server.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 
@@ -89,8 +87,4 @@ public class OperExcel {
         return list;
     }
 
-    public static void main(String[] args) {
-       List<Map<String,Object>> list = readExcel("/Users/sxm/Desktop/voice_contact_template.xlsx", AppConst.VOICE_TEMPLATE_METAS);
-        System.out.println(JSON.toJSONString(list));
-    }
 }

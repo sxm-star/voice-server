@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AuthQScope {
-    AuthQRole[] value() default {AuthQRole.QIU_SERVICE};
+public @interface AuthScope {
+    AuthQRole[] value() default {AuthQRole.MF_SERVICE};
 }

@@ -4,9 +4,7 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.*;
-import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
 import com.mifa.cloud.voice.server.pojo.SystemKeyValue;
-import com.mifa.cloud.voice.server.commons.dto.VoiceTemplateAuditVO;
 import com.mifa.cloud.voice.server.service.SystemKeyValueService;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
 import io.swagger.annotations.Api;
@@ -191,8 +189,6 @@ public class TemplateVoiceController {
             @ModelAttribute @Valid VoiceTemplateAuditQuery query,
             @RequestParam(required = true, defaultValue = "1") Integer pageNum,
             @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
-
-
         return CommonResponse.successCommonResponse(templateVoiceService.queryAuditList(query, pageNum, pageSize));
     }
 
