@@ -34,4 +34,7 @@ public class VoiceTemplateAdminAlterReqDto {
     @ApiModelProperty(value = "拒绝原因")
     private String remark;
 
+    @ApiModelProperty("审核人")
+    private String updatedBy;
+
 }
