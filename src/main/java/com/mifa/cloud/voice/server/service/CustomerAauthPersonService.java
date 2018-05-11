@@ -103,6 +103,7 @@ public class CustomerAauthPersonService {
             customerAuthAudit.setMobile(customerInfo.getMobile());
             customerAuthAudit.setUpdatedAt(date);
             customerAuthAudit.setAuditStatus(AuthEnum.AUTH_ING.getCode());
+            customerAuthAudit.setRemark("");
             int count = customerAuthAuditService.updateByPrimaryKeySelective(customerAuthAudit);
 
             // 更新个人认证表数据
@@ -114,6 +115,7 @@ public class CustomerAauthPersonService {
             customerAauthPerson.setIdCardImgHandheldUrl(StringUtils.isNoneEmpty(param.getIdCardImgHandheldUrl()) ? param.getIdCardImgHandheldUrl() : customerAauthPerson.getIdCardImgHandheldUrl());
             customerAauthPerson.setAuthStatus(AuthEnum.AUTH_ING.getCode());
             customerAauthPerson.setUpdatedAt(date);
+            customerAauthPerson.setRemark("");
             count += updateByPrimaryKeySelective(customerAauthPerson);
             return count;
         }
