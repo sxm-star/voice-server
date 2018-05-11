@@ -261,7 +261,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
-        if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
+        if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
             throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
         }
         String templateId = voiceTemplateDO.getOutTemplateId();
