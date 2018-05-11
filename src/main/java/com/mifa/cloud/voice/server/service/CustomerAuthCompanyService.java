@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
+import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.dao.CustomerAuthCompanyMapper;
 import com.mifa.cloud.voice.server.commons.dto.AuthCheckDTO;
 import com.mifa.cloud.voice.server.commons.dto.AuthCompanyDTO;
@@ -40,7 +41,7 @@ public class CustomerAuthCompanyService {
 
     /**
      * 根据id查询记录
-     * */
+     */
     public CustomerAuthCompany selectByPrimaryKey(String contractNo) {
         if (StringUtils.isEmpty(contractNo)) {
             return null;
@@ -60,30 +61,61 @@ public class CustomerAuthCompanyService {
     /**
      * 提交企业认证信息
      */
-    @Transactional(rollbackFor=Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public int submitAuthInfo(AuthCompanyDTO param, CustomerLoginInfo customerInfo) {
+        CustomerAuthCompany customerAuthCompany = selectByPrimaryKey(param.getContractNo());
+        Date date = new Date();
+        // 初次提交认证信息
+        if (customerAuthCompany == null) {
+            // 审核总表插入数据
+            CustomerAuthAudit customerAuthAudit = CustomerAuthAudit.builder()
+                    .contractNo(param.getContractNo())
+                    .authType("2")
+                    .customerName(param.getCompanyName())
+                    .mobile(customerInfo.getMobile())
+                    .authTime(date)
+                    .createdAt(date)
+                    .createdBy(param.getContractNo())
+                    .auditStatus(AuthEnum.AUTH_ING.getCode())
+                    .build();
+            int count = customerAuthAuditService.insertSelective(customerAuthAudit);
 
-        // 审核总表插入数据
-        CustomerAuthAudit customerAuthAudit = CustomerAuthAudit.builder()
-                .contractNo(param.getContractNo())
-                .authType("2")
-                .customerName(param.getCompanyName())
-                .mobile(customerInfo.getMobile())
-                .authTime(new Date())
-                .createdAt(new Date())
-                .createdBy(param.getContractNo())
-                .auditStatus("1")
-                .build();
-        int count = customerAuthAuditService.insertSelective(customerAuthAudit);
+            // 企业审核表插入数据
+            CustomerAuthCompany authCompany = new CustomerAuthCompany();
+            BeanUtils.copyProperties(param, authCompany);
+            authCompany.setAuthStatus(AuthEnum.AUTH_ING.getCode());
+            authCompany.setCreatedAt(date);
+            authCompany.setCreatedBy(param.getContractNo());
+            count += insertSelective(authCompany);
 
-        CustomerAuthCompany authCompany = new CustomerAuthCompany();
-        BeanUtils.copyProperties(param, authCompany);
-        authCompany.setAuthStatus("1");
-        authCompany.setCreatedAt(new Date());
-        authCompany.setCreatedBy(param.getContractNo());
-        count += insertSelective(authCompany);
+            return count;
+        } else {
+            // 更新审核总表数据
+            CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo(), AuthEnum.AUTH_FAIL);
+            customerAuthAudit.setCustomerName(param.getCompanyName());
+            customerAuthAudit.setMobile(customerInfo.getMobile());
+            customerAuthAudit.setUpdatedAt(date);
+            customerAuthAudit.setAuditStatus(AuthEnum.AUTH_ING.getCode());
+            customerAuthAudit.setRemark("");
+            int count = customerAuthAuditService.updateByPrimaryKeySelective(customerAuthAudit);
 
-        return count;
+            // 更新企业审核表数据
+            customerAuthCompany.setCompanyName(StringUtils.isNotEmpty(param.getCompanyName()) ? param.getCompanyName() : customerAuthCompany.getCompanyName());
+            customerAuthCompany.setCompanyAddress(param.getCompanyAddress());
+            customerAuthCompany.setBusinessLife(param.getBusinessLife());
+            customerAuthCompany.setScale(param.getScale());
+            customerAuthCompany.setProfession(param.getProfession());
+            customerAuthCompany.setOfficialWebsiteUrl(param.getOfficialWebsiteUrl());
+            customerAuthCompany.setBusinessLicenseNo(param.getBusinessLicenseNo());
+            customerAuthCompany.setBusinessLicenseUrl(param.getBusinessLicenseUrl());
+            customerAuthCompany.setAuthStatus(AuthEnum.AUTH_ING.getCode());
+            customerAuthCompany.setUpdatedAt(date);
+            customerAuthCompany.setRemark("");
+            count += updateByPrimaryKeySelective(customerAuthCompany);
+
+            return count;
+        }
+
     }
 
     /**
@@ -93,7 +125,7 @@ public class CustomerAuthCompanyService {
     public int authCheck(AuthCheckDTO param, CustomerAuthCompany customerAuthCompany) {
         Date date = new Date();
         //修改审核总表
-        CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo());
+        CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo(), AuthEnum.AUTH_ING);
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
         customerAuthAudit.setAutitTime(date);
@@ -108,15 +140,6 @@ public class CustomerAuthCompanyService {
         count += updateByPrimaryKeySelective(customerAuthCompany);
         return count;
     }
-
-
-
-
-
-
-
-
-
 
 
 }

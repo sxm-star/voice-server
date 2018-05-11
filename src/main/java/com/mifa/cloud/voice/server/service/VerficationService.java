@@ -23,9 +23,9 @@ public class VerficationService {
      * 根据手机号从缓存中获取短信验证码
      * */
     public String getmobileAuthCodeFromCache(String mobile) {
-        if("test".equals(profileActive) || "dev".equals(profileActive)) {
+        /*if("test".equals(profileActive) || "dev".equals(profileActive)) {
             return "123456";
-        }
+        }*/
         // 校验验证码
         String mobileAuthCode = (String) keyValueDao.get(StaticConst.MOBILE_SMS_KEY + mobile);
         return mobileAuthCode;
