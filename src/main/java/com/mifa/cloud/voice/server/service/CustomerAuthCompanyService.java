@@ -96,6 +96,7 @@ public class CustomerAuthCompanyService {
             customerAuthAudit.setMobile(customerInfo.getMobile());
             customerAuthAudit.setUpdatedAt(date);
             customerAuthAudit.setAuditStatus(AuthEnum.AUTH_ING.getCode());
+            customerAuthAudit.setRemark("");
             int count = customerAuthAuditService.updateByPrimaryKeySelective(customerAuthAudit);
 
             // 更新企业审核表数据
@@ -109,6 +110,7 @@ public class CustomerAuthCompanyService {
             customerAuthCompany.setBusinessLicenseUrl(param.getBusinessLicenseUrl());
             customerAuthCompany.setAuthStatus(AuthEnum.AUTH_ING.getCode());
             customerAuthCompany.setUpdatedAt(date);
+            customerAuthCompany.setRemark("");
             count += updateByPrimaryKeySelective(customerAuthCompany);
 
             return count;
