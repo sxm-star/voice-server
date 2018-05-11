@@ -70,6 +70,8 @@ public class CustomerAuthCompanyService {
                 .customerName(param.getCompanyName())
                 .mobile(customerInfo.getMobile())
                 .authTime(new Date())
+                .createdAt(new Date())
+                .createdBy(param.getContractNo())
                 .auditStatus("1")
                 .build();
         int count = customerAuthAuditService.insertSelective(customerAuthAudit);
@@ -77,6 +79,8 @@ public class CustomerAuthCompanyService {
         CustomerAuthCompany authCompany = new CustomerAuthCompany();
         BeanUtils.copyProperties(param, authCompany);
         authCompany.setAuthStatus("1");
+        authCompany.setCreatedAt(new Date());
+        authCompany.setCreatedBy(param.getContractNo());
         count += insertSelective(authCompany);
 
         return count;
@@ -87,16 +91,20 @@ public class CustomerAuthCompanyService {
      */
     @Transactional(rollbackFor = Exception.class)
     public int authCheck(AuthCheckDTO param, CustomerAuthCompany customerAuthCompany) {
-
+        Date date = new Date();
         //修改审核总表
         CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo());
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
-        customerAuthAudit.setAutitTime(new Date());
+        customerAuthAudit.setAutitTime(date);
+        customerAuthAudit.setUpdatedAt(date);
+        customerAuthAudit.setUpdatedBy(param.getUpdateBy());
         int count = customerAuthAuditService.updateByPrimaryKeySelective(customerAuthAudit);
 
         customerAuthCompany.setRemark(param.getRemark());
         customerAuthCompany.setAuthStatus(param.getAuthStatus());
+        customerAuthCompany.setUpdatedAt(date);
+        customerAuthCompany.setUpdatedBy(param.getUpdateBy());
         count += updateByPrimaryKeySelective(customerAuthCompany);
         return count;
     }

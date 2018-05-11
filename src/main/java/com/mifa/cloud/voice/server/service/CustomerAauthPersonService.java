@@ -73,6 +73,8 @@ public class CustomerAauthPersonService {
                 .customerName(param.getName())
                 .mobile(customerInfo.getMobile())
                 .authTime(new Date())
+                .createdAt(new Date())
+                .createdBy(param.getContractNo())
                 .auditStatus("1") // 审核状态 1:认证中;2:认证通过,3:认证不通过
                 .build();
         int count = customerAuthAuditMapper.insertSelective(customerAuthAudit);
@@ -81,6 +83,8 @@ public class CustomerAauthPersonService {
         CustomerAauthPerson authPerson = new CustomerAauthPerson();
         BeanUtils.copyProperties(param, authPerson);
         authPerson.setAuthStatus("1");
+        authPerson.setCreatedAt(new Date());
+        authPerson.setCreatedBy(param.getContractNo());
         count += insertSelective(authPerson);
         return count;
     }
@@ -90,16 +94,21 @@ public class CustomerAauthPersonService {
      */
     @Transactional(rollbackFor = Exception.class)
     public int authCheck(AuthCheckDTO param, CustomerAauthPerson customerAauthPerson) {
+        Date date = new Date();
         //修改审核总表
         CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo());
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
-        customerAuthAudit.setUpdatedAt(new Date());
-        customerAuthAudit.setAutitTime(new Date());
+        customerAuthAudit.setUpdatedAt(date);
+        customerAuthAudit.setAutitTime(date);
+        customerAuthAudit.setUpdatedBy(param.getUpdateBy());
+
         int count = customerAuthAuditMapper.updateByPrimaryKeySelective(customerAuthAudit);
 
         customerAauthPerson.setRemark(param.getRemark());
         customerAauthPerson.setAuthStatus(param.getAuthStatus());
+        customerAauthPerson.setUpdatedAt(date);
+        customerAauthPerson.setUpdatedBy(param.getUpdateBy());
         count += updateByPrimaryKeySelective(customerAauthPerson);
 
         return count;
