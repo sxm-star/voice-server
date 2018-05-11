@@ -151,8 +151,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                         auditVO.setAuditStatus(AuditEnum.AUDIT_ING.getDesc());
                     }
                     // 创建人
-                    if (StringUtils.isNotEmpty(item.getCreatedBy())) {
-                        CustomerLoginInfo creater = customerLoginInfoService.selectByPrimaryKey(item.getCreatedBy());
+                    if (StringUtils.isNotEmpty(item.getUpdatedBy())) {
+                        CustomerLoginInfo creater = customerLoginInfoService.selectByPrimaryKey(item.getUpdatedBy());
                         auditVO.setAuditer("0".equals(creater.getIsManager()) ? "商户" : "管理员");
                     }
                     auditVO.setVoiceUrl(StringUtils.isNoneEmpty(auditVO.getVoiceUrl()) ? aconst.H5_URL_PATH + auditVO.getVoiceUrl() : auditVO.getVoiceUrl());
