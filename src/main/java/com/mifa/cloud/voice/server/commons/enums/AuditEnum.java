@@ -29,4 +29,13 @@ public enum AuditEnum {
         }
         return code;
     }
+
+    public static String getCode(String desc){
+        for (AuditEnum itemEnum:AuditEnum.values()) {
+            if (itemEnum.getDesc().equals(desc)){
+                return  itemEnum.getCode();
+            }
+        }
+        return desc;
+    }
 }
