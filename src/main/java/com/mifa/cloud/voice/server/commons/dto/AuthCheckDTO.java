@@ -23,4 +23,7 @@ public class AuthCheckDTO {
     @ApiModelProperty("审核不通过原因")
     private String remark;
 
+    @ApiModelProperty("审核人")
+    private String updateBy;
+
 }
