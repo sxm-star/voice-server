@@ -38,7 +38,12 @@ public class HomeService {
             homeStatisticRspDto.setAuthStatus(authAudit.getAuditStatus());
             homeStatisticRspDto.setAuthDesc(AuthEnum.getDesc(authAudit.getAuditStatus()));
             homeStatisticRspDto.setAuthType(AuthTypeEnum.getDesc(authAudit.getAuthType()));
-            homeStatisticRspDto.setCompanyName(authAudit.getCustomerName());
+            if (AuthTypeEnum.PERSON.getCode().equals(authAudit.getAuthType())){
+                homeStatisticRspDto.setCompanyName("");
+            }else {
+                homeStatisticRspDto.setCompanyName(authAudit.getCustomerName());
+            }
+
         }
         return homeStatisticRspDto;
     }
