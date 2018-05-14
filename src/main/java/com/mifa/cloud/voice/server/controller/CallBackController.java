@@ -60,11 +60,16 @@ public class CallBackController {
         voiceCheckBillLogDO.setCreatedBy(voiceCheckBillLogDO.getContractNo());
         voiceCheckBillLogDO.setUpdatedBy(voiceCheckBillLogDO.getContractNo());
         voiceNotifyLogService.save(voiceNotifyLogDO);
-        switch (NotifyEnum.getEnum(callBackDto.getNotify())) {
+        NotifyEnum notifyEnum = NotifyEnum.getEnum(callBackDto.getNotify());
+        switch (notifyEnum) {
             case CDR: {
                 log.info("进入计费:code:{},desc:{}",CDR.getCode(),CDR.getDesc());
                 //元转分
-                voiceCheckBillLogDO.setCost(Double.valueOf(callBackDto.getSubject().getCost()*100).intValue());
+                int cost = Double.valueOf(callBackDto.getSubject().getCost()*100).intValue();
+                if (cost==0){
+                    return;
+                }
+                voiceCheckBillLogDO.setCost(cost);
                 voiceCheckBillLogDO.setDuration(callBackDto.getSubject().getDuration());
                 voiceCheckBillService.save(voiceCheckBillLogDO);
 
@@ -78,6 +83,10 @@ public class CallBackController {
                      return;
                  }
                  updateTaskCallDO.setCallFlag(CallFlagEnum.HAS_CALLED.getCode());
+                 Long startTime = callBackDto.getSubject().getAnswerTime()==null?0:Long.parseLong(callBackDto.getSubject().getAnswerTime());
+                 Long endTime = callBackDto.getSubject().getReleaseTime()==null?0:Long.parseLong(callBackDto.getSubject().getReleaseTime());
+                 Integer diffCost = Long.valueOf((endTime-startTime)/1000).intValue();
+                 updateTaskCallDO.setCallTime(diffCost );
                  taskCallDetailService.updateByIdSelective(updateTaskCallDO);
                  log.info("拨打状态结束更新 :{}",updateTaskCallDO);
             }
@@ -95,6 +104,7 @@ public class CallBackController {
                         return;
                     }
                     updateTaskCallDO.setCallFlag(CallFlagEnum.NO_CALLED.getCode());
+                    updateTaskCallDO.setCallTime(0);
                     taskCallDetailService.updateByIdSelective(updateTaskCallDO);
                     log.info("拨打状态结束更新 :{}",updateTaskCallDO);
                 }

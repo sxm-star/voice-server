@@ -339,4 +339,9 @@ public class StringTools extends StringUtils {
         }
         return buffer.toString();
     }
+
+    public static void main(String[] args) {
+        double str = 0.0d;
+        System.out.println(Double.valueOf(str*100).intValue());
+    }
 }

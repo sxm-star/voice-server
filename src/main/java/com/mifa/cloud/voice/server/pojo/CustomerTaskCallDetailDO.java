@@ -70,7 +70,7 @@ public class CustomerTaskCallDetailDO extends BaseDataDo {
     private Integer callCnt;
 
     /**
-     * 拨打分钟数
+     * 拨打秒数
      */
     private Integer callTime;
 
