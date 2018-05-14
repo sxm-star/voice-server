@@ -10,12 +10,14 @@ import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
+import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
+import com.mifa.cloud.voice.server.utils.SeqProducerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
@@ -165,6 +167,6 @@ public class TestService {
     }
     @Test
     public void testAccount(){
-        //accountCapitalService.save(AccountCapitalDO.builder().contractNo("123456").accountId(SeqProducerUtil.getAccountNo()).availableAmount(0l).freezeAccount(0l).totalAmount(0l))
+        accountCapitalService.save(AccountCapitalDO.builder().contractNo("123456").accountId(SeqProducerUtil.getAccountNo()).availableAmount(0l).freezeAccount(0l).totalAmount(0l).currPeriodBal(0l).lastPeriodBal(0l).build());
     }
 }

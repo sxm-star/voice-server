@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static com.mifa.cloud.voice.server.api.jx.enums.NotifyEnum.CDR;
+
 /**
  * @author: songxm
  * @date: 2018/4/27 16:35
@@ -41,12 +43,12 @@ public class CallBackController {
     @RequestMapping(value = "/jx/call-back", method = RequestMethod.POST)
     @ResponseBody
     public void callBack(@RequestBody CallBackV2Dto callBackDto) {
-        log.info(NotifyEnum.getEnum(callBackDto.getNotify())+ "--" + JSON.toJSONString(callBackDto));
+        log.info("回调通知过程:" + NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()+ "--" + JSON.toJSONString(callBackDto));
         String data = callBackDto.getData();
         VoiceNotifyLogDO voiceNotifyLogDO;
         VoiceCheckBillLogDO voiceCheckBillLogDO;
         if (data.contains("|")){
-          String[]  meta = data.split("|");
+          String[]  meta = data.split("\\|");
             voiceNotifyLogDO = VoiceNotifyLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).callResponse(JSON.toJSONString(callBackDto)).channel(ChannelEnum.JIXIN.getName()).data(meta[1]).contractNo(meta[0]).build();
             voiceCheckBillLogDO = VoiceCheckBillLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).channel(ChannelEnum.JIXIN.getName()).contractNo(meta[0]).data(meta[1]).build();
         }else {
@@ -60,6 +62,7 @@ public class CallBackController {
         voiceNotifyLogService.save(voiceNotifyLogDO);
         switch (NotifyEnum.getEnum(callBackDto.getNotify())) {
             case CDR: {
+                log.info("进入计费:code:{},desc:{}",CDR.getCode(),CDR.getDesc());
                 //元转分
                 voiceCheckBillLogDO.setCost(Double.valueOf(callBackDto.getSubject().getCost()*100).intValue());
                 voiceCheckBillLogDO.setDuration(callBackDto.getSubject().getDuration());
@@ -68,9 +71,33 @@ public class CallBackController {
                  CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
                  taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
                  taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
-                 taskCallDetailDO.setCallFlag(CallFlagEnum.HAS_CALLED.getCode());
                  CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
+                 if (updateTaskCallDO==null)
+                 {
+                     log.warn("更新拨打计划为空updateTaskCallDO :{}",updateTaskCallDO);
+                     return;
+                 }
+                 updateTaskCallDO.setCallFlag(CallFlagEnum.HAS_CALLED.getCode());
                  taskCallDetailService.updateByIdSelective(updateTaskCallDO);
+                 log.info("拨打状态结束更新 :{}",updateTaskCallDO);
+            }
+            break;
+            case CALLEND:
+            {
+                if (callBackDto.getSubject().getCause()==0 && callBackDto.getSubject().getDisposition().equalsIgnoreCase("recv_refuse")){
+                    CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
+                    taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
+                    taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
+                    CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
+                    if (updateTaskCallDO==null)
+                    {
+                        log.warn("更新拨打计划为空updateTaskCallDO :{}",updateTaskCallDO);
+                        return;
+                    }
+                    updateTaskCallDO.setCallFlag(CallFlagEnum.NO_CALLED.getCode());
+                    taskCallDetailService.updateByIdSelective(updateTaskCallDO);
+                    log.info("拨打状态结束更新 :{}",updateTaskCallDO);
+                }
             }
             break;
             default:
