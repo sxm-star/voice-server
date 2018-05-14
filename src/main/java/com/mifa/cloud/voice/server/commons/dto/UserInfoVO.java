@@ -36,12 +36,6 @@ public class UserInfoVO {
     private String mobile;
 
     /**
-     * 登录密码
-     */
-    @ApiModelProperty("密码")
-    private String loginPasswd;
-
-    /**
      * 头像地址
      */
     @ApiModelProperty("头像地址")
