@@ -36,10 +36,16 @@ public class CustomerTaskCallDetailDto {
     private String templateId;
 
     /**
-     *
+     * 批次任务ID
      */
     @ApiModelProperty("批次任务ID")
     private String taskId;
+
+    /**
+     * 批次计划ID
+     */
+    @ApiModelProperty("批次计划ID")
+    private String batchId;
 
     /**
      * 手机号
@@ -53,7 +59,7 @@ public class CustomerTaskCallDetailDto {
      */
     @NotEmpty
     @ApiModelProperty("用户姓名")
-    private String  userName;
+    private String userName;
 
     @ApiModelProperty("公司名称")
     private String orgName;

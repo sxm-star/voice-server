@@ -181,9 +181,6 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     public List<VoiceTemplateSelectDto> queryTemplateVoiceSelectList(VoiceTemplateSelectQueryDto queryDto) {
         try {
             VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(queryDto, VoiceTemplateDO.class);
-            if (queryDto.getIsTest()) {
-                voiceTemplateDO.setContractNo(null);
-            }
             voiceTemplateDO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getCode());
             voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, 1, 5, null);
@@ -266,9 +263,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         }
         String templateId = voiceTemplateDO.getOutTemplateId();
         String called = openDto.getPhone();
-        //String calledDisplay = "95776";
         String calledDisplay = "";
-        String data = BaseStringUtils.uuid();
+        String data = openDto.getContractNo() +"|" + BaseStringUtils.uuid();
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         params.add(openDto.getName());

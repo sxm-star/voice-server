@@ -1,6 +1,9 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,10 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author 
+ * @author songxm
  */
 @Data
 @Table(name="t_customer_task_call_detail")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerTaskCallDetailDO extends BaseDataDo {
     /**
      * 主键
@@ -36,6 +42,11 @@ public class CustomerTaskCallDetailDO extends BaseDataDo {
      * 上传号码批次任务ID
      */
     private String taskId;
+
+    /**
+     * 计划拨打批次ID号
+     */
+    private String batchId;
 
     /**
      * 手机号

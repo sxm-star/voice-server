@@ -115,4 +115,6 @@ public class CallJobDto {
     private Date createdAt;
     @ApiModelProperty("任务ID")
     private String taskId;
+    @ApiModelProperty("计划批次ID号")
+    private String batchId;
 }

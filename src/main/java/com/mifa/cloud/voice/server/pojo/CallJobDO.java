@@ -1,6 +1,9 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -10,6 +13,9 @@ import javax.persistence.*;
  */
 @Table(name="t_customer_call_job")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CallJobDO extends BaseDataDo {
     /**
      * 主键
@@ -45,6 +51,9 @@ public class CallJobDO extends BaseDataDo {
 
     @Column(name = "task_id")
     private String taskId;
+
+    @Column(name = "batch_id")
+    private String batchId;
 
     /**
      * 语音模板名称 冗余

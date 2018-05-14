@@ -6,15 +6,13 @@ import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDto;
 import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDto;
 import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDto;
-import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
-import com.mifa.cloud.voice.server.commons.enums.TimeUnitEnum;
+import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
+import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
@@ -67,6 +65,8 @@ public class TestService {
 
     @Autowired
     VoiceNotifyLogService voiceNotifyLogService;
+    @Autowired
+    VoiceServiceBillRateService rateService;
 
     @Test
     public void testRedis() {
@@ -156,5 +156,9 @@ public class TestService {
     @Test
     public void testNotify() {
        // voiceNotifyLogService.save(VoiceNotifyLogDO.builder().callTime(new Date()).callResponse("test").called("18720987088").data("123456").build());
+    }
+    @Test
+    public void testServiceBillRate(){
+        rateService.save(VoiceServiceBillRateDO.builder().channel(ChannelEnum.JIXIN.getName()).calfeeType(CalFeeTypeEnum.CHARGE_BY_TIME.getCode()).contractNo("123456").productName(ProductEnum.VOICE_NOTIFY.name()).rateAmt(10).build());
     }
 }

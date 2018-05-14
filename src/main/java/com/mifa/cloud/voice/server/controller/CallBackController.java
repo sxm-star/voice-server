@@ -74,7 +74,7 @@ public class CallBackController {
             }
             break;
             default:
-                log.warn("通知结果 未知类型");
+                log.warn("通知结果 类型:{}",NotifyEnum.getEnum(callBackDto.getNotify()).getDesc());
                 break;
         }
 

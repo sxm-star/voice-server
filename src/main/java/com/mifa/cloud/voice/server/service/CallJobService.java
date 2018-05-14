@@ -17,6 +17,7 @@ import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
+import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -53,6 +54,7 @@ public class CallJobService extends BaseService<CallJobDO> {
             throw new BaseBizException("401","当前模板没有审核通过,不允许被添加至任务列表");
         }
         CallJobDO customerCallJobDO = BaseBeanUtils.convert(customerCallJobDto, CallJobDO.class);
+        customerCallJobDO.setBatchId(BaseStringUtils.uuid());
         customerCallJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
        // customerCallJobDO.setJobStatus(JobStatusEnum.WAIT_START.getCode());
         customerCallJobDO.setJobStatus(JobStatusEnum.RUNNING.getCode());  //默认设置好启动状态

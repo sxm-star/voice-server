@@ -24,6 +24,10 @@ public class CallDetailQueryDto {
     @ApiModelProperty(value = "任务号ID",required = true)
     private String taskId;
 
+    @NotEmpty(message = "计划的批次ID不能为空")
+    @ApiModelProperty(value = "计划批次ID",required = true)
+    private String batchId;
+
     /**
      * 手机号
      */

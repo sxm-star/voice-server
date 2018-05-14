@@ -5,12 +5,11 @@ import com.mifa.cloud.voice.server.api.jx.VoiceApi;
 import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
+import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
-import com.mifa.cloud.voice.server.pojo.CallJobDO;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDO;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskUserContactsDOExample;
+import com.mifa.cloud.voice.server.exception.BaseBizException;
+import com.mifa.cloud.voice.server.pojo.*;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.EncodesUtils;
@@ -36,7 +35,6 @@ public class JobTaskListener {
 
     @Autowired
     ContactsService contactTaskService;
-
     @Autowired
     CustomerTaskUserContactsDAO contactsDAO;
     @Autowired
@@ -49,6 +47,8 @@ public class JobTaskListener {
     CallJobService jobService;
     @Autowired
     CustomerTaskCallDetailService taskCallDetailService;
+    @Autowired
+    TemplateVoiceService templateVoiceService;
 
     @RabbitListener(queues = "q_voice_job_pool")
     @RabbitHandler
@@ -67,10 +67,12 @@ public class JobTaskListener {
             List<CustomerTaskUserContactsDO> list = contactsDAO.selectByExample(example);
             if(list!=null && list.size()>0){
                 for (CustomerTaskUserContactsDO item: list){
-
-                    String templateId = "20325";
+                    VoiceTemplateDO voiceTemplateDO = templateVoiceService.queryById(callJobDO.getTemplateId());
+                    if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
+                        throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
+                    }
+                    String templateId = voiceTemplateDO.getOutTemplateId();
                     String called = EncodesUtils.selfDecrypt(item.getUserPhone(),item.getSalt());
-                    //String calledDisplay = "95776";
                     String calledDisplay = "";
                     int playTimes = 1;
                     List<String> params = new ArrayList<>();
@@ -80,7 +82,7 @@ public class JobTaskListener {
                     System.out.println("info " + JSON.toJSONString(info));
                     System.out.println("subject " + JSON.toJSONString(subject));
                     JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
-                            .data(taskId).timestamp(String.valueOf(System.currentTimeMillis())).build();
+                            .data(item.getContractNo()+"|"+taskId).timestamp(String.valueOf(System.currentTimeMillis())).build();
                     jxVoiceVcodeReqDto.setInfo(info);
                     jxVoiceVcodeReqDto.setSubject(subject);
                     try {
@@ -96,6 +98,7 @@ public class JobTaskListener {
                         detailDO.setPhone(called);
                         detailDO.setCreatedAt(new Date());
                         detailDO.setTaskId(taskId);
+                        detailDO.setBatchId(callJobDO.getBatchId());
                         taskCallDetailService.save(detailDO);
                         log.info("保存拨打电话入库:{}",detailDO);
                     }catch (Exception e){
