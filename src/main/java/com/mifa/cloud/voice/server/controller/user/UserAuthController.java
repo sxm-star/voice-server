@@ -122,7 +122,7 @@ public class UserAuthController {
         if (count > 0) {
             return CommonResponse.successCommonResponse("审核成功", null);
         }
-        return CommonResponse.failCommonResponse("审核失败");
+        return CommonResponse.failCommonResponse("未查询到有效的认证信息");
 
     }
 
@@ -143,7 +143,7 @@ public class UserAuthController {
         if (count > 0) {
             return CommonResponse.successCommonResponse("审核成功", null);
         }
-        return CommonResponse.failCommonResponse("审核失败");
+        return CommonResponse.failCommonResponse("未查询到有效的认证信息");
 
     }
 

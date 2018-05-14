@@ -130,6 +130,9 @@ public class CustomerAauthPersonService {
         Date date = new Date();
         //修改审核总表
         CustomerAuthAudit customerAuthAudit = customerAuthAuditService.selectByContractNo(param.getContractNo(), AuthEnum.AUTH_ING);
+        if(customerAuthAudit == null) {
+            return 0;
+        }
         customerAuthAudit.setRemark(param.getRemark());
         customerAuthAudit.setAuditStatus(param.getAuthStatus());
         customerAuthAudit.setUpdatedAt(date);
