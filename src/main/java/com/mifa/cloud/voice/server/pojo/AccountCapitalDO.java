@@ -55,6 +55,11 @@ public class AccountCapitalDO extends BaseDataDo {
     private Long totalAmount;
 
     /**
+     * 信用额度,可透支额度
+     */
+    private Long  creditAmount;
+
+    /**
      * 上期起初余额
      */
     private Long lastPeriodBal;

@@ -82,7 +82,7 @@ public class JobTaskListener {
                     System.out.println("info " + JSON.toJSONString(info));
                     System.out.println("subject " + JSON.toJSONString(subject));
                     JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
-                            .data(item.getContractNo()+"|"+taskId).timestamp(String.valueOf(System.currentTimeMillis())).build();
+                            .data(item.getContractNo()+"|"+taskId+"|"+callJobDO.getBatchId()+"|"+called).timestamp(String.valueOf(System.currentTimeMillis())).build();
                     jxVoiceVcodeReqDto.setInfo(info);
                     jxVoiceVcodeReqDto.setSubject(subject);
                     try {

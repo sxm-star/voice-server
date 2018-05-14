@@ -47,14 +47,11 @@ public class CallBackController {
         String data = callBackDto.getData();
         VoiceNotifyLogDO voiceNotifyLogDO;
         VoiceCheckBillLogDO voiceCheckBillLogDO;
-        if (data.contains("|")){
-          String[]  meta = data.split("\\|");
+
+            String[]  meta = data.split("\\|");
             voiceNotifyLogDO = VoiceNotifyLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).callResponse(JSON.toJSONString(callBackDto)).channel(ChannelEnum.JIXIN.getName()).data(meta[1]).contractNo(meta[0]).build();
             voiceCheckBillLogDO = VoiceCheckBillLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).channel(ChannelEnum.JIXIN.getName()).contractNo(meta[0]).data(meta[1]).build();
-        }else {
-            voiceNotifyLogDO =  VoiceNotifyLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).callResponse(JSON.toJSONString(callBackDto)).channel(ChannelEnum.JIXIN.getName()).data(data).contractNo(callBackDto.getSubject().getCalled()).build();
-            voiceCheckBillLogDO = VoiceCheckBillLogDO.builder().notify(NotifyEnum.getEnum(callBackDto.getNotify()).getDesc()).called(callBackDto.getSubject().getCalled()).channel(ChannelEnum.JIXIN.getName()).contractNo(callBackDto.getSubject().getCalled()).data(data).build();
-        }
+
         voiceNotifyLogDO.setCreatedBy(voiceNotifyLogDO.getContractNo());
         voiceNotifyLogDO.setUpdatedBy(voiceNotifyLogDO.getContractNo());
         voiceCheckBillLogDO.setCreatedBy(voiceCheckBillLogDO.getContractNo());
@@ -74,7 +71,10 @@ public class CallBackController {
                 voiceCheckBillService.save(voiceCheckBillLogDO);
 
                  CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
+
+                 taskCallDetailDO.setContractNo(meta[0]);
                  taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
+                 taskCallDetailDO.setBatchId(meta[2]);
                  taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
                  CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
                  if (updateTaskCallDO==null)
@@ -95,6 +95,8 @@ public class CallBackController {
             {
                 if (callBackDto.getSubject().getCause()==0 && callBackDto.getSubject().getDisposition().equalsIgnoreCase("recv_refuse")){
                     CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
+                    taskCallDetailDO.setContractNo(meta[0]);
+                    taskCallDetailDO.setBatchId(meta[2]);
                     taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
                     taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
                     CustomerTaskCallDetailDO updateTaskCallDO =  taskCallDetailService.queryOne(taskCallDetailDO);
