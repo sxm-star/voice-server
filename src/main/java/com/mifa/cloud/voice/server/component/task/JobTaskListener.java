@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,13 +71,14 @@ public class JobTaskListener {
                         throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
                     }
                     String templateId = voiceTemplateDO.getOutTemplateId();
+                    log.info("拨打计划----- 三方ID号 :{}",templateId);
                     String called = EncodesUtils.selfDecrypt(item.getUserPhone(),item.getSalt());
                     String calledDisplay = "";
                     int playTimes = 1;
-                    List<String> params = new ArrayList<>();
-                    params.add(item.getUserName());
+//                    List<String> params = new ArrayList<>();
+//                    params.add(item.getUserName());
                     Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+ BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
-                    Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
+                    Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).playTimes(playTimes).build();
                     System.out.println("info " + JSON.toJSONString(info));
                     System.out.println("subject " + JSON.toJSONString(subject));
                     JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
@@ -90,7 +90,7 @@ public class JobTaskListener {
 
                         CustomerTaskCallDetailDO detailDO = new CustomerTaskCallDetailDO();
                         detailDO.setOrgName(item.getOrgName());
-                        detailDO.setTemplateId("20325");
+                        detailDO.setTemplateId(templateId);
                         detailDO.setContractNo(item.getContractNo());
                         detailDO.setCreatedBy(item.getContractNo());
                         detailDO.setUserName(item.getUserName());
