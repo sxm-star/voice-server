@@ -267,7 +267,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         String data = openDto.getContractNo() +"|" + BaseStringUtils.uuid();
         int playTimes = 1;
         List<String> params = new ArrayList<>();
-        params.add(openDto.getName());
+//        params.add(openDto.getName());
         Info info = Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
         Subject subject = Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()

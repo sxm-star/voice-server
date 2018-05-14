@@ -67,6 +67,8 @@ public class TestService {
     VoiceNotifyLogService voiceNotifyLogService;
     @Autowired
     VoiceServiceBillRateService rateService;
+    @Autowired
+    AccountCapitalService accountCapitalService;
 
     @Test
     public void testRedis() {
@@ -160,5 +162,9 @@ public class TestService {
     @Test
     public void testServiceBillRate(){
         rateService.save(VoiceServiceBillRateDO.builder().channel(ChannelEnum.JIXIN.getName()).calfeeType(CalFeeTypeEnum.CHARGE_BY_TIME.getCode()).contractNo("123456").productName(ProductEnum.VOICE_NOTIFY.name()).rateAmt(10).build());
+    }
+    @Test
+    public void testAccount(){
+        //accountCapitalService.save(AccountCapitalDO.builder().contractNo("123456").accountId(SeqProducerUtil.getAccountNo()).availableAmount(0l).freezeAccount(0l).totalAmount(0l))
     }
 }
