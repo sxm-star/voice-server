@@ -92,7 +92,7 @@ public class VerficationCodeController {
         keyValueDao.set(StaticConst.MOBILE_SMS_KEY + param.getMobile(), code, 60 * 3);
         Map<String, String> map = new HashMap<String, String>();
         map.put("bizType", "1");
-        map.put("aliasName", "mifayuyinyun");
+        map.put("aliasName", "midunyuyinyun");
         map.put("tel", param.getMobile());
         map.put("identifyingCode", code);
         String json = JSONObject.toJSONString(map);
