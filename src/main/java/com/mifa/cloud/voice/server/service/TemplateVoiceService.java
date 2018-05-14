@@ -265,7 +265,9 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         String called = openDto.getPhone();
         String calledDisplay = "";
 
-        String data = openDto.getContractNo() +"|" + BaseStringUtils.uuid() +"|" + BaseStringUtils.uuid() + "|" + called;
+        String taskId = BaseStringUtils.uuid();
+        String batchId = BaseStringUtils.uuid();
+        String data = openDto.getContractNo() +"|" + taskId +"|" + batchId + "|" + called;
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         Info info = Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
@@ -279,7 +281,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
             CustomerTaskCallDetailDO customerTaskCallDetailDO = new CustomerTaskCallDetailDO();
             customerTaskCallDetailDO.setPhone(called);
-            customerTaskCallDetailDO.setTaskId(data);
+            customerTaskCallDetailDO.setTaskId(taskId);
+            customerTaskCallDetailDO.setBatchId(batchId);
             customerTaskCallDetailDO.setNote("测试接口记录");
             customerTaskCallDetailDO.setCreatedAt(new Date());
             customerTaskCallDetailDO.setCallCnt(1);

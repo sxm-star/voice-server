@@ -18,4 +18,19 @@ import lombok.NoArgsConstructor;
 public class HomeStatisticRspDto {
 
 
+    private String contractNo;
+
+    /**
+     * 可用金额
+     */
+    private Long availableAmount;
+
+    private String authStatus;
+
+    private String authDesc;
+
+    private String authType;
+
+    private String companyName;
+
 }

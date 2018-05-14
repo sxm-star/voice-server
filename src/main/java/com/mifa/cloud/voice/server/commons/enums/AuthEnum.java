@@ -21,4 +21,22 @@ public enum AuthEnum {
         this.desc = desc;
     }
 
+    public static String getDesc(String code){
+        for (AuthEnum itemEnum:AuthEnum.values()) {
+            if (itemEnum.getCode().equals(code)){
+                return  itemEnum.getDesc();
+            }
+        }
+        return code;
+    }
+
+    public static String getCode(String desc){
+        for (AuthEnum itemEnum:AuthEnum.values()) {
+            if (itemEnum.getDesc().equals(desc)){
+                return  itemEnum.getCode();
+            }
+        }
+        return desc;
+    }
+
 }

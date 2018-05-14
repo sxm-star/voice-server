@@ -44,7 +44,9 @@ public class CustomerAuthAuditService {
         CustomerAuthAuditExample example = new CustomerAuthAuditExample();
         CustomerAuthAuditExample.Criteria criteria = example.createCriteria();
         criteria.andContractNoEqualTo(contractNo);
-        criteria.andAuditStatusEqualTo(authEnum.getCode());
+        if (authEnum!=null) {
+            criteria.andAuditStatusEqualTo(authEnum.getCode());
+        }
         List<CustomerAuthAudit> authAuditList = mapper.selectByExample(example);
         if(authAuditList.isEmpty()) {
             return null;
