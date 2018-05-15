@@ -80,7 +80,7 @@ public class JobTaskListener {
                     String calledDisplay = "";
                     int playTimes = 1;
                     List<String> params = new ArrayList<>();
-                    Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+ BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
+                    Info info =  Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call"+ BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
                     Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
                     System.out.println("info " + JSON.toJSONString(info));
                     System.out.println("subject " + JSON.toJSONString(subject));
