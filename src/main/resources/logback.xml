@@ -7,7 +7,7 @@
         <encoder>
             <!-- 输出格式 -->
             <pattern>
-                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n${CORRELATION_ID:-%wEx}
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -25,7 +25,7 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n </pattern>
         </encoder>
         <!-- error级别过滤器 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
