@@ -67,4 +67,7 @@ public class VoiceTemplateAuditVO {
 
     @ApiModelProperty("语音话术类目id")
     private Integer categoryId;
+
+    @ApiModelProperty("设置的话术关键词")
+    private String keyWord;
 }
