@@ -126,6 +126,8 @@ public final class SeqProducerUtil {
         seq = getLastStr(seq, 15);
         return bf.append(Constant.LUCKY_ACCOUNT_NO).append(seq).toString();
     }
+
+
     public static void main(String[] args){
         System.out.println(getID());
     }

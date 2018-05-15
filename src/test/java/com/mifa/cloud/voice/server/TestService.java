@@ -10,10 +10,7 @@ import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
-import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
-import com.mifa.cloud.voice.server.pojo.UploadFileLog;
-import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
+import com.mifa.cloud.voice.server.pojo.*;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
@@ -159,7 +156,7 @@ public class TestService {
 
     @Test
     public void testNotify() {
-       // voiceNotifyLogService.save(VoiceNotifyLogDO.builder().callTime(new Date()).callResponse("test").called("18720987088").data("123456").build());
+       //voiceNotifyLogService.save(VoiceNotifyLogDO.builder().callTime(new Date()).callResponse("test").called("18720987088").data("123456").build());
     }
     @Test
     public void testServiceBillRate(){

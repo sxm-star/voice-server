@@ -1,0 +1,15 @@
+15:09:59.646 2984 [main] WARN  o.s.c.c.c.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/voice-server-api/dev": Connection refused (Connection refused); nested exception is java.net.ConnectException: Connection refused (Connection refused)
+15:10:28.912 2236 [main] WARN  o.s.c.c.c.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/voice-server-api/dev": Connection refused (Connection refused); nested exception is java.net.ConnectException: Connection refused (Connection refused)
+15:10:40.356 13680 [main] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:10:45.693 19017 [main] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:10:51.791 25115 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Coercing to be of type string. This may not even be a scalar type in actuality
+15:10:51.854 25178 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Coercing to be of type string. This may not even be a scalar type in actuality
+15:10:56.588 29912 [Thread-8] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:10:56.685 30009 [Thread-8] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method 'close' failed on bean with name 'sqlSessionTemplate': java.lang.UnsupportedOperationException: Manual close is not allowed over a Spring managed SqlSession
+15:15:22.814 2490 [main] WARN  o.s.c.c.c.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/voice-server-api/dev": Connection refused (Connection refused); nested exception is java.net.ConnectException: Connection refused (Connection refused)
+15:15:34.141 13817 [main] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:15:38.890 18566 [main] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:15:44.656 24332 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Coercing to be of type string. This may not even be a scalar type in actuality
+15:15:44.727 24403 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Coercing to be of type string. This may not even be a scalar type in actuality
+15:15:47.172 26848 [Thread-8] WARN  c.n.c.s.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+15:15:47.215 26891 [Thread-8] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method 'close' failed on bean with name 'sqlSessionTemplate': java.lang.UnsupportedOperationException: Manual close is not allowed over a Spring managed SqlSession

@@ -6,12 +6,19 @@ appConfig:
     accessSecret: oCLx4mIfSPKTAdfHhf07NgXOzY3Yv1
     voiceUrl: http://h.1069106.com:1210/
 
-  #即信语音通道
+  #即信语音通道--生产
+#  jixinVoice:
+#    accountId: b1a593ca514fd08adf922d205fecb18e
+#    authToken: 00343a5a9e1db212774dff67b4f0cc14
+#    voiceUrl: https://api.139130.com:9999/
+#    appId: 9b45108124879810c3b081a8aabff9f0
+
+  #即信语音通道--测试
   jixinVoice:
-    accountId: b1a593ca514fd08adf922d205fecb18e
-    authToken: 00343a5a9e1db212774dff67b4f0cc14
+    accountId: a187fbfcf4fddfdc600b89e281cda0cd
+    authToken: cd9827f0fbb40c9ba91b961e1c9383f4
     voiceUrl: https://api.139130.com:9999/
-    appId: 9b45108124879810c3b081a8aabff9f0
+    appId: f5f09ecc45da90082877615314e2e1eb
 
     #梦网云通语音通道
   montnetsVoice:

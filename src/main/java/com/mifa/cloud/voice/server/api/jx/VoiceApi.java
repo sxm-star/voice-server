@@ -13,20 +13,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 public class VoiceApi {
 
-    private static final String ACCOUNT_SID = "b1a593ca514fd08adf922d205fecb18e";
-    private static final String AUTH_TOKEN = "00343a5a9e1db212774dff67b4f0cc14";
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String BASE_URL = "https://api.139130.com:9999";
     private static final String CAPTCHA_URL = "/api/v1.0.0/voice/verify";
     private static final String NOTIFICATION_URL = "/api/v1.0.0/voice/notify";
     private static final String CLICK_CALL_URL = "/voice/clickcall";
     private static final String SIG_PARAM_STR = "?sig=";
-private static final String JSON_CONTENT_TYPE = "application/json;charset=utf-8";
-private static final String CHARSET_UTF8 = "UTF-8";
+    private static final String JSON_CONTENT_TYPE = "application/json;charset=utf-8";
+    private static final String CHARSET_UTF8 = "UTF-8";
 
 
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -34,8 +32,8 @@ private static final String CHARSET_UTF8 = "UTF-8";
     public static void main(String[] args) throws Exception {
         try {
             System.out.println("ssss");
-           // sendVoiceCaptcha();
- //           sendVoiceNotification();
+            // sendVoiceCaptcha();
+            //           sendVoiceNotification();
 //            sendClickToCall();
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,46 +41,46 @@ private static final String CHARSET_UTF8 = "UTF-8";
     }
 
     /*语音验证码DEMO*/
-    public static String  sendVoiceCaptcha(JxVoiceVcodeReqDto jxVoiceVcodeReqDto) throws Exception{
+    public static String sendVoiceCaptcha(JxVoiceVcodeReqDto jxVoiceVcodeReqDto,String accountId,String authToken) throws Exception {
         String timestamp = getTimeStamp();
-        String sig = getSig(timestamp);
-        String url = getUrl(CAPTCHA_URL,sig);
-        String authorization = getAuthorization(timestamp);
+        String sig = getSig(accountId,authToken,timestamp);
+        String url = getUrl(CAPTCHA_URL, sig);
+        String authorization = getAuthorization(accountId,timestamp);
         String requestContent = getJsonRequestBody(jxVoiceVcodeReqDto);
 
-        HttpURLConnection conn = getConnection(url,authorization,requestContent.length());
+        HttpURLConnection conn = getConnection(url, authorization, requestContent.length());
 
         DataOutputStream output = new DataOutputStream(conn.getOutputStream());
         output.write(requestContent.getBytes(CHARSET_UTF8));
         output.close();
 
-       return printResponse(conn);
+        return printResponse(conn);
     }
 
     /*语音通知DEMO*/
-    public static String sendVoiceNotification(JxVoiceVcodeReqDto jxVoiceVcodeReqDto) throws Exception{
+    public static String sendVoiceNotification(JxVoiceVcodeReqDto jxVoiceVcodeReqDto,String accountId,String authToken) throws Exception {
         String timestamp = getTimeStamp();
-        String sig = getSig(timestamp);
-        String url = getUrl(NOTIFICATION_URL,sig);
-        String authorization = getAuthorization(timestamp);
+        String sig = getSig(accountId,authToken,timestamp);
+        String url = getUrl(NOTIFICATION_URL, sig);
+        String authorization = getAuthorization(accountId,timestamp);
         String requestContent = getJsonRequestBody(jxVoiceVcodeReqDto);
-        HttpURLConnection conn = getConnection(url,authorization,requestContent.length());
+        HttpURLConnection conn = getConnection(url, authorization, requestContent.length());
 
         DataOutputStream output = new DataOutputStream(conn.getOutputStream());
         output.write(requestContent.getBytes(CHARSET_UTF8));
         output.close();
 
-       return printResponse(conn);
+        return printResponse(conn);
     }
 
     /*点击通话DEMO*/
-    public static String  sendClickToCall(JxVoiceVcodeReqDto jxVoiceVcodeReqDto) throws Exception{
+    public static String sendClickToCall(JxVoiceVcodeReqDto jxVoiceVcodeReqDto,String accountId,String authToken) throws Exception {
         String timestamp = getTimeStamp();
-        String sig = getSig(timestamp);
-        String url = getUrl(CLICK_CALL_URL,sig);
-        String authorization = getAuthorization(timestamp);
+        String sig = getSig(accountId,authToken,timestamp);
+        String url = getUrl(CLICK_CALL_URL, sig);
+        String authorization = getAuthorization(accountId,timestamp);
         String requestContent = getJsonRequestBody(jxVoiceVcodeReqDto);
-        HttpURLConnection conn = getConnection(url,authorization,requestContent.length());
+        HttpURLConnection conn = getConnection(url, authorization, requestContent.length());
 
         DataOutputStream output = new DataOutputStream(conn.getOutputStream());
         output.write(requestContent.getBytes(CHARSET_UTF8));
@@ -92,40 +90,40 @@ private static final String CHARSET_UTF8 = "UTF-8";
     }
 
     /*获取yyyyMMddHHmmss格式时间戳*/
-    private static String getTimeStamp(){
+    private static String getTimeStamp() {
         return new SimpleDateFormat(DATE_FORMAT).format(new Date());
     }
 
     /*获取sig字符串*/
-    private static String getSig(String timestamp){
-        return DigestUtils.sha1Hex(ACCOUNT_SID+AUTH_TOKEN+timestamp).toLowerCase();
+    private static String getSig(String accountId,String authToken,String timestamp) {
+        return DigestUtils.sha1Hex(accountId + authToken + timestamp).toLowerCase();
     }
 
     /*获取请求完整URL*/
-    private static String getUrl(String functionUrl,String sig){
-        return BASE_URL + functionUrl + SIG_PARAM_STR +sig;
+    private static String getUrl(String functionUrl, String sig) {
+        return BASE_URL + functionUrl + SIG_PARAM_STR + sig;
     }
 
     /*获取Authorization*/
-    private static String getAuthorization(String timestamp){
-        return Base64.encodeBase64String((ACCOUNT_SID+":"+timestamp).getBytes());
+    private static String getAuthorization(String accountId,String timestamp) {
+        return Base64.encodeBase64String((accountId + ":" + timestamp).getBytes());
     }
 
     /*获取完整HttpURLConnection对象*/
-    private static HttpURLConnection getConnection(String url,String authorization,int length) throws Exception {
-        HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
+    private static HttpURLConnection getConnection(String url, String authorization, int length) throws Exception {
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setDoOutput(true);
         conn.setDoInput(true);
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type",JSON_CONTENT_TYPE );
+        conn.setRequestProperty("Content-Type", JSON_CONTENT_TYPE);
         conn.setRequestProperty("Accept", JSON_CONTENT_TYPE);
         conn.setRequestProperty("Authorization", authorization);
-        conn.setRequestProperty("Content-Length", length+"");
+        conn.setRequestProperty("Content-Length", length + "");
         return conn;
     }
 
     /*获取请求body*/
-    private static String getJsonRequestBody(JxVoiceVcodeReqDto jxVoiceVcodeReqDto) throws Exception{
+    private static String getJsonRequestBody(JxVoiceVcodeReqDto jxVoiceVcodeReqDto) throws Exception {
 //        String appId = "aac0430e5af2394a4035f635a6399702";
 //        String templateId = "10003";
 //        String called = "13251022729";

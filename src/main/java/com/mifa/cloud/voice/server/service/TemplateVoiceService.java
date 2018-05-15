@@ -278,7 +278,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         jxVoiceVcodeReqDto.setSubject(subject);
         log.info(JSON.toJSONString(jxVoiceVcodeReqDto));
         try {
-            VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
+            VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,appProperties.getJixinVoice().getAccountId(),appProperties.getJixinVoice().getAuthToken());
             CustomerTaskCallDetailDO customerTaskCallDetailDO = new CustomerTaskCallDetailDO();
             customerTaskCallDetailDO.setPhone(called);
             customerTaskCallDetailDO.setTaskId(taskId);

@@ -47,7 +47,7 @@ public class VoiceServiceBillRateDO extends BaseDataDo {
     private Integer rateAmt;
 
     /**
-     * 计费类型 ，目前统一按时间计费 1: 分/秒
+     * 计费类型 ，目前统一按时间计费 1: 分/minute
      */
     private String calfeeType;
 

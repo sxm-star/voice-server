@@ -17,6 +17,7 @@ import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceReqDto;
 import com.mifa.cloud.voice.server.api.montnets.dto.TemplateVoiceRspDto;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("dev")
+@Slf4j
 public class TestOpenApi {
 
     @Autowired
@@ -110,27 +112,30 @@ public class TestOpenApi {
 
     @Test
     public void testJxVoiceApi2() throws Exception{
-        String templateId = "20325";
+        String templateId = "20477";
         String called = "13251022729";
         //String calledDisplay = "95776";
         String calledDisplay = "";
         int playTimes = 1;
         List<String> params = new ArrayList<>();
-        params.add("宋烜明");
-        Info info =  Info.builder().appID("9b45108124879810c3b081a8aabff9f0").callID("call"+BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
+        String data ="8001489512062976" +  "|" + BaseStringUtils.uuid() + "|" + BaseStringUtils.uuid() + "|" + "13251022729";
+//        params.add("宋烜明");
+        Info info =  Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call"+BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
         Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
         System.out.println("info " + JSON.toJSONString(info));
         System.out.println("subject " + JSON.toJSONString(subject));
         JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
-                .data("123").timestamp(String.valueOf(System.currentTimeMillis())).build();
+                .data(data).timestamp(String.valueOf(System.currentTimeMillis())).build();
         jxVoiceVcodeReqDto.setInfo(info);
         jxVoiceVcodeReqDto.setSubject(subject);
 
         System.out.println(JSON.toJSONString(jxVoiceVcodeReqDto));
        // jxVoiceManager.templateVoiceVcodeSend(jxVoiceVcodeReqDto);
        // VoiceApi.sendVoiceCaptcha(jxVoiceVcodeReqDto);
-
-        System.out.println(VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto));
+        String accountId =appProperties.getJixinVoice().getAccountId();
+        String authToken = appProperties.getJixinVoice().getAuthToken();
+        log.info("accountId:{} ; authToken:{}",accountId,authToken);
+        System.out.println(VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,accountId,authToken));
         //jxVoiceManager.templateVoiceVcodeSend();
        // System.out.println( jxVoiceApi.templateVoiceVcodeSend(jxVoiceManager.getAuthorization(timestamp), JSON.toJSONString(jxVoiceVcodeReqDto).length()+"", jxVoiceManager.getSig(timestamp), jxVoiceVcodeReqDto));
     }

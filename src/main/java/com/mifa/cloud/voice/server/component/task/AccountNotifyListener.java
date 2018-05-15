@@ -2,9 +2,6 @@ package com.mifa.cloud.voice.server.component.task;
 
 import com.mifa.cloud.voice.server.api.jx.dto.CallBackV2Dto;
 import com.mifa.cloud.voice.server.service.AccountCapitalService;
-import com.mifa.cloud.voice.server.service.AccountDetailService;
-import com.mifa.cloud.voice.server.service.CustomerVoiceBillService;
-import com.mifa.cloud.voice.server.service.VoiceServiceBillRateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,12 +19,7 @@ public class AccountNotifyListener {
 
     @Autowired
     AccountCapitalService accountCapitalService;
-    @Autowired
-    AccountDetailService accountDetailService;
-    @Autowired
-    VoiceServiceBillRateService rateService;
-    @Autowired
-    CustomerVoiceBillService customerVoiceBillService;
+
 
 
     @RabbitListener(queues = "q_voice_account_notify")
@@ -38,10 +30,6 @@ public class AccountNotifyListener {
             log.warn("账户扣费接收到通知内容为空!");
             return;
         }
-
-        String data = callBackDto.getData();
-        String[] meta = data.split("\\|");
-
-
+        accountCapitalService.calcTenantBill(callBackDto);
     }
 }

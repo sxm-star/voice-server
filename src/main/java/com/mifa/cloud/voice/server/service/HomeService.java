@@ -32,7 +32,7 @@ public class HomeService {
         CustomerAuthAudit authAudit = authAuditService.selectByContractNo(contractNo, null);
         HomeStatisticRspDto homeStatisticRspDto =  HomeStatisticRspDto.builder().contractNo(contractNo).build();
         if (accountCapitalDO!=null){
-            homeStatisticRspDto.setAvailableAmount(accountCapitalDO.getAvailableAmount()/100); //分转元
+            homeStatisticRspDto.setAvailableAmount(accountCapitalDO.getAvailableAmount()*1.0/100); //分转元
         }
         if (authAudit!=null){
             homeStatisticRspDto.setAuthStatus(authAudit.getAuditStatus());

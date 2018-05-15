@@ -52,6 +52,6 @@ public class VoiceApiConfig {
     }
 
    private  String getSig(String timestamp){
-        return DigestUtils.sha1Hex(this.appProperties.getJixinVoice().getAccessId()+this.appProperties.getJixinVoice().getAuthToken()+timestamp).toLowerCase();
+        return DigestUtils.sha1Hex(this.appProperties.getJixinVoice().getAccountId()+this.appProperties.getJixinVoice().getAuthToken()+timestamp).toLowerCase();
     }
 }

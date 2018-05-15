@@ -80,7 +80,6 @@ public class LogAspect {
                 beforeExecLog(this);
             } catch (Exception e) {
                 log.error("系统异常:{}", e);
-                e.printStackTrace();
             }
         }
 
@@ -89,7 +88,6 @@ public class LogAspect {
                 afterExecLog(this, resp);
             } catch (Exception e) {
                 log.error("处理之后的异常:{}", e);
-                e.printStackTrace();
             }
         }
     }
@@ -103,12 +101,7 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
 
         // 记录下请求内容
-        log.info("请求URL : {}", request.getRequestURL().toString());
-        log.info("请求IP : " + IPUtil.getRequestIp(request));
-        // log.info("CLASS_METHOD : " +
-        // joinPoint.getSignature().getDeclaringTypeName() + "." +
-        // joinPoint.getSignature().getName());
-        // log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+        log.info("请求URL : {},请求IP :{}", request.getRequestURL().toString(),IPUtil.getRequestIp(request));
     }
 
     // 切入点
@@ -139,8 +132,7 @@ public class LogAspect {
         try {
             resp = point.proceed(); // 执行目标方法内容，获取返回值
         } catch (Exception e) {
-            log.error("", e);
-            log.error("业务处理过程出现异常:{},class:{},methodName:{}", e.getCause(), evtClass, methodName);
+            log.error("业务处理过程出现异常:{},class:{},methodName:{},异常:{}", e.getCause(), evtClass, methodName,e);
             exFlag = true;
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
                     .getRequestAttributes();
@@ -279,7 +271,6 @@ public class LogAspect {
                 methodParamNames.put(entry.getKey(), arg);
             }
         } catch (Exception e) {
-            log.error("AOP 组装入参Map异常");
         }
         return methodParamNames;
     }
@@ -296,10 +287,6 @@ public class LogAspect {
         Loggable logAnno = entity.getMethodLogAnnon();
         String scopeStr = scope.toString();
         String logText = "";
-
-        // if(logContent!=null){ logText = JSON.toJSONString(logContent);}
-
-        // log.info("scope----->{}，entity----->{}，logContent--->{}",scope,entity.toString(),logContent);
         if (scope.toString().equalsIgnoreCase("REQUEST")) {
             log.info("请求参数:{}", logContent);
         } else if (scope.toString().equalsIgnoreCase("RESPONSE")) {
@@ -307,23 +294,6 @@ public class LogAspect {
         } else {
             log.info("不知何种请求");
         }
-        // if (null != logContent) {
-        // switch (ClassUtil.getClassType(logContent)) {
-        // case PRIMITIVE:
-        // logText = logContent.toString();
-        // break;
-        //
-        // case REFERENCE:
-        // logText = JSON.toJSONString(logContent);
-        // break;
-        // }
-        // }
-
-        // LogInfoBean logInfo = new LogInfoBean(entity.getLogId(),
-        // logAnno.type(),
-        // Level.toLevel(logAnno.level()), logText);
-        // logInfo.setMethodName(entity.getMethodName());
-        // logInfo.setRemark(scopeStr);
 
         if (logAnno.db()) {
             // logService.savelogToDB(entity.getLogId(), logAnno.type(),

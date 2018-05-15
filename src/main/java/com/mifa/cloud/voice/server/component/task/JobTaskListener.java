@@ -7,6 +7,7 @@ import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
+import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.*;
@@ -49,6 +50,8 @@ public class JobTaskListener {
     CustomerTaskCallDetailService taskCallDetailService;
     @Autowired
     TemplateVoiceService templateVoiceService;
+    @Autowired
+    AppProperties appProperties;
 
     @RabbitListener(queues = "q_voice_job_pool")
     @RabbitHandler
@@ -86,7 +89,7 @@ public class JobTaskListener {
                     jxVoiceVcodeReqDto.setInfo(info);
                     jxVoiceVcodeReqDto.setSubject(subject);
                     try {
-                        VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
+                        VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,appProperties.getJixinVoice().getAccountId(),appProperties.getJixinVoice().getAuthToken());
 
                         CustomerTaskCallDetailDO detailDO = new CustomerTaskCallDetailDO();
                         detailDO.setOrgName(item.getOrgName());

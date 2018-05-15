@@ -71,7 +71,7 @@ public class OpenApiController {
         jxVoiceVcodeReqDto.setSubject(subject);
         log.info(JSON.toJSONString(jxVoiceVcodeReqDto));
         try {
-           String result =  VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto);
+           String result =  VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,appProperties.getJixinVoice().getAccountId(),appProperties.getJixinVoice().getAuthToken());
            log.info("发送结果通知:{}",result);
         }catch (Exception e){
             log.error("openAPI 语音发送失败:{}",e);

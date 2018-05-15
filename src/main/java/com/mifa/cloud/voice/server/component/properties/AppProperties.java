@@ -30,7 +30,7 @@ public class AppProperties {
 	}
     @Data
 	public static class JixinVoice{
-        private String accessId;
+        private String accountId;
         private String authToken;
         private String voiceUrl;
         private String appId;

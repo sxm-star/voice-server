@@ -59,7 +59,7 @@ public class JxVoiceManager {
      * @return
      */
     public  String getAuthorization(String timestamp){
-        return Base64.encodeBase64String((appProperties.getJixinVoice().getAccessId() +":"+timestamp).getBytes());
+        return Base64.encodeBase64String((appProperties.getJixinVoice().getAccountId() +":"+timestamp).getBytes());
     }
 
     /**
@@ -68,7 +68,7 @@ public class JxVoiceManager {
      * @return
      */
     public  String getSig(String timestamp){
-        return DigestUtils.sha1Hex(appProperties.getJixinVoice().getAccessId()+appProperties.getJixinVoice().getAuthToken()+timestamp).toLowerCase();
+        return DigestUtils.sha1Hex(appProperties.getJixinVoice().getAccountId()+appProperties.getJixinVoice().getAuthToken()+timestamp).toLowerCase();
     }
 
     /*获取请求完整URL*/
