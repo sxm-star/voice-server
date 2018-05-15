@@ -24,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -224,7 +221,12 @@ public class ContactsService {
                 taskUserContactsDO.setCreatedBy(contractNo);
                 contactsDOs.add(taskUserContactsDO);
             });
-            int cnt = contactsDAO.insertBatch(contactsDOs);
+
+            Set<CustomerTaskUserContactsDO> contactSet = new TreeSet<>((o1, o2) -> o1.getUserPhone().compareTo(o2.getUserPhone()));
+            contactSet.addAll(contactsDOs);
+            List<CustomerTaskUserContactsDO> unique = new ArrayList<>(contactSet);
+            log.info("去重情况:{}",unique);
+            int cnt = contactsDAO.insertBatch(unique);
             log.info("实际批量保存 size: {}", cnt);
             if (cnt > 0) {
                 UploadFileLog uploadFileLog = uploadFileLogMapper.selectByPrimaryKey(fileId);
