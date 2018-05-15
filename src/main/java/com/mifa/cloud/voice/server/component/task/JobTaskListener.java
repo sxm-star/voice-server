@@ -1,12 +1,12 @@
 package com.mifa.cloud.voice.server.component.task;
 
-import com.alibaba.fastjson.JSON;
 import com.mifa.cloud.voice.server.api.jx.VoiceApi;
 import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
+import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
@@ -66,7 +66,7 @@ public class JobTaskListener {
 
             String taskId = callJobDO.getTaskId();
             CustomerTaskUserContactsDOExample example = new CustomerTaskUserContactsDOExample();
-            example.createCriteria().andTaskIdEqualTo(taskId);
+            example.createCriteria().andTaskIdEqualTo(taskId).andStatusEqualTo(StatusEnum.NORMAL.getCode()+"");
             List<CustomerTaskUserContactsDO> list = contactsDAO.selectByExample(example);
             if(list!=null && list.size()>0){
                 for (CustomerTaskUserContactsDO item: list){
@@ -82,26 +82,15 @@ public class JobTaskListener {
                     List<String> params = new ArrayList<>();
                     Info info =  Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call"+ BaseStringUtils.uuid()).sessionID("session"+BaseStringUtils.uuid()).build();
                     Subject subject =  Subject.builder().templateID(templateId).called(called).calledDisplay(calledDisplay).params(params).playTimes(playTimes).build();
-                    System.out.println("info " + JSON.toJSONString(info));
-                    System.out.println("subject " + JSON.toJSONString(subject));
                     JxVoiceVcodeReqDto jxVoiceVcodeReqDto = JxVoiceVcodeReqDto.builder()
                             .data(item.getContractNo()+"|"+taskId+"|"+callJobDO.getBatchId()+"|"+called).timestamp(String.valueOf(System.currentTimeMillis())).build();
                     jxVoiceVcodeReqDto.setInfo(info);
                     jxVoiceVcodeReqDto.setSubject(subject);
                     try {
                         VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,appProperties.getJixinVoice().getAccountId(),appProperties.getJixinVoice().getAuthToken());
-
-                        CustomerTaskCallDetailDO detailDO = new CustomerTaskCallDetailDO();
-                        detailDO.setOrgName(item.getOrgName());
-                        detailDO.setTemplateId(templateId);
-                        detailDO.setContractNo(item.getContractNo());
+                        CustomerTaskCallDetailDO detailDO = CustomerTaskCallDetailDO.builder().orgName(item.getOrgName()).templateId(templateId).contractNo(item.getContractNo()).userName(item.getUserName()).callCnt(1).phone(called).taskId(taskId).batchId(callJobDO.getBatchId()).build();
                         detailDO.setCreatedBy(item.getContractNo());
-                        detailDO.setUserName(item.getUserName());
-                        detailDO.setCallCnt(1);
-                        detailDO.setPhone(called);
                         detailDO.setCreatedAt(new Date());
-                        detailDO.setTaskId(taskId);
-                        detailDO.setBatchId(callJobDO.getBatchId());
                         taskCallDetailService.save(detailDO);
                         log.info("保存拨打电话入库:{}",detailDO);
                     }catch (Exception e){

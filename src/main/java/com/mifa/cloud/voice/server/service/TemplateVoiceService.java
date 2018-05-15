@@ -15,9 +15,9 @@ import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
+import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
-import com.mifa.cloud.voice.server.commons.dto.VoiceTemplateAuditVO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
@@ -53,6 +53,8 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     private ConstConfig aconst;
     @Autowired
     private AppProperties appProperties;
+    @Autowired
+    private AccountCapitalService accountCapitalService;
 
 
 
@@ -255,8 +257,11 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-
     public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
+        AccountCapitalDO accountCapitalDO =  accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(openDto.getContractNo()).build());
+        if (accountCapitalDO==null){
+            throw new BaseBizException("400","还未开通资金账户,请先完成充值");
+        }
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
         if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
             throw new BaseBizException("400", "不存在的模板或未审核通过的模板");

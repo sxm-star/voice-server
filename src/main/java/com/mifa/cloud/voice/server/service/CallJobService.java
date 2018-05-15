@@ -13,6 +13,7 @@ import com.mifa.cloud.voice.server.dao.CallJobDAO;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
+import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.CallJobDO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
@@ -47,8 +48,15 @@ public class CallJobService extends BaseService<CallJobDO> {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private AccountCapitalService accountCapitalService;
 
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
+
+        AccountCapitalDO accountCapitalDO =  accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(customerCallJobDto.getContractNo()).build());
+        if (accountCapitalDO==null){
+            throw new BaseBizException("400","还未开通资金账户,请先完成充值");
+        }
         VoiceTemplateDO voiceTemplateDO = templateVoiceDAO.selectByPrimaryKey(customerCallJobDto.getTemplateId());
         if(voiceTemplateDO==null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())){
             throw new BaseBizException("401","当前模板没有审核通过,不允许被添加至任务列表");

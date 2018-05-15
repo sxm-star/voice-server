@@ -14,7 +14,7 @@
 
     <!-- error级别单独记录 -->
     <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/engine-error-today.log</file>
+        <file>logs/voice-service-error-today.log</file>
         <!-- 以day为单位自动回滚 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/voice-service-error/voice-service-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>

@@ -23,7 +23,7 @@ public class HomeStatisticRspDto {
     /**
      * 可用金额
      */
-    private Double availableAmount;
+    private String availableAmount ;
 
     private String authStatus;
 
