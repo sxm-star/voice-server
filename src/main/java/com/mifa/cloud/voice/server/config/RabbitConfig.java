@@ -22,5 +22,9 @@ public class RabbitConfig {
         return new Queue("q_voice_job_pool");
     }
 
+    @Bean
+    public Queue accountNotify(){
+        return new Queue("q_voice_account_notify");
+    }
 
 }

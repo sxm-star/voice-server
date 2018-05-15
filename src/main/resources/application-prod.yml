@@ -42,7 +42,7 @@ jedis:
 
 #文件上传
 upload:
-  path: /home/voice/uploadfiles/pictures
+  path: /home/voice/uploadfiles/
 
 #h5地址
 h5:
@@ -62,7 +62,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://voice.mifaqianbao.com:2001/eureka/  #Eureka Server
+      defaultZone: http://127.0.0.1:2001/eureka/  #Eureka Server
 
   #服务注册时，在Eureka的实例配置
   #metadata-map.cluster：指定服务集群名称（一个服务集群包括多个app）

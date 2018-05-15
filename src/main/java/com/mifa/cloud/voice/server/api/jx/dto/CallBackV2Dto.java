@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author: songxm
  * @date: 2018/5/3 15:18
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CallBackV2Dto {
+public class CallBackV2Dto implements Serializable{
 
     /**
      * 通用名称
