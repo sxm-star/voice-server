@@ -121,6 +121,7 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         if (this.queryOne(customerTaskContactGroupDO) != null) {
             customerTaskContactGroupDO.setStatus(StatusEnum.BLOCK.getCode().toString());
             int cnt = this.updateByIdSelective(customerTaskContactGroupDO);
+
             boolean flag = contactsService.batchDeleteByContactNoAndGroupId(contactNo,id);
             return cnt > 0 && flag ? Boolean.TRUE : Boolean.FALSE;
         }

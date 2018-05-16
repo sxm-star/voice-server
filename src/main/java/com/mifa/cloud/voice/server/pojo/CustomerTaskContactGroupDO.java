@@ -1,6 +1,9 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.util.Date;
  */
 @Table(name="t_customer_task_contact_group")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerTaskContactGroupDO extends BaseDataDo{
     /**
      * 主键

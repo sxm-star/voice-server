@@ -1,6 +1,9 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +12,9 @@ import java.util.Date;
  * @author 
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerTaskUserContactsDO implements Serializable {
     /**
      * ID号

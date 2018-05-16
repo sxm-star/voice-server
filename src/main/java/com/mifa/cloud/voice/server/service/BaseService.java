@@ -112,9 +112,9 @@ public abstract class BaseService<T extends BaseDataDo> {
         if (t.getCreatedAt() == null) {
             t.setCreatedAt(new Date());
             // 业务上要求，更新时间和创建时间必须一直，如果new的话，很可能不一致，造成业务上的错误
-            t.setUpdatedAt(t.getCreatedAt());
+           // t.setUpdatedAt(t.getCreatedAt());
         } else {
-            t.setUpdatedAt(t.getCreatedAt());
+           // t.setUpdatedAt(t.getCreatedAt());
         }
         return this.getMapper().insert(t);
     }
@@ -128,9 +128,9 @@ public abstract class BaseService<T extends BaseDataDo> {
         if (t.getCreatedAt() == null) {
             t.setCreatedAt(new Date());
             // 业务上要求，更新时间和创建时间必须一直，如果new的话，很可能不一致，造成业务上的错误
-            t.setUpdatedAt(t.getCreatedAt());
+           // t.setUpdatedAt(t.getCreatedAt());
         } else {
-            t.setUpdatedAt(t.getCreatedAt());
+           // t.setUpdatedAt(t.getCreatedAt());
         }
         return this.getMapper().insertSelective(t);
     }

@@ -185,7 +185,7 @@ public class ContactsService {
         }
         CustomerTaskUserContactsDOExample example =  new CustomerTaskUserContactsDOExample();
         example.createCriteria().andContractNoEqualTo(contactNo).andTaskIdEqualTo(taskContactGroupDO.getTaskId());
-        int cnt = contactsDAO.deleteByExample(example);
+        int cnt = contactsDAO.updateByExampleSelective(CustomerTaskUserContactsDO.builder().status(String.valueOf(StatusEnum.BLOCK.getCode())).build(),example);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
     /**
