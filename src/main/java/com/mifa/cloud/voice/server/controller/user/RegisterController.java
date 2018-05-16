@@ -46,7 +46,7 @@ public class RegisterController {
         // 校验验证码
         String mobileAuthCode = verficationService.getmobileAuthCodeFromCache(param.getMobile());
 
-        if(StringUtils.isBlank(mobileAuthCode)) {
+        /*if(StringUtils.isBlank(mobileAuthCode)) {
             return CommonResponse.failCommonResponse("短信验证码已过期");
         }
         if(!mobileAuthCode.equals(param.getMobieAuthCode())) {
@@ -54,15 +54,12 @@ public class RegisterController {
         }
         if(!param.getLoginPasswd().equals(param.getLoginPasswdSecond())) {
             return CommonResponse.failCommonResponse("两次密码输入不一致");
-        }
+        }*/
         // 验证账号是否已经注册
-        CustomerLoginInfo loginInfo = customerLoginInfoService.findByLoginName(param.getLoginName());
-        CustomerLoginInfo loginInfoMobile = customerLoginInfoService.findByLoginMobile(param.getMobile());
-        if(loginInfo != null) {
+        CustomerLoginInfo loginInfo = customerLoginInfoService.findByMobileOrLoginName(param.getLoginName(), param.getLoginName());
+        CustomerLoginInfo loginInfoMobile = customerLoginInfoService.findByMobileOrLoginName(param.getMobile(), param.getMobile());
+        if(loginInfo != null || loginInfoMobile != null) {
             return CommonResponse.failCommonResponse("该账号已被注册");
-        }
-        if(loginInfoMobile != null) {
-            return CommonResponse.failCommonResponse("该手机号已被注册");
         }
 
         // 密码加密处理
