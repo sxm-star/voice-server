@@ -39,9 +39,9 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact-group",method = RequestMethod.POST)
     @Loggable(descp = "增加号码组")
-    public CommonResponse<Boolean> addContactGroup(@RequestBody @Valid ContactGroupPostDto contactGroupPostDto){
+    public CommonResponse<Boolean> addContactGroup(@RequestBody @Valid ContactGroupPostDTO contactGroupPostDTO){
 
-     return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(contactGroupPostDto));
+     return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(contactGroupPostDTO));
     }
 
     @ApiOperation(value = "编辑号码组")
@@ -84,7 +84,7 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact-group-list",method = RequestMethod.GET)
     @Loggable(descp = "号码组的列表查询")
-    public CommonResponse<PageDto<ContactGroupRspDto>> queryContactList(@RequestParam(required = true)String contractNo,@RequestParam(required = false) String groupName,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
+    public CommonResponse<PageDTO<ContactGroupRspDTO>> queryContactList(@RequestParam(required = true)String contractNo, @RequestParam(required = false) String groupName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
     }
 
@@ -94,7 +94,7 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact-group-select-list",method = RequestMethod.GET)
     @Loggable(descp = "号码组的下拉框查询")
-    public CommonResponse<List<ContactGroupSelectDto>> queryContactList(@RequestParam(required = true)String contractNo){
+    public CommonResponse<List<ContactGroupSelectDTO>> queryContactList(@RequestParam(required = true)String contractNo){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.querySelectedContactGroupList(contractNo));
     }
 
@@ -103,8 +103,8 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact-list",method = RequestMethod.GET)
     @Loggable(descp = "号码列表查询")
-    public CommonResponse<PageDto<ContactRspDto>> queryContactList(@ModelAttribute @Valid ContactQueryDto contactQueryDto,@RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
-        return CommonResponse.successCommonResponse(contactsService.queryContactList(contactQueryDto,pageNum,pageSize));
+    public CommonResponse<PageDTO<ContactRspDTO>> queryContactList(@ModelAttribute @Valid ContactQueryDTO contactQueryDTO, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
+        return CommonResponse.successCommonResponse(contactsService.queryContactList(contactQueryDTO,pageNum,pageSize));
     }
 
 
@@ -113,8 +113,8 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact",method = RequestMethod.POST)
     @Loggable(descp = "号码新增")
-    public CommonResponse<PageDto<ContactDto>> addContact(@RequestBody @Valid ContactDto contactDto){
-        return CommonResponse.successCommonResponse(contactsService.insertContact(contactDto));
+    public CommonResponse<PageDTO<ContactDTO>> addContact(@RequestBody @Valid ContactDTO contactDTO){
+        return CommonResponse.successCommonResponse(contactsService.insertContact(contactDTO));
     }
 
     @ApiOperation("号码修改")
@@ -122,7 +122,7 @@ public class ContactsController {
     })
     @RequestMapping(value = "/contact",method = RequestMethod.PUT)
     @Loggable(descp = "号码修改")
-    public CommonResponse<PageDto<ContactDto>> addContact(@ModelAttribute @Valid ContactAlterReqDto contactDto){
+    public CommonResponse<PageDTO<ContactDTO>> addContact(@ModelAttribute @Valid ContactAlterReqDTO contactDto){
         return CommonResponse.successCommonResponse(contactsService.alterContact(contactDto));
     }
 

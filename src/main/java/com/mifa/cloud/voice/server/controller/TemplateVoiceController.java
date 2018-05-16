@@ -38,7 +38,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "新增模板类目")
-    public CommonResponse<Boolean> addTemplateVoice(@RequestBody @Valid TemplateVoiceDto voiceDto) {
+    public CommonResponse<Boolean> addTemplateVoice(@RequestBody @Valid TemplateVoiceDTO voiceDto) {
         return CommonResponse.successCommonResponse(templateVoiceService.insertTemplateVoice(voiceDto));
     }
 
@@ -47,7 +47,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "语音模板列表")
-    public CommonResponse<PageDto<VoiceTemplateRspDto>> queryTemplateVoiceList(@ModelAttribute @Valid VoiceTemplateQuery query, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10")  Integer pageSize){
+    public CommonResponse<PageDTO<VoiceTemplateRspDTO>> queryTemplateVoiceList(@ModelAttribute @Valid VoiceTemplateQuery query, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10")  Integer pageSize){
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceList(query,pageNum,pageSize));
     }
 
@@ -56,7 +56,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取单个语音模板")
-    public CommonResponse<VoiceTemplateRspDto> queryTemplateVoice(@RequestParam(required = true) String contractNo,@RequestParam(required = true) String templateId){
+    public CommonResponse<VoiceTemplateRspDTO> queryTemplateVoice(@RequestParam(required = true) String contractNo, @RequestParam(required = true) String templateId){
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoice(contractNo,templateId));
     }
 
@@ -69,7 +69,7 @@ public class TemplateVoiceController {
             @ApiImplicitParam(paramType = "query", name = "isTest", required = true, dataType = "boolean",value = "标识位不能为空 true:测试语音发送查询"),
     })
     @Loggable(descp = "语音模板下拉框查询 三级联动")
-    public CommonResponse<List<VoiceTemplateSelectDto>> queryTemplateVoiceSelectList(@ModelAttribute @Valid VoiceTemplateSelectQueryDto queryDto ){
+    public CommonResponse<List<VoiceTemplateSelectDTO>> queryTemplateVoiceSelectList(@ModelAttribute @Valid VoiceTemplateSelectQueryDTO queryDto ){
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceSelectList(queryDto));
     }
 
@@ -89,7 +89,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "语音模板编辑")
-    public CommonResponse<Boolean> alterTemplateVoice(@ModelAttribute @Valid VoiceTemplateAlterReqDto alterReqDto){
+    public CommonResponse<Boolean> alterTemplateVoice(@ModelAttribute @Valid VoiceTemplateAlterReqDTO alterReqDto){
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoice(alterReqDto));
     }
 
@@ -98,7 +98,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "管理员语音模板编辑")
-    public CommonResponse<Boolean> alterTemplateVoiceByAdmin(@ModelAttribute @Valid VoiceTemplateAdminAlterReqDto alterReqDto){
+    public CommonResponse<Boolean> alterTemplateVoiceByAdmin(@ModelAttribute @Valid VoiceTemplateAdminAlterReqDTO alterReqDto){
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoiceAdmin(alterReqDto));
     }
 
@@ -107,7 +107,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "语音模板测试")
-    public CommonResponse<Boolean> testTemplateVoice(@RequestBody @Valid VoiceTemplateOpenDto templateOpenDto){
+    public CommonResponse<Boolean> testTemplateVoice(@RequestBody @Valid VoiceTemplateOpenDTO templateOpenDto){
         return CommonResponse.successCommonResponse(templateVoiceService.testTemplateVoice(templateOpenDto));
     }
 
@@ -116,7 +116,7 @@ public class TemplateVoiceController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "业务类型列表")
-    public CommonResponse<PageDto<SystemKeyValueVO>> getBusinessTypeList(
+    public CommonResponse<PageDTO<SystemKeyValueVO>> getBusinessTypeList(
             @ModelAttribute @Valid SystemKeyValueQueryDTO query,
             @RequestParam(required = true, defaultValue = "1") Integer pageNum,
             @RequestParam(required = true,defaultValue = "10")  Integer pageSize) {
@@ -185,7 +185,7 @@ public class TemplateVoiceController {
             @ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "语音模版审核列表")
-    public CommonResponse<PageDto<VoiceTemplateAuditVO>> getVoiceTemplateAutidList(
+    public CommonResponse<PageDTO<VoiceTemplateAuditVO>> getVoiceTemplateAutidList(
             @ModelAttribute @Valid VoiceTemplateAuditQuery query,
             @RequestParam(required = true, defaultValue = "1") Integer pageNum,
             @RequestParam(required = true, defaultValue = "10") Integer pageSize) {

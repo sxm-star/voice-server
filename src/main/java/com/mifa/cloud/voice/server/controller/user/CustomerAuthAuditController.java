@@ -3,7 +3,7 @@ package com.mifa.cloud.voice.server.controller.user;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.dto.AuthCheckListDTO;
 import com.mifa.cloud.voice.server.commons.dto.CustomerAuthAuditVO;
 import com.mifa.cloud.voice.server.service.CustomerAuthAuditService;
@@ -35,11 +35,11 @@ public class CustomerAuthAuditController {
             required = true, value = "service token", dataType = "string")
     })
     @Loggable(descp = "获得认证审核列表")
-    public CommonResponse<PageDto<CustomerAuthAuditVO>> getAuthCheckList(@RequestBody(required = false) AuthCheckListDTO param,
+    public CommonResponse<PageDTO<CustomerAuthAuditVO>> getAuthCheckList(@RequestBody(required = false) AuthCheckListDTO param,
                                                                          @RequestParam(required = true, defaultValue = "1") Integer pageNum,
                                                                          @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
-        PageDto<CustomerAuthAuditVO> pageDto = customerAuthAuditService.selectAuthCheckList(param, pageNum, pageSize);
-        return CommonResponse.successCommonResponse(pageDto);
+        PageDTO<CustomerAuthAuditVO> pageDTO = customerAuthAuditService.selectAuthCheckList(param, pageNum, pageSize);
+        return CommonResponse.successCommonResponse(pageDTO);
     }
 
 

@@ -1,6 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.HomeStatisticRspDto;
+import com.mifa.cloud.voice.server.commons.dto.HomeStatisticRspDTO;
 import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.commons.enums.AuthTypeEnum;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
@@ -27,26 +27,26 @@ public class HomeService {
     CustomerAuthAuditService authAuditService;
 
 
-    public HomeStatisticRspDto homeStatistic(String contractNo){
+    public HomeStatisticRspDTO homeStatistic(String contractNo){
         AccountCapitalDO accountCapitalDO = accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(contractNo).build());
         CustomerAuthAudit authAudit = authAuditService.selectByContractNo(contractNo, null);
-        HomeStatisticRspDto homeStatisticRspDto =  HomeStatisticRspDto.builder().contractNo(contractNo).build();
+        HomeStatisticRspDTO homeStatisticRspDTO =  HomeStatisticRspDTO.builder().contractNo(contractNo).build();
         if (accountCapitalDO!=null){
-            homeStatisticRspDto.setAvailableAmount(String.valueOf(accountCapitalDO.getAvailableAmount()*1.0/100) +"元"); //分转元
+            homeStatisticRspDTO.setAvailableAmount(String.valueOf(accountCapitalDO.getAvailableAmount()*1.0/100) +"元"); //分转元
         }else {
-            homeStatisticRspDto.setAvailableAmount("0.00元");
+            homeStatisticRspDTO.setAvailableAmount("0.00元");
         }
         if (authAudit!=null){
-            homeStatisticRspDto.setAuthStatus(authAudit.getAuditStatus());
-            homeStatisticRspDto.setAuthDesc(AuthEnum.getDesc(authAudit.getAuditStatus()));
-            homeStatisticRspDto.setAuthType(AuthTypeEnum.getDesc(authAudit.getAuthType()));
+            homeStatisticRspDTO.setAuthStatus(authAudit.getAuditStatus());
+            homeStatisticRspDTO.setAuthDesc(AuthEnum.getDesc(authAudit.getAuditStatus()));
+            homeStatisticRspDTO.setAuthType(AuthTypeEnum.getDesc(authAudit.getAuthType()));
             if (AuthTypeEnum.PERSON.getCode().equals(authAudit.getAuthType())){
-                homeStatisticRspDto.setCompanyName("");
+                homeStatisticRspDTO.setCompanyName("");
             }else {
-                homeStatisticRspDto.setCompanyName(authAudit.getCustomerName());
+                homeStatisticRspDTO.setCompanyName(authAudit.getCustomerName());
             }
 
         }
-        return homeStatisticRspDto;
+        return homeStatisticRspDTO;
     }
 }

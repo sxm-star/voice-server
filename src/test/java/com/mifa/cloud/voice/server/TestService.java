@@ -3,9 +3,9 @@ package com.mifa.cloud.voice.server;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDto;
-import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDto;
-import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDto;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDTO;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDTO;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDTO;
 import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
@@ -127,30 +127,30 @@ public class TestService {
 
     @Test
     public void testOpenApiService(){
-        OpenApiConfigDto openApiConfigDto = new OpenApiConfigDto();
-        openApiConfigDto.setContractNo("123456");
-        openApiConfigDto.setCreatedBy("admin");
-        openApiConfigDto.setTimeUnit(TimeUnitEnum.MONTH);
-        openApiConfigDto.setExpireValue(1);
-        openapiConfigService.addOpenapiConfig(openApiConfigDto);
+        OpenApiConfigDTO openApiConfigDTO = new OpenApiConfigDTO();
+        openApiConfigDTO.setContractNo("123456");
+        openApiConfigDTO.setCreatedBy("admin");
+        openApiConfigDTO.setTimeUnit(TimeUnitEnum.MONTH);
+        openApiConfigDTO.setExpireValue(1);
+        openapiConfigService.addOpenapiConfig(openApiConfigDTO);
     }
 
 
     @Test
     public void testGetOpenApiService(){
-        OpenApiConfigRspDto openApiConfigRspDto = openapiConfigService.getOpenApiConfig("123456");
-        System.out.println(openApiConfigRspDto);
+        OpenApiConfigRspDTO openApiConfigRspDTO = openapiConfigService.getOpenApiConfig("123456");
+        System.out.println(openApiConfigRspDTO);
     }
 
     @Test
     public void testParam(){
-        OpenApiVoiceReqDto openApiVoiceReqDto = new OpenApiVoiceReqDto();
-        openApiVoiceReqDto.setMobile("13251022729");
-        openApiVoiceReqDto.setTemplateId("6d9c4f7ae25f4782823b7aefc5968962");
+        OpenApiVoiceReqDTO openApiVoiceReqDTO = new OpenApiVoiceReqDTO();
+        openApiVoiceReqDTO.setMobile("13251022729");
+        openApiVoiceReqDTO.setTemplateId("6d9c4f7ae25f4782823b7aefc5968962");
         Map<String,Object> map = new HashMap<>();
         map.put("${name}","风清扬");
-        openApiVoiceReqDto.setParamsValue(map);
-        System.out.println(JSON.toJSONString(openApiVoiceReqDto));
+        openApiVoiceReqDTO.setParamsValue(map);
+        System.out.println(JSON.toJSONString(openApiVoiceReqDTO));
 
     }
 

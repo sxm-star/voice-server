@@ -1,7 +1,7 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.RoleDto;
-import com.mifa.cloud.voice.server.commons.dto.RoleResourceDto;
+import com.mifa.cloud.voice.server.commons.dto.RoleDTO;
+import com.mifa.cloud.voice.server.commons.dto.RoleResourceDTO;
 import com.mifa.cloud.voice.server.dao.SystemResourceDAO;
 import com.mifa.cloud.voice.server.dao.SystemRoleResourceDAO;
 import com.mifa.cloud.voice.server.pojo.SystemRoleResourceDO;
@@ -30,25 +30,25 @@ public class SystemRoleResourceService {
      * @param roleId
      * @return
      */
-   private List<RoleResourceDto> findSystemRoleResource(Long roleId) {
+   private List<RoleResourceDTO> findSystemRoleResource(Long roleId) {
         SystemRoleResourceDOExample criteriaRoleResource = new SystemRoleResourceDOExample();
         criteriaRoleResource.createCriteria().andRoleIdEqualTo(roleId);
         List<SystemRoleResourceDO> list = systemRoleResourceDAO.selectByExample(criteriaRoleResource);
         if (list != null || !list.isEmpty()) {
-            List<RoleResourceDto> roleResourceDtos  = new ArrayList<>();
-            list.forEach(systemRoleResourceDO -> roleResourceDtos.add(BaseBeanUtils.convert(systemRoleResourceDO,RoleResourceDto.class)));
-            return roleResourceDtos;
+            List<RoleResourceDTO> roleResourceDTOs = new ArrayList<>();
+            list.forEach(systemRoleResourceDO -> roleResourceDTOs.add(BaseBeanUtils.convert(systemRoleResourceDO,RoleResourceDTO.class)));
+            return roleResourceDTOs;
         }
         return Collections.emptyList();
     }
 
-    public Map<Long,RoleResourceDto> findRoleResourceList(RoleDto ...roles){
-        Map<Long, RoleResourceDto> resourceMap = new HashMap<>();;
-        for (RoleDto role : roles) {
+    public Map<Long,RoleResourceDTO> findRoleResourceList(RoleDTO...roles){
+        Map<Long, RoleResourceDTO> resourceMap = new HashMap<>();;
+        for (RoleDTO role : roles) {
             if (role.getRoleStatus()!=null&&role.getRoleStatus()==0) {
-                List<RoleResourceDto> roleResources = findSystemRoleResource(role.getId());
+                List<RoleResourceDTO> roleResources = findSystemRoleResource(role.getId());
                 if (roleResources!=null || !roleResources.isEmpty()){
-                    roleResources.forEach(roleResourceDto -> { resourceMap.put(roleResourceDto.getResourceId(), roleResourceDto);});
+                    roleResources.forEach(roleResourceDTO -> { resourceMap.put(roleResourceDTO.getResourceId(), roleResourceDTO);});
                     return  resourceMap;
                 }
             }
@@ -57,9 +57,9 @@ public class SystemRoleResourceService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateRoleResource(Long roleId,Map<Long, RoleResourceDto> map, Long[] ids) {
+    public void updateRoleResource(Long roleId, Map<Long, RoleResourceDTO> map, Long[] ids) {
         for (Long resourceId : ids) {
-            RoleResourceDto newRoleResource= map.remove(resourceId);
+            RoleResourceDTO newRoleResource= map.remove(resourceId);
             if (newRoleResource==null) {
                 SystemRoleResourceDO roleResourceDO = new SystemRoleResourceDO();
                 roleResourceDO.setRoleId(roleId);
@@ -67,7 +67,7 @@ public class SystemRoleResourceService {
                 systemRoleResourceDAO.insert(roleResourceDO);
             }
         }
-        for (RoleResourceDto removeResource : map.values()) {
+        for (RoleResourceDTO removeResource : map.values()) {
             systemRoleResourceDAO.deleteByPrimaryKey(removeResource.getId());
         }
     }

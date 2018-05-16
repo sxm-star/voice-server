@@ -20,7 +20,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoiceTemplateDO extends BaseDataDo {
+public class VoiceTemplateDO extends BaseDataDO {
     /**
      * 语音模板id
      */

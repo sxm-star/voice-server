@@ -5,7 +5,7 @@ import com.github.abel533.entity.Example.Criteria;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mifa.cloud.voice.server.dao.base.BaseMapper;
-import com.mifa.cloud.voice.server.pojo.BaseDataDo;
+import com.mifa.cloud.voice.server.pojo.BaseDataDO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * @param <T>   spring4.0泛型注入
  *
  */
-public abstract class BaseService<T extends BaseDataDo> {
+public abstract class BaseService<T extends BaseDataDO> {
 	   /**
 	    * spring4.0 泛型注入新特性，扩展通用mapper
 	    */

@@ -2,7 +2,7 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.dao.CustomerRechargeMapper;
 import com.mifa.cloud.voice.server.commons.dto.CustomerRechargeVO;
 import com.mifa.cloud.voice.server.pojo.CustomerRecharge;
@@ -27,7 +27,7 @@ public class CustomerRechargeService {
     /**
      * 充值记录列表
      */
-    public PageDto<CustomerRechargeVO> selectRechargeList(String rechargeName, String contractNo, Integer pageNum, Integer pageSize) {
+    public PageDTO<CustomerRechargeVO> selectRechargeList(String rechargeName, String contractNo, Integer pageNum, Integer pageSize) {
 
         PageHelper.startPage(pageNum, pageSize);
         CustomerRechargeExample example = new CustomerRechargeExample();
@@ -47,7 +47,7 @@ public class CustomerRechargeService {
                 .forEach(
                         item -> voList.add(BaseBeanUtils.convert(item, CustomerRechargeVO.class))
                 );
-        PageDto<CustomerRechargeVO> pageResult = BaseBeanUtils.convert(pageInfo, PageDto.class);
+        PageDTO<CustomerRechargeVO> pageResult = BaseBeanUtils.convert(pageInfo, PageDTO.class);
         pageResult.setList(voList);
         return pageResult;
     }

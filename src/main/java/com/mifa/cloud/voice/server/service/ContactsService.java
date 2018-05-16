@@ -49,31 +49,31 @@ public class ContactsService {
      *
      * @return
      */
-    public PageDto<ContactRspDto> queryContactList(ContactQueryDto contactQueryDto, Integer pageNum, Integer pageSize) {
-        CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactQueryDto, CustomerTaskUserContactsDO.class);
+    public PageDTO<ContactRspDTO> queryContactList(ContactQueryDTO contactQueryDTO, Integer pageNum, Integer pageSize) {
+        CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactQueryDTO, CustomerTaskUserContactsDO.class);
             CustomerTaskUserContactsDOExample example = new CustomerTaskUserContactsDOExample();
             CustomerTaskUserContactsDOExample.Criteria criteria = example.createCriteria();
-            criteria.andContractNoEqualTo(contactQueryDto.getContractNo());
-            criteria.andTaskIdEqualTo(contactQueryDto.getTaskId());
+            criteria.andContractNoEqualTo(contactQueryDTO.getContractNo());
+            criteria.andTaskIdEqualTo(contactQueryDTO.getTaskId());
             criteria.andStatusEqualTo(StatusEnum.NORMAL.getCode().toString());
-            if (StringUtils.isNotEmpty(contactQueryDto.getUserName())) {
-                criteria.andUserNameEqualTo(contactQueryDto.getUserName());
+            if (StringUtils.isNotEmpty(contactQueryDTO.getUserName())) {
+                criteria.andUserNameEqualTo(contactQueryDTO.getUserName());
             }
-            if (StringUtils.isNotEmpty(contactQueryDto.getUserPhone())) {
-                criteria.andUserPhoneEqualTo(EncodesUtils.selfEncrypt(contactQueryDto.getUserPhone(),appProperties.getSalt()));
+            if (StringUtils.isNotEmpty(contactQueryDTO.getUserPhone())) {
+                criteria.andUserPhoneEqualTo(EncodesUtils.selfEncrypt(contactQueryDTO.getUserPhone(),appProperties.getSalt()));
             }
-            if (StringUtils.isNotEmpty(contactQueryDto.getOrgName())) {
-                criteria.andOrgNameEqualTo(contactQueryDto.getOrgName());
+            if (StringUtils.isNotEmpty(contactQueryDTO.getOrgName())) {
+                criteria.andOrgNameEqualTo(contactQueryDTO.getOrgName());
             }
             example.setOrderByClause("created_at desc");
             PageHelper.startPage(pageNum, pageSize);
             List<CustomerTaskUserContactsDO> contactListDOs = contactsDAO.selectByExample(example);
             PageInfo<CustomerTaskUserContactsDO> pageInfo = new PageInfo<>(contactListDOs);
             if (pageInfo != null && CollectionUtils.isNotEmpty(pageInfo.getList())) {
-                List<ContactRspDto> contactDtos = new ArrayList<>();
+                List<ContactRspDTO> contactDtos = new ArrayList<>();
 
                 pageInfo.getList().stream().forEach(contact -> {
-                    ContactRspDto contactDto = BaseBeanUtils.convert(contact, ContactRspDto.class);
+                    ContactRspDTO contactDto = BaseBeanUtils.convert(contact, ContactRspDTO.class);
                     contactDto.setUserSex(contactDto.getUserSex());
                     try {
                         contactDto.setUserPhone(EncodesUtils.selfDecrypt(contactDto.getUserPhone(),appProperties.getSalt()));
@@ -82,7 +82,7 @@ public class ContactsService {
                     }
                     contactDtos.add(contactDto);
                 });
-                PageDto<ContactRspDto> pageResult = BaseBeanUtils.convert(pageInfo, PageDto.class);
+                PageDTO<ContactRspDTO> pageResult = BaseBeanUtils.convert(pageInfo, PageDTO.class);
                 pageResult.setList(contactDtos);
 
                 return pageResult;
@@ -97,27 +97,27 @@ public class ContactsService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean insertContact(ContactDto contactDto) {
-        CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(contactDto.getGroupId());
+    public Boolean insertContact(ContactDTO contactDTO) {
+        CustomerTaskContactGroupDO taskContactGroupDO =  taskContactGroupDAO.selectByPrimaryKey(contactDTO.getGroupId());
         if (taskContactGroupDO==null){
-            log.warn("不存在的号码组信息 groupId = {},插入号码无效",contactDto.getGroupId());
+            log.warn("不存在的号码组信息 groupId = {},插入号码无效", contactDTO.getGroupId());
             return Boolean.FALSE;
         }
-        CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDto, CustomerTaskUserContactsDO.class);
+        CustomerTaskUserContactsDO contactDo = BaseBeanUtils.convert(contactDTO, CustomerTaskUserContactsDO.class);
         contactDo.setTaskId(taskContactGroupDO.getTaskId());
 
         CustomerTaskUserContactsDO queryContactDo = new CustomerTaskUserContactsDO();
-        queryContactDo.setContractNo(contactDto.getContractNo());
-        queryContactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
+        queryContactDo.setContractNo(contactDTO.getContractNo());
+        queryContactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDTO.getUserPhone(),appProperties.getSalt()));
         queryContactDo.setTaskId(taskContactGroupDO.getTaskId());
         queryContactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
         if (contactsDAO.selectOne(queryContactDo)!=null){
             throw new BaseBizException("400","已存在用户号,不允许重复添加");
         }
-        contactDo.setCreatedBy(contactDto.getContractNo());
+        contactDo.setCreatedBy(contactDTO.getContractNo());
         contactDo.setCreatedAt(new Date());
         contactDo.setStatus(StatusEnum.NORMAL.getCode().toString());
-        contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDto.getUserPhone(),appProperties.getSalt()));
+        contactDo.setUserPhone(EncodesUtils.selfEncrypt(contactDTO.getUserPhone(),appProperties.getSalt()));
         contactDo.setSalt(appProperties.getSalt());
         contactDo.setUserSex(SexEnum.getDesc(contactDo.getUserSex()));
         int cnt = contactsDAO.insert(contactDo);
@@ -125,7 +125,7 @@ public class ContactsService {
         int groupCnt = taskContactGroupDO.getGroupCnt() + 1;
         taskContactGroupDO.setGroupCnt(groupCnt);
         taskContactGroupDO.setUpdatedAt(new Date());
-        taskContactGroupDO.setUpdatedBy(contactDto.getContractNo());
+        taskContactGroupDO.setUpdatedBy(contactDTO.getContractNo());
         int groupUpdateCnt = taskContactGroupDAO.updateByPrimaryKeySelective(taskContactGroupDO);
         return cnt > 0 && groupUpdateCnt>0? Boolean.TRUE : Boolean.FALSE;
     }
@@ -135,7 +135,7 @@ public class ContactsService {
      *
      * @return
      */
-    public Boolean alterContact(ContactAlterReqDto contactQueryDto) {
+    public Boolean alterContact(ContactAlterReqDTO contactQueryDto) {
         CustomerTaskUserContactsDO pre_ContactsDo = contactsDAO.selectByPrimaryKey(contactQueryDto.getId());
         BaseBeanUtils.copyNoneNullProperties(contactQueryDto, pre_ContactsDo);
         pre_ContactsDo.setUpdatedBy(contactQueryDto.getContractNo());

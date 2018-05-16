@@ -58,27 +58,27 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
 
 
 
-    public Boolean insertTemplateVoice(TemplateVoiceDto templateVoiceDto) {
-        VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDto, VoiceTemplateDO.class);
-        voiceTemplateDO.setCreatedBy(templateVoiceDto.getContractNo());
+    public Boolean insertTemplateVoice(TemplateVoiceDTO templateVoiceDTO) {
+        VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(templateVoiceDTO, VoiceTemplateDO.class);
+        voiceTemplateDO.setCreatedBy(templateVoiceDTO.getContractNo());
         voiceTemplateDO.setCreatedAt(new Date());
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         voiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
-        voiceTemplateDO.setTemplateType(templateVoiceDto.getTemplateType().toString());
+        voiceTemplateDO.setTemplateType(templateVoiceDTO.getTemplateType().toString());
         int cnt = templateVoiceDAO.insert(voiceTemplateDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
-    public VoiceTemplateRspDto queryTemplateVoice(@RequestParam(required = true) String contractNo, @RequestParam(required = true) String templateId) {
+    public VoiceTemplateRspDTO queryTemplateVoice(@RequestParam(required = true) String contractNo, @RequestParam(required = true) String templateId) {
         VoiceTemplateDO voiceTemplateDO = new VoiceTemplateDO();
         voiceTemplateDO.setContractNo(contractNo);
         voiceTemplateDO.setTemplateId(templateId);
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         VoiceTemplateDO resDo = this.queryOne(voiceTemplateDO);
-        VoiceTemplateRspDto rspDto = null;
+        VoiceTemplateRspDTO rspDto = null;
         if (resDo != null) {
-            rspDto = BaseBeanUtils.convert(resDo, VoiceTemplateRspDto.class);
+            rspDto = BaseBeanUtils.convert(resDo, VoiceTemplateRspDTO.class);
             rspDto.setAuditStatus(AuditEnum.getDesc(resDo.getAuditStatus()));
             rspDto.setTemplateTypeDesc(VoiceTypeEnum.getDesc(rspDto.getTemplateType()));
             rspDto.setTemplateType(VoiceTypeEnum.getDesc(resDo.getTemplateType()));
@@ -87,45 +87,45 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         return rspDto;
     }
 
-    public PageDto<VoiceTemplateRspDto> queryTemplateVoiceList(VoiceTemplateQuery query, Integer pageNum, Integer pageSize) {
+    public PageDTO<VoiceTemplateRspDTO> queryTemplateVoiceList(VoiceTemplateQuery query, Integer pageNum, Integer pageSize) {
         VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
-        PageDto<VoiceTemplateRspDto> pageDto = null;
+        PageDTO<VoiceTemplateRspDTO> pageDTO = null;
         try {
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, pageNum, pageSize, " created_at desc");
             if (pageInfo != null && pageInfo.getList() != null) {
-                pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
+                pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
                 List<VoiceTemplateDO> doList = pageInfo.getList();
-                List<VoiceTemplateRspDto> rspList = new ArrayList<>();
+                List<VoiceTemplateRspDTO> rspList = new ArrayList<>();
                 doList.forEach(voiceTemplateItem -> {
-                    VoiceTemplateRspDto voiceTemplateRspDto = BaseBeanUtils.convert(voiceTemplateItem, VoiceTemplateRspDto.class);
-                    voiceTemplateRspDto.setTemplateType(voiceTemplateRspDto.getTemplateType().equals(VoiceTypeEnum.TEXT.name()) ? VoiceTypeEnum.TEXT.getDesc() : VoiceTypeEnum.VOICE.getDesc());
+                    VoiceTemplateRspDTO voiceTemplateRspDTO = BaseBeanUtils.convert(voiceTemplateItem, VoiceTemplateRspDTO.class);
+                    voiceTemplateRspDTO.setTemplateType(voiceTemplateRspDTO.getTemplateType().equals(VoiceTypeEnum.TEXT.name()) ? VoiceTypeEnum.TEXT.getDesc() : VoiceTypeEnum.VOICE.getDesc());
                     ;
                     if (AuditEnum.WAIT_AUDIT.getCode().equals(voiceTemplateItem.getAuditStatus())) {
-                        voiceTemplateRspDto.setAuditStatus(AuditEnum.WAIT_AUDIT.getDesc());
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.WAIT_AUDIT.getDesc());
                     }
                     if (AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateItem.getAuditStatus())) {
-                        voiceTemplateRspDto.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getDesc());
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getDesc());
                     }
                     if (AuditEnum.AUDIT_FAIL.getCode().equals(voiceTemplateItem.getAuditStatus())) {
-                        voiceTemplateRspDto.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
                     }
                     if (AuditEnum.AUDIT_ING.getCode().equals(voiceTemplateItem.getAuditStatus())) {
-                        voiceTemplateRspDto.setAuditStatus(AuditEnum.AUDIT_ING.getDesc());
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_ING.getDesc());
                     }
-                    rspList.add(voiceTemplateRspDto);
+                    rspList.add(voiceTemplateRspDTO);
                 });
-                pageDto.setList(rspList);
+                pageDTO.setList(rspList);
             }
-            return pageDto;
+            return pageDTO;
         } catch (Exception e) {
             log.error("语音模板分页查询错误:{}", e);
-            return pageDto;
+            return pageDTO;
         }
     }
 
-    public PageDto<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
-        PageDto<VoiceTemplateAuditVO> pageDto = null;
+    public PageDTO<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
+        PageDTO<VoiceTemplateAuditVO> pageDTO = null;
         VoiceTemplateDO templateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
         if (query.getVoiceType() != null) {
             templateDO.setTemplateType(query.getVoiceType().name());
@@ -139,7 +139,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         try {
             List<VoiceTemplateAuditVO> voList = new ArrayList<>();
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(templateDO, pageNum, pageSize, " created_at desc");
-            pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
+            pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
             if (pageInfo != null && !pageInfo.getList().isEmpty()) {
                 pageInfo.getList().stream().forEach(item -> {
                     VoiceTemplateAuditVO auditVO = BaseBeanUtils.convert(item, VoiceTemplateAuditVO.class);
@@ -166,12 +166,12 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
                     voList.add(auditVO);
                 });
             }
-            pageDto.setList(voList);
+            pageDTO.setList(voList);
         } catch (Exception e) {
             log.error("语音模板审核列表分页查询错误:{}", e);
             e.printStackTrace();
         }
-        return pageDto;
+        return pageDTO;
     }
 
 
@@ -180,16 +180,16 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
      *
      * @return
      */
-    public List<VoiceTemplateSelectDto> queryTemplateVoiceSelectList(VoiceTemplateSelectQueryDto queryDto) {
+    public List<VoiceTemplateSelectDTO> queryTemplateVoiceSelectList(VoiceTemplateSelectQueryDTO queryDto) {
         try {
             VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(queryDto, VoiceTemplateDO.class);
             voiceTemplateDO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getCode());
             voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
             PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, 1, 5, null);
             if (pageInfo != null && pageInfo.getList() != null) {
-                List<VoiceTemplateSelectDto> resList = new ArrayList<>();
+                List<VoiceTemplateSelectDTO> resList = new ArrayList<>();
                 pageInfo.getList().forEach(item -> {
-                    resList.add(BaseBeanUtils.convert(item, VoiceTemplateSelectDto.class));
+                    resList.add(BaseBeanUtils.convert(item, VoiceTemplateSelectDTO.class));
                 });
                 return resList;
             }
@@ -218,7 +218,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public boolean alterTemplateVoice(VoiceTemplateAlterReqDto alterReqDto) {
+    public boolean alterTemplateVoice(VoiceTemplateAlterReqDTO alterReqDto) {
         String templateID = alterReqDto.getTemplateId();
         VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
         if (voiceTemplateDO.getAuditStatus().equals(AuditEnum.AUDIT_FAIL.getCode())) {
@@ -243,7 +243,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         }
     }
 
-    public boolean alterTemplateVoiceAdmin(VoiceTemplateAdminAlterReqDto alterReqDto) {
+    public boolean alterTemplateVoiceAdmin(VoiceTemplateAdminAlterReqDTO alterReqDto) {
         String templateID = alterReqDto.getTemplateId();
         VoiceTemplateDO voiceTemplateDO = this.queryById(templateID);
         voiceTemplateDO.setOutChannelName(StringUtils.isNotEmpty(alterReqDto.getOutChannelName()) ? alterReqDto.getOutChannelName() : voiceTemplateDO.getOutChannelName());
@@ -257,7 +257,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public boolean testTemplateVoice(VoiceTemplateOpenDto openDto) {
+    public boolean testTemplateVoice(VoiceTemplateOpenDTO openDto) {
         AccountCapitalDO accountCapitalDO =  accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(openDto.getContractNo()).build());
         if (accountCapitalDO==null){
             throw new BaseBizException("400","还未开通资金账户,请先完成充值");

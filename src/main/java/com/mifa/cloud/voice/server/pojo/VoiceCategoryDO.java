@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Data
 @Table(name = "t_voice_category")
-public class VoiceCategoryDO extends BaseDataDo {
+public class VoiceCategoryDO extends BaseDataDO {
     /**
      * 类目id
      */

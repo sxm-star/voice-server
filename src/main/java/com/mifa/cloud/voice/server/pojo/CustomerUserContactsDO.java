@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Table(name="t_customer_user_contacts")
 @Data
-public class CustomerUserContactsDO  extends BaseDataDo {
+public class CustomerUserContactsDO  extends BaseDataDO {
     /**
      * 用户姓名
      */

@@ -19,7 +19,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenapiConfigDO extends BaseDataDo{
+public class OpenapiConfigDO extends BaseDataDO {
     /**
      * 主键ID
      */

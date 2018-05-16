@@ -1,6 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.RoleDto;
+import com.mifa.cloud.voice.server.commons.dto.RoleDTO;
 import com.mifa.cloud.voice.server.commons.enums.RoleEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.SystemRoleInfoDAO;
@@ -33,11 +33,11 @@ public class SystemRoleService {
      * @param id
      * @return
      */
-    public RoleDto getRoleById(Long id) {
-        return BaseBeanUtils.convert(systemRoleInfoDAO.selectByPrimaryKey(id), RoleDto.class);
+    public RoleDTO getRoleById(Long id) {
+        return BaseBeanUtils.convert(systemRoleInfoDAO.selectByPrimaryKey(id), RoleDTO.class);
     }
 
-    public List<RoleDto> getRoleList(String roleName, RoleEnum roleEnum, StatusEnum statusEnum) {
+    public List<RoleDTO> getRoleList(String roleName, RoleEnum roleEnum, StatusEnum statusEnum) {
         SystemRoleInfoDOExample roleInfoDOExample = new SystemRoleInfoDOExample();
         SystemRoleInfoDOExample.Criteria criteria = roleInfoDOExample.createCriteria();
         if (StringUtils.isNotEmpty(roleName)) {
@@ -52,22 +52,22 @@ public class SystemRoleService {
         roleInfoDOExample.setOrderByClause(" id asc ");
         List<SystemRoleInfoDO> list = systemRoleInfoDAO.selectByExample(roleInfoDOExample);
         if (CollectionUtils.isNotEmpty(list)) {
-            List<RoleDto> result = new ArrayList<>();
-            list.forEach(systemRoleInfoDO -> result.add(BaseBeanUtils.convert(systemRoleInfoDO, RoleDto.class)));
+            List<RoleDTO> result = new ArrayList<>();
+            list.forEach(systemRoleInfoDO -> result.add(BaseBeanUtils.convert(systemRoleInfoDO, RoleDTO.class)));
             return result;
         }
         return Collections.EMPTY_LIST;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean insertRole(RoleDto roleDto) {
-        int cnt = systemRoleInfoDAO.insertSelective(BaseBeanUtils.convert(roleDto, SystemRoleInfoDO.class));
+    public boolean insertRole(RoleDTO roleDTO) {
+        int cnt = systemRoleInfoDAO.insertSelective(BaseBeanUtils.convert(roleDTO, SystemRoleInfoDO.class));
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateRole(RoleDto roleDto) {
-        int cnt = systemRoleInfoDAO.updateByPrimaryKeySelective(BaseBeanUtils.convert(roleDto, SystemRoleInfoDO.class));
+    public boolean updateRole(RoleDTO roleDTO) {
+        int cnt = systemRoleInfoDAO.updateByPrimaryKeySelective(BaseBeanUtils.convert(roleDTO, SystemRoleInfoDO.class));
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 

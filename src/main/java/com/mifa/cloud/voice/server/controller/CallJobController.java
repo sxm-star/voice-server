@@ -97,7 +97,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job-list", method = RequestMethod.GET)
     @Loggable(descp = "任务列表查询")
     @AuthScope(AuthQRole.MF_SERVICE)
-    public CommonResponse<PageDto<ContactGroupRspDto>> queryJobList(@RequestParam(required = true) String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+    public CommonResponse<PageDTO<ContactGroupRspDTO>> queryJobList(@RequestParam(required = true) String contractNo, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
         return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo, jobName, pageNum, pageSize));
     }
 
@@ -111,7 +111,7 @@ public class CallJobController {
     @RequestMapping(value = "/call-job-detail-list", method = RequestMethod.GET)
     @Loggable(descp = "任务拨打明细列表情况查询")
     @AuthScope(AuthQRole.MF_SERVICE)
-    public CommonResponse<PageDto<CustomerTaskCallDetailDto>> queryDetailList(@ModelAttribute @Valid CallDetailQueryDto callDetailQueryDto, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
-        return CommonResponse.successCommonResponse(taskCallDetailService.queryTaskDetailList(callDetailQueryDto, pageNum, pageSize));
+    public CommonResponse<PageDTO<CustomerTaskCallDetailDTO>> queryDetailList(@ModelAttribute @Valid CallDetailQueryDTO callDetailQueryDTO, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+        return CommonResponse.successCommonResponse(taskCallDetailService.queryTaskDetailList(callDetailQueryDTO, pageNum, pageSize));
     }
 }

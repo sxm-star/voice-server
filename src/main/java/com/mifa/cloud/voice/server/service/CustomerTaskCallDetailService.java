@@ -1,9 +1,9 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.CallDetailQueryDto;
-import com.mifa.cloud.voice.server.commons.dto.CustomerTaskCallDetailDto;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.CallDetailQueryDTO;
+import com.mifa.cloud.voice.server.commons.dto.CustomerTaskCallDetailDTO;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.enums.CallFlagEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
@@ -27,24 +27,24 @@ public class CustomerTaskCallDetailService extends BaseService<CustomerTaskCallD
     @Autowired
     CustomerTaskCallDetailDAO taskCallDetailDAO;
 
-    public PageDto<CustomerTaskCallDetailDto> queryTaskDetailList(CallDetailQueryDto callDetailQueryDto,Integer pageNum,Integer pageSize){
-        CustomerTaskCallDetailDO customerTaskCallDetailDO = BaseBeanUtils.convert(callDetailQueryDto,CustomerTaskCallDetailDO.class);
-        PageDto<CustomerTaskCallDetailDto> pageDto = null;
+    public PageDTO<CustomerTaskCallDetailDTO> queryTaskDetailList(CallDetailQueryDTO callDetailQueryDTO, Integer pageNum, Integer pageSize){
+        CustomerTaskCallDetailDO customerTaskCallDetailDO = BaseBeanUtils.convert(callDetailQueryDTO,CustomerTaskCallDetailDO.class);
+        PageDTO<CustomerTaskCallDetailDTO> pageDTO = null;
         try {
             PageInfo<CustomerTaskCallDetailDO>  pageInfo = this.queryListByPageAndOrder(customerTaskCallDetailDO,pageNum,pageSize," created_at desc ");
             if (pageInfo!=null ||  pageInfo.getList()!=null || pageInfo.getList().size()>0){
-                pageDto = BaseBeanUtils.convert(pageInfo,PageDto.class);
-                List<CustomerTaskCallDetailDto> resList = new ArrayList<>();
+                pageDTO = BaseBeanUtils.convert(pageInfo,PageDTO.class);
+                List<CustomerTaskCallDetailDTO> resList = new ArrayList<>();
                 pageInfo.getList().forEach(item->{
-                    CustomerTaskCallDetailDto detailDto = BaseBeanUtils.convert(item,CustomerTaskCallDetailDto.class);
+                    CustomerTaskCallDetailDTO detailDto = BaseBeanUtils.convert(item,CustomerTaskCallDetailDTO.class);
                     detailDto.setCallFlag(CallFlagEnum.getDesc(item.getCallFlag()));
                     resList.add(detailDto);
                 });
-                pageDto.setList(resList);
+                pageDTO.setList(resList);
             }
         }catch (Exception e){
             log.error("查询异常:{}",e);
         }
-        return pageDto;
+        return pageDTO;
     }
 }

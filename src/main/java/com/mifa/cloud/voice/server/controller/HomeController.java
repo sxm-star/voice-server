@@ -4,7 +4,7 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.HomeStatisticRspDto;
+import com.mifa.cloud.voice.server.commons.dto.HomeStatisticRspDTO;
 import com.mifa.cloud.voice.server.service.HomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +32,7 @@ public class HomeController {
     })
     @RequestMapping(value = "/home-statistic",method = RequestMethod.GET)
     @Loggable(descp = "首页统计信息")
-    public CommonResponse<HomeStatisticRspDto> homeStatistic(@RequestParam("contactNo") String contactNo){
+    public CommonResponse<HomeStatisticRspDTO> homeStatistic(@RequestParam("contactNo") String contactNo){
         return CommonResponse.successCommonResponse(homeService.homeStatistic(contactNo));
     }
 }

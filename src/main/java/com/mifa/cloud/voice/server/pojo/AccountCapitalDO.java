@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountCapitalDO extends BaseDataDo {
+public class AccountCapitalDO extends BaseDataDO {
     /**
      * 主键
      */

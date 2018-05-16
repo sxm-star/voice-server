@@ -2,7 +2,7 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueEditDTO;
 import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueQueryDTO;
 import com.mifa.cloud.voice.server.commons.dto.SystemKeyValueVO;
@@ -62,7 +62,7 @@ public class SystemKeyValueService {
     /**
      * 分页查询字典列表
      */
-    public PageDto<SystemKeyValueVO> getSystemKeyValuePageList(SystemKeyValueQueryDTO query, Integer page, Integer rows) {
+    public PageDTO<SystemKeyValueVO> getSystemKeyValuePageList(SystemKeyValueQueryDTO query, Integer page, Integer rows) {
         SystemKeyValueExample example = new SystemKeyValueExample();
         SystemKeyValueExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotEmpty(query.getContractNo())) {
@@ -80,9 +80,9 @@ public class SystemKeyValueService {
         PageInfo<SystemKeyValue> pageInfo = new PageInfo<>(mapper.selectByExample(example));
         List<SystemKeyValueVO> voList = new ArrayList<>();
         pageInfo.getList().forEach(item -> voList.add(BaseBeanUtils.convert(item, SystemKeyValueVO.class)));
-        PageDto<SystemKeyValueVO> pageDto = BaseBeanUtils.convert(pageInfo,PageDto.class);
-        pageDto.setList(voList);
-        return pageDto;
+        PageDTO<SystemKeyValueVO> pageDTO = BaseBeanUtils.convert(pageInfo,PageDTO.class);
+        pageDTO.setList(voList);
+        return pageDTO;
     }
 
     /**

@@ -7,7 +7,7 @@ import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDto;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiVoiceReqDTO;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
 import com.mifa.cloud.voice.server.service.TemplateVoiceService;
@@ -51,16 +51,16 @@ public class OpenApiController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "tenant token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @RequestMapping(value = "v1/voice-notify",method = RequestMethod.POST)
-    public void sendVoiceNotify(@RequestBody @Valid OpenApiVoiceReqDto openApiVoiceReqDto, HttpServletRequest request){
-        VoiceTemplateDO voiceTemplateDO = templateVoiceService.queryOne(VoiceTemplateDO.builder().templateId(openApiVoiceReqDto.getTemplateId()).build());
+    public void sendVoiceNotify(@RequestBody @Valid OpenApiVoiceReqDTO openApiVoiceReqDTO, HttpServletRequest request){
+        VoiceTemplateDO voiceTemplateDO = templateVoiceService.queryOne(VoiceTemplateDO.builder().templateId(openApiVoiceReqDTO.getTemplateId()).build());
         voiceTemplateDO.getOutChannelName();
         String templateId = voiceTemplateDO.getOutTemplateId();
-        String called = openApiVoiceReqDto.getMobile();
+        String called = openApiVoiceReqDTO.getMobile();
         String calledDisplay = "";
         String data = BaseStringUtils.uuid();
         int playTimes = 1;
         List<String> params = new ArrayList<>();
-        openApiVoiceReqDto.getParamsValue().entrySet().stream().forEach(entry -> {
+        openApiVoiceReqDTO.getParamsValue().entrySet().stream().forEach(entry -> {
             params.add(entry.getValue().toString());
         });
         Info info = Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();

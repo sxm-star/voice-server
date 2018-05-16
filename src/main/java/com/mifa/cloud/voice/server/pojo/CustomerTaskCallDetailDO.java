@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerTaskCallDetailDO extends BaseDataDo {
+public class CustomerTaskCallDetailDO extends BaseDataDO {
     /**
      * 主键
      */

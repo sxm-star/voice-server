@@ -2,7 +2,7 @@ package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.dao.CustomerAuthAuditMapper;
 import com.mifa.cloud.voice.server.commons.dto.AuthCheckListDTO;
@@ -66,7 +66,7 @@ public class CustomerAuthAuditService {
     /**
      * 根据条件查询list
      */
-    public PageDto<CustomerAuthAuditVO> selectAuthCheckList(AuthCheckListDTO dto, Integer page, Integer rows) {
+    public PageDTO<CustomerAuthAuditVO> selectAuthCheckList(AuthCheckListDTO dto, Integer page, Integer rows) {
 
         CustomerAuthAuditExample example = new CustomerAuthAuditExample();
         CustomerAuthAuditExample.Criteria criteria = example.createCriteria();
@@ -95,7 +95,7 @@ public class CustomerAuthAuditService {
                 .forEach(
                         item -> voList.add(BaseBeanUtils.convert(item, CustomerAuthAuditVO.class))
                 );
-        PageDto<CustomerAuthAuditVO> pageResult =  BaseBeanUtils.convert(pageInfo,PageDto.class);
+        PageDTO<CustomerAuthAuditVO> pageResult =  BaseBeanUtils.convert(pageInfo,PageDTO.class);
         pageResult.setList(voList);
 
         return pageResult;

@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountCapitalDetailDO extends BaseDataDo {
+public class AccountCapitalDetailDO extends BaseDataDO {
     /**
      * 主键id
      */

@@ -4,9 +4,9 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.MenuDto;
-import com.mifa.cloud.voice.server.commons.dto.ResourceDto;
-import com.mifa.cloud.voice.server.commons.dto.ResourceFunctionModelDto;
+import com.mifa.cloud.voice.server.commons.dto.MenuDTO;
+import com.mifa.cloud.voice.server.commons.dto.ResourceDTO;
+import com.mifa.cloud.voice.server.commons.dto.ResourceFunctionModelDTO;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.service.SystemResourceService;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
@@ -43,19 +43,19 @@ public class SystemManagerController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "添加系统菜单")
-    public CommonResponse<Boolean> addMenu(@RequestBody @Valid List<ResourceFunctionModelDto> resourceFunctionModelDtos) {
-        if (CollectionUtils.isEmpty(resourceFunctionModelDtos)){
+    public CommonResponse<Boolean> addMenu(@RequestBody @Valid List<ResourceFunctionModelDTO> resourceFunctionModelDTOs) {
+        if (CollectionUtils.isEmpty(resourceFunctionModelDTOs)){
             return CommonResponse.failCommonResponse();
         }
-        List<ResourceDto> resourceDtos = new ArrayList<>();
-        resourceFunctionModelDtos.forEach(resourceFunctionModelDto -> {
-            ResourceDto resourceDto = BaseBeanUtils.convert(resourceFunctionModelDto, ResourceDto.class);
-            resourceDto.setResourceStatus(resourceFunctionModelDto.getStatusEnum().getCode());
-            resourceDto.setResourceGroup(resourceFunctionModelDto.getResourceGroup().getCode());
-            resourceDto.setResourceType(resourceFunctionModelDto.getResouceTypeEnum().getCode());
-            resourceDtos.add(resourceDto);
+        List<ResourceDTO> resourceDTOs = new ArrayList<>();
+        resourceFunctionModelDTOs.forEach(resourceFunctionModelDTO -> {
+            ResourceDTO resourceDTO = BaseBeanUtils.convert(resourceFunctionModelDTO, ResourceDTO.class);
+            resourceDTO.setResourceStatus(resourceFunctionModelDTO.getStatusEnum().getCode());
+            resourceDTO.setResourceGroup(resourceFunctionModelDTO.getResourceGroup().getCode());
+            resourceDTO.setResourceType(resourceFunctionModelDTO.getResouceTypeEnum().getCode());
+            resourceDTOs.add(resourceDTO);
         });
-        return CommonResponse.successCommonResponse(resourceService.addMenu(resourceDtos));
+        return CommonResponse.successCommonResponse(resourceService.addMenu(resourceDTOs));
     }
 
     @ApiOperation("批量修改菜单")
@@ -63,16 +63,16 @@ public class SystemManagerController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "修改系统菜单,支持单条修改和批量修改")
-    public CommonResponse<Boolean> alterMenu(@RequestBody @Valid List<MenuDto> menuDtos) {
-        if (CollectionUtils.isEmpty(menuDtos)){
+    public CommonResponse<Boolean> alterMenu(@RequestBody @Valid List<MenuDTO> menuDTOs) {
+        if (CollectionUtils.isEmpty(menuDTOs)){
             return CommonResponse.failCommonResponse();
         }
-        List<ResourceDto> resourceDtos = new ArrayList<>();
-        menuDtos.forEach(resourceFunctionModelDto -> {
-            ResourceDto resourceDto = BaseBeanUtils.convert(resourceFunctionModelDto, ResourceDto.class);
-            resourceDtos.add(resourceDto);
+        List<ResourceDTO> resourceDTOs = new ArrayList<>();
+        menuDTOs.forEach(resourceFunctionModelDto -> {
+            ResourceDTO resourceDTO = BaseBeanUtils.convert(resourceFunctionModelDto, ResourceDTO.class);
+            resourceDTOs.add(resourceDTO);
         });
-        return CommonResponse.successCommonResponse(resourceService.alterMenu(resourceDtos));
+        return CommonResponse.successCommonResponse(resourceService.alterMenu(resourceDTOs));
     }
 
     @ApiOperation("获取同一层级菜单列表")
@@ -80,12 +80,12 @@ public class SystemManagerController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取同一层级菜单列表")
-    public CommonResponse<List<MenuDto>> findMenuList(@RequestParam(required = true, defaultValue = "0") Long pid, @RequestParam(required = true) StatusEnum statusEnum) {
-        List<ResourceDto> list = resourceService.findResourceList(pid, null, statusEnum);
+    public CommonResponse<List<MenuDTO>> findMenuList(@RequestParam(required = true, defaultValue = "0") Long pid, @RequestParam(required = true) StatusEnum statusEnum) {
+        List<ResourceDTO> list = resourceService.findResourceList(pid, null, statusEnum);
         if (CollectionUtils.isNotEmpty(list)) {
-            List<MenuDto> resultList = new ArrayList<>();
+            List<MenuDTO> resultList = new ArrayList<>();
             list.forEach(resourceDto -> {
-                resultList.add(BaseBeanUtils.convert(resourceDto, MenuDto.class));
+                resultList.add(BaseBeanUtils.convert(resourceDto, MenuDTO.class));
             });
             return CommonResponse.successCommonResponse(resultList);
         }

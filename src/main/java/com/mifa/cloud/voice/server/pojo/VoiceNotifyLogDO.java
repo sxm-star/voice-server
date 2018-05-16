@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoiceNotifyLogDO extends BaseDataDo {
+public class VoiceNotifyLogDO extends BaseDataDO {
     /**
      * 主键ID
      */

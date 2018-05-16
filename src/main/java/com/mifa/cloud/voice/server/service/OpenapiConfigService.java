@@ -1,7 +1,7 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDto;
-import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDto;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigDTO;
+import com.mifa.cloud.voice.server.commons.dto.OpenApiConfigRspDTO;
 import com.mifa.cloud.voice.server.pojo.OpenapiConfigDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseDateUtils;
@@ -21,27 +21,27 @@ import java.util.Date;
 public class OpenapiConfigService extends BaseService<OpenapiConfigDO> {
 
 
-    public  Boolean addOpenapiConfig(OpenApiConfigDto openapiConfigDto){
-        OpenapiConfigDO openapiConfigDO =   this.queryOne(OpenapiConfigDO.builder().contractNo(openapiConfigDto.getContractNo()).build());
+    public  Boolean addOpenapiConfig(OpenApiConfigDTO openapiConfigDTO){
+        OpenapiConfigDO openapiConfigDO =   this.queryOne(OpenapiConfigDO.builder().contractNo(openapiConfigDTO.getContractNo()).build());
         if (null!=openapiConfigDO){
             log.warn("已经存在租户token了");
             return Boolean.FALSE;
         }
-        openapiConfigDO =  BaseBeanUtils.convert(openapiConfigDto,OpenapiConfigDO.class);
+        openapiConfigDO =  BaseBeanUtils.convert(openapiConfigDTO,OpenapiConfigDO.class);
         Date currentDate = new Date();
         openapiConfigDO.setCreatedAt(currentDate);
-        openapiConfigDO.setAuthToken(JwtTokenUtil.createToken(openapiConfigDO.getContractNo(),currentDate,openapiConfigDto.getTimeUnit().getCode(),openapiConfigDto.getExpireValue()));
-        openapiConfigDO.setAuthExpire(BaseDateUtils.getPeriodDateByCalendar(currentDate,openapiConfigDto.getTimeUnit().getCode(),openapiConfigDto.getExpireValue()));
+        openapiConfigDO.setAuthToken(JwtTokenUtil.createToken(openapiConfigDO.getContractNo(),currentDate, openapiConfigDTO.getTimeUnit().getCode(), openapiConfigDTO.getExpireValue()));
+        openapiConfigDO.setAuthExpire(BaseDateUtils.getPeriodDateByCalendar(currentDate, openapiConfigDTO.getTimeUnit().getCode(), openapiConfigDTO.getExpireValue()));
         int cnt = this.save(openapiConfigDO);
         return cnt>0?Boolean.TRUE:Boolean.FALSE;
     }
 
-    public OpenApiConfigRspDto getOpenApiConfig(String contractNo){
+    public OpenApiConfigRspDTO getOpenApiConfig(String contractNo){
         OpenapiConfigDO openapiConfigDO = new OpenapiConfigDO();
         openapiConfigDO.setContractNo(contractNo);
-        OpenApiConfigRspDto rspDto = null;
+        OpenApiConfigRspDTO rspDto = null;
         try{
-            rspDto  = BaseBeanUtils.convert(this.queryOne(openapiConfigDO),OpenApiConfigRspDto.class);
+            rspDto  = BaseBeanUtils.convert(this.queryOne(openapiConfigDO),OpenApiConfigRspDTO.class);
         }catch (Exception e){
             log.error("查询租户token信息异常:{}",e);
         }

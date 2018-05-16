@@ -52,11 +52,11 @@ public class RbacController {
             @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string", value = "角色ID,选填")
     })
     @Loggable(descp = "修改用户权限列表获取操作")
-    public CommonResponse alterfindRoleResourceList(@RequestBody @Valid  RoleResourcePostDto roleResourcePostDto) {
-        RoleDto role = roleService.getRoleById(roleResourcePostDto.getRoleId());
-        Map<Long, RoleResourceDto> map = roleResourceService
+    public CommonResponse alterfindRoleResourceList(@RequestBody @Valid RoleResourcePostDTO roleResourcePostDTO) {
+        RoleDTO role = roleService.getRoleById(roleResourcePostDTO.getRoleId());
+        Map<Long, RoleResourceDTO> map = roleResourceService
                 .findRoleResourceList(role);
-        roleResourceService.updateRoleResource(roleResourcePostDto.getRoleId(),map,roleResourcePostDto.getResourceIds());
+        roleResourceService.updateRoleResource(roleResourcePostDTO.getRoleId(),map, roleResourcePostDTO.getResourceIds());
         return CommonResponse.successCommonResponse();
     }
 
@@ -67,12 +67,12 @@ public class RbacController {
             @ApiImplicitParam(paramType = "query", name = "roleId", required = false, dataType = "string", value = "角色ID,选填")
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<List<ResourceDto>> findRoleResourceList(String contractNo, String roleId) {
+    public CommonResponse<List<ResourceDTO>> findRoleResourceList(String contractNo, String roleId) {
         Preconditions.checkArgument(StringUtils.isNotEmpty(contractNo) || StringUtils.isNotEmpty(roleId), "客户号和角色ID不能同时为空");
-        RoleDto role = roleService.getRoleById(roleId == null ? customerLoginInfoService.selectByPrimaryKey(contractNo).getContractNoRoleId() : Long.parseLong(roleId));
-        Map<Long, RoleResourceDto> map = roleResourceService
+        RoleDTO role = roleService.getRoleById(roleId == null ? customerLoginInfoService.selectByPrimaryKey(contractNo).getContractNoRoleId() : Long.parseLong(roleId));
+        Map<Long, RoleResourceDTO> map = roleResourceService
                 .findRoleResourceList(role);
-        List<ResourceDto> parentResourceList = resourceService
+        List<ResourceDTO> parentResourceList = resourceService
                 .findResourceList(0L, null, StatusEnum.NORMAL);
         resourceService.findAllResourceList(parentResourceList, StatusEnum.NORMAL);
         ResourceUtil.markResource(parentResourceList, map);
@@ -84,7 +84,7 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "获取系统角色列表操作")
-    public CommonResponse<List<RoleDto>> findRoleList(@RequestParam(value = "roleName", required = false) String roleName, @RequestParam(value = "roleEnum", required = false) RoleEnum roleEnum, @RequestParam(value = "roleStatus", required = false) StatusEnum roleStatus) {
+    public CommonResponse<List<RoleDTO>> findRoleList(@RequestParam(value = "roleName", required = false) String roleName, @RequestParam(value = "roleEnum", required = false) RoleEnum roleEnum, @RequestParam(value = "roleStatus", required = false) StatusEnum roleStatus) {
 
         return CommonResponse.successCommonResponse(roleService.getRoleList(roleName, roleEnum, roleStatus));
     }
@@ -94,13 +94,13 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<Boolean> insertRole(@RequestBody @Valid RolePostDto rolePostDto) {
-        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto, RoleDto.class);
-        roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
-        roleDto.setRoleType(rolePostDto.getRoleType().getCode());
+    public CommonResponse<Boolean> insertRole(@RequestBody @Valid RolePostDTO rolePostDTO) {
+        RoleDTO roleDTO = BaseBeanUtils.convert(rolePostDTO, RoleDTO.class);
+        roleDTO.setRoleStatus(rolePostDTO.getRoleStatus().getCode());
+        roleDTO.setRoleType(rolePostDTO.getRoleType().getCode());
         //安全考虑,新增操作不需要传id
-        roleDto.setId(null);
-        return CommonResponse.successCommonResponse(roleService.insertRole(roleDto));
+        roleDTO.setId(null);
+        return CommonResponse.successCommonResponse(roleService.insertRole(roleDTO));
     }
 
     @ApiOperation("修改系统角色")
@@ -108,11 +108,11 @@ public class RbacController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
     @Loggable(descp = "用户权限列表获取操作")
-    public CommonResponse<Boolean> alterRole(@RequestBody @Valid RolePostDto rolePostDto) {
-        RoleDto roleDto = BaseBeanUtils.convert(rolePostDto, RoleDto.class);
-        roleDto.setRoleStatus(rolePostDto.getRoleStatus().getCode());
-        roleDto.setRoleType(rolePostDto.getRoleType().getCode());
-        return CommonResponse.successCommonResponse(roleService.updateRole(roleDto));
+    public CommonResponse<Boolean> alterRole(@RequestBody @Valid RolePostDTO rolePostDTO) {
+        RoleDTO roleDTO = BaseBeanUtils.convert(rolePostDTO, RoleDTO.class);
+        roleDTO.setRoleStatus(rolePostDTO.getRoleStatus().getCode());
+        roleDTO.setRoleType(rolePostDTO.getRoleType().getCode());
+        return CommonResponse.successCommonResponse(roleService.updateRole(roleDTO));
     }
 
     @ApiOperation("批量删除系统角色")

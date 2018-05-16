@@ -1,6 +1,6 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.ResourceDto;
+import com.mifa.cloud.voice.server.commons.dto.ResourceDTO;
 import com.mifa.cloud.voice.server.commons.enums.ResouceTypeEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.SystemResourceDAO;
@@ -35,7 +35,7 @@ public class SystemResourceService {
      * @param resouceStatusEnum
      * @return
      */
-    public List<ResourceDto> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum, StatusEnum resouceStatusEnum) {
+    public List<ResourceDTO> findResourceList(Long pid, ResouceTypeEnum resouceTypeEnum, StatusEnum resouceStatusEnum) {
         SystemResourceDOExample resourceDOExample = new SystemResourceDOExample();
         SystemResourceDOExample.Criteria criteria = resourceDOExample.createCriteria();
         criteria.andPidEqualTo(pid);
@@ -49,9 +49,9 @@ public class SystemResourceService {
 
         List<SystemResourceDO> resourceDOList = systemResourceDAO.selectByExample(resourceDOExample);
         if (resourceDOList != null || !resourceDOList.isEmpty()) {
-            List<ResourceDto> resourceDtos = new ArrayList<>();
-            resourceDOList.forEach(systemResourceDO -> resourceDtos.add(BaseBeanUtils.convert(systemResourceDO, ResourceDto.class)));
-            return resourceDtos;
+            List<ResourceDTO> resourceDTOs = new ArrayList<>();
+            resourceDOList.forEach(systemResourceDO -> resourceDTOs.add(BaseBeanUtils.convert(systemResourceDO, ResourceDTO.class)));
+            return resourceDTOs;
         }
         return Collections.emptyList();
     }
@@ -59,31 +59,31 @@ public class SystemResourceService {
     /**
      * 加载子资源文件列表
      *
-     * @param resourceDtos
+     * @param resourceDTOs
      * @param resouceStatusEnum
      * @return
      */
-    public List<ResourceDto> findAllResourceList(List<ResourceDto> resourceDtos, StatusEnum resouceStatusEnum) {
-        if (resourceDtos == null || resourceDtos.isEmpty()) {
+    public List<ResourceDTO> findAllResourceList(List<ResourceDTO> resourceDTOs, StatusEnum resouceStatusEnum) {
+        if (resourceDTOs == null || resourceDTOs.isEmpty()) {
             return Collections.emptyList();
         }
-        resourceDtos.forEach(resourceDto -> {
+        resourceDTOs.forEach(resourceDto -> {
             resourceDto.setChildResource(findResourceList(resourceDto.getId(), null, StatusEnum.NORMAL));
         });
-        return resourceDtos;
+        return resourceDTOs;
     }
 
     /**
      * 菜单设置
      *
-     * @param resourceDtos
+     * @param resourceDTOs
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addMenu(List<ResourceDto> resourceDtos) {
-        if (CollectionUtils.isNotEmpty(resourceDtos)) {
+    public Boolean addMenu(List<ResourceDTO> resourceDTOs) {
+        if (CollectionUtils.isNotEmpty(resourceDTOs)) {
             List<SystemResourceDO> resourceDOs = new ArrayList<>();
-            resourceDtos.forEach(resourceDto -> {
+            resourceDTOs.forEach(resourceDto -> {
                 resourceDOs.add(BaseBeanUtils.convert(resourceDto, SystemResourceDO.class));
             });
             int cnt = systemResourceDAO.insertBatch(resourceDOs);
@@ -94,15 +94,15 @@ public class SystemResourceService {
 
     /**
      * 菜单更新状态 地址栏操作
-     * @param resourceDtos
+     * @param resourceDTOs
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean alterMenu(List<ResourceDto> resourceDtos) {
-        if (CollectionUtils.isNotEmpty(resourceDtos)) {
+    public Boolean alterMenu(List<ResourceDTO> resourceDTOs) {
+        if (CollectionUtils.isNotEmpty(resourceDTOs)) {
             int cnt = 0;
-            for (ResourceDto resourceDto:resourceDtos) {
-                SystemResourceDO resourceDO =  BaseBeanUtils.convert(resourceDto, SystemResourceDO.class);
+            for (ResourceDTO resourceDTO : resourceDTOs) {
+                SystemResourceDO resourceDO =  BaseBeanUtils.convert(resourceDTO, SystemResourceDO.class);
                 int tmpCnt = systemResourceDAO.updateByPrimaryKeySelective(resourceDO);
                 cnt += tmpCnt;
             }

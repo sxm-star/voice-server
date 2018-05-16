@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CallJobDO extends BaseDataDo {
+public class CallJobDO extends BaseDataDO {
     /**
      * 主键
      */

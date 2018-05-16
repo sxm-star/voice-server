@@ -1,9 +1,9 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
-import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryDto;
-import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryQueryDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
+import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryDTO;
+import com.mifa.cloud.voice.server.commons.dto.VoiceCategoryQueryDTO;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.VoiceCategoryDAO;
 import com.mifa.cloud.voice.server.pojo.VoiceCategoryDO;
@@ -35,26 +35,26 @@ public class TemplateCategoryService extends BaseService<VoiceCategoryDO> {
      *
      * @return
      */
-    public PageDto<VoiceCategoryDto> queryVoiceCategoryList(VoiceCategoryQueryDto voiceCategoryQueryDto, Integer pageNum, Integer pageSize) {
+    public PageDTO<VoiceCategoryDTO> queryVoiceCategoryList(VoiceCategoryQueryDTO voiceCategoryQueryDTO, Integer pageNum, Integer pageSize) {
         VoiceCategoryDO voiceCategoryDO = new VoiceCategoryDO();
         voiceCategoryDO.setParentId(0); //系统目前只有一级
         voiceCategoryDO.setStatus(StatusEnum.NORMAL.getCode());
-        if (StringUtils.isNotEmpty(voiceCategoryQueryDto.getContanctNo())) {
-            voiceCategoryDO.setCreatedBy(voiceCategoryQueryDto.getContanctNo());
+        if (StringUtils.isNotEmpty(voiceCategoryQueryDTO.getContanctNo())) {
+            voiceCategoryDO.setCreatedBy(voiceCategoryQueryDTO.getContanctNo());
         }
-        if (StringUtils.isNotEmpty(voiceCategoryQueryDto.getName())) {
-            voiceCategoryDO.setName(voiceCategoryQueryDto.getName());
+        if (StringUtils.isNotEmpty(voiceCategoryQueryDTO.getName())) {
+            voiceCategoryDO.setName(voiceCategoryQueryDTO.getName());
         }
-        if (StringUtils.isNotEmpty(voiceCategoryQueryDto.getBizType())) {
-            voiceCategoryDO.setBizType(voiceCategoryQueryDto.getBizType());
+        if (StringUtils.isNotEmpty(voiceCategoryQueryDTO.getBizType())) {
+            voiceCategoryDO.setBizType(voiceCategoryQueryDTO.getBizType());
         }
         try {
             PageInfo<VoiceCategoryDO> pageInfo = this.queryListByPageAndOrder(voiceCategoryDO, pageNum, pageSize, "sort_order asc");
             if (pageInfo != null && CollectionUtils.isNotEmpty(pageInfo.getList())) {
-                List<VoiceCategoryDto> voiceCategoryDtos = new ArrayList<>();
-                pageInfo.getList().stream().forEach(catrgoryItem -> voiceCategoryDtos.add(BaseBeanUtils.convert(catrgoryItem, VoiceCategoryDto.class)));
-                PageDto<VoiceCategoryDto> pageResult = BaseBeanUtils.convert(pageInfo, PageDto.class);
-                pageResult.setList(voiceCategoryDtos);
+                List<VoiceCategoryDTO> voiceCategoryDTOs = new ArrayList<>();
+                pageInfo.getList().stream().forEach(catrgoryItem -> voiceCategoryDTOs.add(BaseBeanUtils.convert(catrgoryItem, VoiceCategoryDTO.class)));
+                PageDTO<VoiceCategoryDTO> pageResult = BaseBeanUtils.convert(pageInfo, PageDTO.class);
+                pageResult.setList(voiceCategoryDTOs);
                 return pageResult;
             }
         } catch (Exception e) {
@@ -65,12 +65,12 @@ public class TemplateCategoryService extends BaseService<VoiceCategoryDO> {
 
     /**
      * 新增模板类目操作
-     * @param voiceCategoryQueryDto
+     * @param voiceCategoryQueryDTO
      * @return
      */
-    public Boolean insertVoiceCategory(VoiceCategoryQueryDto voiceCategoryQueryDto) {
-        VoiceCategoryDO voiceCategoryDO = BaseBeanUtils.convert(voiceCategoryQueryDto, VoiceCategoryDO.class);
-        voiceCategoryDO.setCreatedBy(voiceCategoryQueryDto.getContanctNo());
+    public Boolean insertVoiceCategory(VoiceCategoryQueryDTO voiceCategoryQueryDTO) {
+        VoiceCategoryDO voiceCategoryDO = BaseBeanUtils.convert(voiceCategoryQueryDTO, VoiceCategoryDO.class);
+        voiceCategoryDO.setCreatedBy(voiceCategoryQueryDTO.getContanctNo());
         voiceCategoryDO.setStatus(StatusEnum.NORMAL.getCode());
         int cnt = voiceCategoryDAO.insert(voiceCategoryDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
@@ -79,13 +79,13 @@ public class TemplateCategoryService extends BaseService<VoiceCategoryDO> {
     /**
      * 模板类目修改
      * @param categoryId
-     * @param voiceCategoryQueryDto
+     * @param voiceCategoryQueryDTO
      * @return
      */
-    public Boolean alterVoiceCategory(Integer categoryId , VoiceCategoryQueryDto voiceCategoryQueryDto) {
+    public Boolean alterVoiceCategory(Integer categoryId , VoiceCategoryQueryDTO voiceCategoryQueryDTO) {
         VoiceCategoryDO preVoiceCategoryDO = this.queryById(categoryId.longValue());
-        VoiceCategoryDO newVoiceCategoryDO = BaseBeanUtils.convert(voiceCategoryQueryDto, VoiceCategoryDO.class);
-        newVoiceCategoryDO.setUpdatedBy(voiceCategoryQueryDto.getContanctNo());
+        VoiceCategoryDO newVoiceCategoryDO = BaseBeanUtils.convert(voiceCategoryQueryDTO, VoiceCategoryDO.class);
+        newVoiceCategoryDO.setUpdatedBy(voiceCategoryQueryDTO.getContanctNo());
         newVoiceCategoryDO.setCategoryId(preVoiceCategoryDO.getCategoryId());
         int cnt = voiceCategoryDAO.updateByPrimaryKeySelective(newVoiceCategoryDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;

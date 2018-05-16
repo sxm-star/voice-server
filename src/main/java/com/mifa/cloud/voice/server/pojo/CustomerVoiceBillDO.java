@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerVoiceBillDO extends BaseDataDo {
+public class CustomerVoiceBillDO extends BaseDataDO {
     /**
      * 主键ID
      */

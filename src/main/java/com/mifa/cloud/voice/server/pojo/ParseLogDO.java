@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Table(name="t_parse_log")
 @Data
-public class ParseLogDO extends BaseDataDo {
+public class ParseLogDO extends BaseDataDO {
     /**
      * 主键ID号
      */

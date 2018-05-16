@@ -3,9 +3,9 @@ package com.mifa.cloud.voice.server.service;
 import com.github.abel533.entity.Example;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.CallJobDto;
+import com.mifa.cloud.voice.server.commons.dto.CallJobDTO;
 import com.mifa.cloud.voice.server.commons.dto.CustomerCallJobDto;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
 import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
@@ -83,33 +83,33 @@ public class CallJobService extends BaseService<CallJobDO> {
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public CallJobDto queryCallJob(String contractNo, Integer id) {
+    public CallJobDTO queryCallJob(String contractNo, Integer id) {
         CallJobDO callJobDO = new CallJobDO();
         callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         callJobDO.setContractNo(contractNo);
         callJobDO.setId(id);
         CallJobDO newCallJobDO = this.queryOne(callJobDO);
-        CallJobDto callJobDto = null;
+        CallJobDTO callJobDTO = null;
         if (newCallJobDO != null) {
-            callJobDto = BaseBeanUtils.convert(newCallJobDO, CallJobDto.class);
-            callJobDto.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
+            callJobDTO = BaseBeanUtils.convert(newCallJobDO, CallJobDTO.class);
+            callJobDTO.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
 
         }
-        return callJobDto;
+        return callJobDTO;
     }
 
-    public CallJobDto queryCallJobByID(Integer id) {
+    public CallJobDTO queryCallJobByID(Integer id) {
         CallJobDO callJobDO = new CallJobDO();
         callJobDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         callJobDO.setId(id);
         CallJobDO newCallJobDO = this.queryOne(callJobDO);
-        CallJobDto callJobDto = null;
+        CallJobDTO callJobDTO = null;
         if (newCallJobDO != null) {
-            callJobDto = BaseBeanUtils.convert(newCallJobDO, CallJobDto.class);
-            callJobDto.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
+            callJobDTO = BaseBeanUtils.convert(newCallJobDO, CallJobDTO.class);
+            callJobDTO.setJobStatus(JobStatusEnum.getDesc(newCallJobDO.getJobStatus()));
 
         }
-        return callJobDto;
+        return callJobDTO;
     }
 
     public Boolean delCallJob(String contracNo, Integer id) {
@@ -133,8 +133,8 @@ public class CallJobService extends BaseService<CallJobDO> {
         }
     }
 
-    public PageDto<CallJobDto> queryCallJobList(String contractNo, String jobName, Integer pageNum, Integer pageize) {
-        PageDto<CallJobDto> pageDto = null;
+    public PageDTO<CallJobDTO> queryCallJobList(String contractNo, String jobName, Integer pageNum, Integer pageize) {
+        PageDTO<CallJobDTO> pageDTO = null;
         try {
 
             Example example = new Example(CallJobDO.class);
@@ -149,20 +149,20 @@ public class CallJobService extends BaseService<CallJobDO> {
             List<CallJobDO> listDOs = customerCallJobDAO.selectByExample(example);
             if (listDOs != null && listDOs.size() > 0) {
                 PageInfo<CallJobDO> pageInfo = new PageInfo<CallJobDO>(listDOs);
-                List<CallJobDto> rspList = new ArrayList<>();
+                List<CallJobDTO> rspList = new ArrayList<>();
 
                 listDOs.forEach(item -> {
-                    CallJobDto callJobDto = BaseBeanUtils.convert(item, CallJobDto.class);
-                    callJobDto.setJobStatus(JobStatusEnum.getDesc(item.getJobStatus()));
-                    rspList.add(callJobDto);
+                    CallJobDTO callJobDTO = BaseBeanUtils.convert(item, CallJobDTO.class);
+                    callJobDTO.setJobStatus(JobStatusEnum.getDesc(item.getJobStatus()));
+                    rspList.add(callJobDTO);
                 });
-                pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
-                pageDto.setList(rspList);
+                pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
+                pageDTO.setList(rspList);
             }
-            return pageDto;
+            return pageDTO;
         } catch (Exception e) {
             log.error("拨打计划分页查询错误:{}", e);
-            return pageDto;
+            return pageDTO;
         }
     }
 

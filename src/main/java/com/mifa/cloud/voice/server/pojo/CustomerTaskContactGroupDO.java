@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerTaskContactGroupDO extends BaseDataDo{
+public class CustomerTaskContactGroupDO extends BaseDataDO {
     /**
      * 主键
      */

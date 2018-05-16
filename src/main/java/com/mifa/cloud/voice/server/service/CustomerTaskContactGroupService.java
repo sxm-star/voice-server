@@ -1,10 +1,10 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.github.pagehelper.PageInfo;
-import com.mifa.cloud.voice.server.commons.dto.ContactGroupPostDto;
-import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDto;
-import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDto;
-import com.mifa.cloud.voice.server.commons.dto.PageDto;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupPostDTO;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupRspDTO;
+import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDTO;
+import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
@@ -34,14 +34,14 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
     @Autowired
     ContactsService contactsService;
 
-    public Boolean addContactGroup(ContactGroupPostDto contactGroupPostDto) {
+    public Boolean addContactGroup(ContactGroupPostDTO contactGroupPostDTO) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setTaskId(BaseStringUtils.uuid());
-        customerTaskContactGroupDO.setSource(contactGroupPostDto.getSource());
-        customerTaskContactGroupDO.setGroupName(contactGroupPostDto.getGroupName());
+        customerTaskContactGroupDO.setSource(contactGroupPostDTO.getSource());
+        customerTaskContactGroupDO.setGroupName(contactGroupPostDTO.getGroupName());
         customerTaskContactGroupDO.setGroupCnt(0);//默认0
         customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
-        customerTaskContactGroupDO.setCreatedBy(contactGroupPostDto.getContractNo());
+        customerTaskContactGroupDO.setCreatedBy(contactGroupPostDTO.getContractNo());
         customerTaskContactGroupDO.setCreatedAt(new Date());
         this.save(customerTaskContactGroupDO);
         return Boolean.TRUE;
@@ -61,23 +61,23 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
         return Boolean.TRUE;
     }
 
-    public ContactGroupRspDto getContanctGroupById(Long id) {
+    public ContactGroupRspDTO getContanctGroupById(Long id) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = this.queryById(id);
         if (customerTaskContactGroupDO != null) {
-            return BaseBeanUtils.convert(customerTaskContactGroupDO, ContactGroupRspDto.class);
+            return BaseBeanUtils.convert(customerTaskContactGroupDO, ContactGroupRspDTO.class);
         }
         return null;
     }
 
-    public Boolean updateContanctGroupByIdSelective(ContactGroupRspDto contactGroupRspDto) {
-        CustomerTaskContactGroupDO customerTaskContactGroupDO = BaseBeanUtils.convert(contactGroupRspDto, CustomerTaskContactGroupDO.class);
+    public Boolean updateContanctGroupByIdSelective(ContactGroupRspDTO contactGroupRspDTO) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO = BaseBeanUtils.convert(contactGroupRspDTO, CustomerTaskContactGroupDO.class);
         customerTaskContactGroupDO.setUpdatedAt(new Date());
         customerTaskContactGroupDO.setUpdatedBy("system");
         this.updateByIdSelective(customerTaskContactGroupDO);
         return Boolean.TRUE;
     }
 
-    public PageDto<ContactGroupRspDto> queryContactGroupList(String contractNo, String groupName, Integer pageNum, Integer pageSize) {
+    public PageDTO<ContactGroupRspDTO> queryContactGroupList(String contractNo, String groupName, Integer pageNum, Integer pageSize) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setCreatedBy(contractNo);
         customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
@@ -88,27 +88,27 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
             }
             pageInfo = this.queryListByPageAndOrder(customerTaskContactGroupDO, pageNum, pageSize, " created_at desc ");
 
-            List<ContactGroupRspDto> list = new ArrayList<>();
+            List<ContactGroupRspDTO> list = new ArrayList<>();
             pageInfo.getList().forEach(
-                    item -> list.add(BaseBeanUtils.convert(item, ContactGroupRspDto.class))
+                    item -> list.add(BaseBeanUtils.convert(item, ContactGroupRspDTO.class))
             );
-            PageDto<ContactGroupRspDto> pageDto = BaseBeanUtils.convert(pageInfo, PageDto.class);
-            pageDto.setList(list);
-            return pageDto;
+            PageDTO<ContactGroupRspDTO> pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
+            pageDTO.setList(list);
+            return pageDTO;
         } catch (Exception e) {
             log.error("查询异常:{}", e);
             return null;
         }
     }
 
-    public List<ContactGroupSelectDto> querySelectedContactGroupList(String contactNo) {
+    public List<ContactGroupSelectDTO> querySelectedContactGroupList(String contactNo) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
         customerTaskContactGroupDO.setCreatedBy(contactNo);
         customerTaskContactGroupDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         List<CustomerTaskContactGroupDO> list = this.queryListByWhere(customerTaskContactGroupDO);
         if (CollectionUtils.isNotEmpty(list)) {
-            List<ContactGroupSelectDto> resList = new ArrayList<>();
-            list.forEach(customerTaskContactGroupDO1 -> resList.add(BaseBeanUtils.convert(customerTaskContactGroupDO1, ContactGroupSelectDto.class)));
+            List<ContactGroupSelectDTO> resList = new ArrayList<>();
+            list.forEach(customerTaskContactGroupDO1 -> resList.add(BaseBeanUtils.convert(customerTaskContactGroupDO1, ContactGroupSelectDTO.class)));
             return resList;
         }
         return Collections.EMPTY_LIST;
