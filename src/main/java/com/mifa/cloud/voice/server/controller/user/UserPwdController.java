@@ -63,7 +63,7 @@ public class UserPwdController {
             return CommonResponse.failCommonResponse("两次密码输入不一致");
         }
 
-        CustomerLoginInfo customerLoginInfo = loginInfoService.selectByPrimaryKey(param.getContractNo());
+        CustomerLoginInfo customerLoginInfo = loginInfoService.findByLoginMobile(param.getMobile());
 
         if(customerLoginInfo == null) {
             return CommonResponse.failCommonResponse("用户不存在");

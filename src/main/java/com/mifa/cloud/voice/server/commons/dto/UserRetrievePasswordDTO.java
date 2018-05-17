@@ -14,9 +14,9 @@ import javax.validation.constraints.Size;
 @ApiModel("用户找回密码实体类")
 public class UserRetrievePasswordDTO {
 
-    @ApiModelProperty("用户ID")
-    @NotEmpty(message = "用户ID不能为空")
-    private String contractNo;
+    @ApiModelProperty("用户手机号")
+    @NotEmpty(message = "用户手机号不能为空")
+    private String mobile;
 
     /**
      * 新密码
