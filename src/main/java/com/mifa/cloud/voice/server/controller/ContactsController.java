@@ -40,7 +40,6 @@ public class ContactsController {
     @RequestMapping(value = "/contact-group",method = RequestMethod.POST)
     @Loggable(descp = "增加号码组")
     public CommonResponse<Boolean> addContactGroup(@RequestBody @Valid ContactGroupPostDTO contactGroupPostDTO){
-
      return CommonResponse.successCommonResponse(customerTaskContactGroupService.addContactGroup(contactGroupPostDTO));
     }
 
@@ -77,7 +76,7 @@ public class ContactsController {
 
     @ApiOperation(value = "号码组的列表查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
-    ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
+            ,  @ApiImplicitParam(paramType = "query", name = "contractNo", required = true, dataType = "string",value = "客户号"),
             @ApiImplicitParam(paramType = "query", name = "groupName", required = false, dataType = "string",value = "组名"),
             @ApiImplicitParam(paramType = "query", name = "pageNum", required = true, dataType = "int", value = "页码"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
@@ -86,6 +85,19 @@ public class ContactsController {
     @Loggable(descp = "号码组的列表查询")
     public CommonResponse<PageDTO<ContactGroupRspDTO>> queryContactList(@RequestParam(required = true)String contractNo, @RequestParam(required = false) String groupName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
         return CommonResponse.successCommonResponse(customerTaskContactGroupService.queryContactGroupList(contractNo,groupName,pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "管理员号码组的列表查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            ,  @ApiImplicitParam(paramType = "query", name = "mobile", required = false, dataType = "string",value = "商户手机"),
+            @ApiImplicitParam(paramType = "query", name = "groupName", required = false, dataType = "string",value = "组名"),
+            @ApiImplicitParam(paramType = "query", name = "pageNum", required = true, dataType = "int", value = "页码"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
+    })
+    @RequestMapping(value = "/system/contact-group-list",method = RequestMethod.GET)
+    @Loggable(descp = "管理员号码组的列表查询")
+    public CommonResponse<PageDTO<ContactGroupRspDTO>> querySystemContactList(@RequestParam(required = false)String mobile, @RequestParam(required = false) String groupName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10") Integer pageSize){
+        return CommonResponse.successCommonResponse(customerTaskContactGroupService.querySystemContactGroupList(mobile,groupName,pageNum,pageSize));
     }
 
     @ApiOperation(value = "号码组的下拉框查询")

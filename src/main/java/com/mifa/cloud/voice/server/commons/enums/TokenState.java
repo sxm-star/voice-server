@@ -16,7 +16,7 @@ public enum TokenState {
 	
     private String  state;  
       
-    private TokenState(String state) {  
+     TokenState(String state) {
         this.state = state;  
     }
     

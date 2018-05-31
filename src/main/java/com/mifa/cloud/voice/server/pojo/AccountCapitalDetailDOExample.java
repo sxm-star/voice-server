@@ -3,11 +3,6 @@ package com.mifa.cloud.voice.server.pojo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class AccountCapitalDetailDOExample {
     protected String orderByClause;
@@ -15,6 +10,10 @@ public class AccountCapitalDetailDOExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+
+    private Integer limit;
+
+    private Integer offset;
 
     public AccountCapitalDetailDOExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -67,6 +66,22 @@ public class AccountCapitalDetailDOExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getOffset() {
+        return offset;
     }
 
     protected abstract static class GeneratedCriteria {

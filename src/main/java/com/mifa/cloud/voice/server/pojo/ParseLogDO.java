@@ -1,6 +1,10 @@
 package com.mifa.cloud.voice.server.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -8,10 +12,13 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * @author 
+ * @author songxm
  */
-@Table(name="t_parse_log")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="t_parse_log")
 public class ParseLogDO extends BaseDataDO {
     /**
      * 主键ID号
@@ -31,14 +38,18 @@ public class ParseLogDO extends BaseDataDO {
     private String parseFileName;
 
     /**
-     * 解析状态 1:成功；2:失败；3:运行中
+     * 备注信息
+     */
+    private String remark;
+
+    /**
+     * 解析状态 1:成功；2:失败
      */
     private String parseStatus;
 
     /**
      * 解析时间
      */
-    @NotEmpty
     private Date parseTime;
 
 

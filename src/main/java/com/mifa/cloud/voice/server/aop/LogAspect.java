@@ -163,9 +163,10 @@ public class LogAspect {
 
     @AfterReturning(returning = "ret", pointcut = "pointcut()")
     public void doAfterReturning(Object ret) throws Throwable {
-        // 处理完请求，返回内容
-        log.info("RESPONSE : " + ret);
-        log.info("###### use time : {} ms ######", (System.currentTimeMillis() - startTime.get()));
+        if(log.isDebugEnabled()){
+            log.debug("RESPONSE : " + ret);
+            log.debug("###### use time : {} ms ######", (System.currentTimeMillis() - startTime.get()));
+        }
     }
 
     /**
@@ -290,7 +291,9 @@ public class LogAspect {
         if (scope.toString().equalsIgnoreCase("REQUEST")) {
             log.info("请求参数:{}", logContent);
         } else if (scope.toString().equalsIgnoreCase("RESPONSE")) {
-            log.info("响应结果:{}", logContent);
+            if (log.isDebugEnabled()) {
+                log.debug("响应结果:{}", logContent);
+            }
         } else {
             log.info("不知何种请求");
         }

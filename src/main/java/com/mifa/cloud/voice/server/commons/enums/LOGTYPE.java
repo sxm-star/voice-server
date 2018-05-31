@@ -4,7 +4,7 @@ public enum LOGTYPE {
 
     private final String value;
 
-    private LOGTYPE(String value) {
+    LOGTYPE(String value) {
         this.value = value;
     }
 

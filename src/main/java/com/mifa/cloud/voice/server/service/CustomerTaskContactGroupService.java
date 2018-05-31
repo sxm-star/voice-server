@@ -7,6 +7,7 @@ import com.mifa.cloud.voice.server.commons.dto.ContactGroupSelectDTO;
 import com.mifa.cloud.voice.server.commons.dto.PageDTO;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
 import com.mifa.cloud.voice.server.dao.CustomerTaskContactGroupDAO;
+import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
@@ -33,6 +34,8 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
     CustomerTaskContactGroupDAO groupDAO;
     @Autowired
     ContactsService contactsService;
+    @Autowired
+    CustomerLoginInfoService customerLoginInfoService;
 
     public Boolean addContactGroup(ContactGroupPostDTO contactGroupPostDTO) {
         CustomerTaskContactGroupDO customerTaskContactGroupDO = new CustomerTaskContactGroupDO();
@@ -91,6 +94,39 @@ public class CustomerTaskContactGroupService extends BaseService<CustomerTaskCon
             List<ContactGroupRspDTO> list = new ArrayList<>();
             pageInfo.getList().forEach(
                     item -> list.add(BaseBeanUtils.convert(item, ContactGroupRspDTO.class))
+            );
+            PageDTO<ContactGroupRspDTO> pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
+            pageDTO.setList(list);
+            return pageDTO;
+        } catch (Exception e) {
+            log.error("查询异常:{}", e);
+            return null;
+        }
+    }
+
+    public PageDTO<ContactGroupRspDTO> querySystemContactGroupList(String mobile,String groupName, Integer pageNum, Integer pageSize) {
+        CustomerTaskContactGroupDO customerTaskContactGroupDO=  CustomerTaskContactGroupDO.builder().status(StatusEnum.NORMAL.getCode().toString()).build();
+        PageInfo<CustomerTaskContactGroupDO> pageInfo;
+        try {
+            if (StringUtils.isNotEmpty(groupName)) {
+                customerTaskContactGroupDO.setGroupName(groupName);
+            }
+            if (StringUtils.isNotEmpty(mobile)){
+                CustomerLoginInfo customerLoginInfo = customerLoginInfoService.findByLoginMobile(mobile);
+                if (null!=customerLoginInfo){
+                    customerTaskContactGroupDO.setCreatedBy(customerLoginInfo.getContractNo());
+                }
+
+            }
+            pageInfo = this.queryListByPageAndOrder(customerTaskContactGroupDO, pageNum, pageSize, " created_at desc ");
+
+            List<ContactGroupRspDTO> list = new ArrayList<>();
+            pageInfo.getList().forEach(
+                    item -> {
+                        ContactGroupRspDTO contactGroupRspDTO =    BaseBeanUtils.convert(item, ContactGroupRspDTO.class);
+                        contactGroupRspDTO.setMobile(customerLoginInfoService.selectByPrimaryKey(item.getCreatedBy()).getMobile());
+                        contactGroupRspDTO.setContractNo(item.getCreatedBy());
+                        list.add(contactGroupRspDTO);}
             );
             PageDTO<ContactGroupRspDTO> pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
             pageDTO.setList(list);

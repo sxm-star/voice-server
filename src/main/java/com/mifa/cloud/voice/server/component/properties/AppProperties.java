@@ -21,6 +21,9 @@ public class AppProperties {
 
     private String salt;
 
+    private Tenant tenant;
+
+
 
 	@Data
 	public static class AliyunVoice{
@@ -41,6 +44,12 @@ public class AppProperties {
        private String  userid;
        private String  pwd;
        private String  voiceUrl;
+    }
+
+    @Data
+    public static class Tenant{
+        private Long freeAmount;
+        private Integer freeVoiceCnt;
     }
 
 

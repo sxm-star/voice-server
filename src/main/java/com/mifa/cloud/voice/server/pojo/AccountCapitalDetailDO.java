@@ -4,57 +4,46 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * @author songxm
+ * @author 
  */
-@Table(name="t_account_capital_detail")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountCapitalDetailDO extends BaseDataDO {
+@Builder
+public class AccountCapitalDetailDO implements Serializable {
     /**
      * 主键id
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
      * 凭证号
      */
-    @NotEmpty
     private String receiptNo;
 
     /**
      * 账户号
      */
-    @NotEmpty
     private String accountNo;
 
     /**
      * 客户号
      */
-    @NotEmpty
     private String contractNo;
 
     /**
      * 交易类型
      */
-    @NotEmpty
     private String transType;
 
     /**
      * 币种
      */
-    @NotEmpty
     private String ccy;
 
     /**
@@ -76,6 +65,26 @@ public class AccountCapitalDetailDO extends BaseDataDO {
      * 备注
      */
     private String remark;
+
+    /**
+     * 创建时间 
+     */
+    private Date createdAt;
+
+    /**
+     * 创建人
+     */
+    private String createdBy;
+
+    /**
+     * 最后更新时间 
+     */
+    private Date updatedAt;
+
+    /**
+     * 最后更新人
+     */
+    private String updatedBy;
 
 
 }

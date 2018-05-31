@@ -1,11 +1,11 @@
 package com.mifa.cloud.voice.server.controller.user;
 
+import com.mifa.cloud.voice.server.annotation.AuthScope;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.UserEditAvatarDTO;
-import com.mifa.cloud.voice.server.commons.dto.UserEditMobileDTO;
-import com.mifa.cloud.voice.server.commons.dto.UserInfoVO;
+import com.mifa.cloud.voice.server.commons.dto.*;
+import com.mifa.cloud.voice.server.commons.enums.AuthQRole;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.CustomerAauthPerson;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthCompany;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
@@ -39,6 +39,8 @@ import javax.ws.rs.core.MediaType;
 public class UserInfoController {
 
     @Autowired
+    private ConstConfig aconst;
+    @Autowired
     private CustomerLoginInfoService infoService;
 
     @Autowired
@@ -65,8 +67,7 @@ public class UserInfoController {
 
         UserInfoVO vo = new UserInfoVO();
         BeanUtils.copyProperties(customerInfo, vo);
-
-        /** TODO 获取用户认证信息*/
+        vo.setAvatarUrl(vo.getAvatarUrl()==null?"":aconst.H5_URL_PATH + vo.getAvatarUrl());
         CustomerAauthPerson customerAauthPerson = customerAauthPersonService.selectByPrimaryKey(contractNo);
         CustomerAuthCompany customerAuthCompany = customerAuthCompanyService.selectByPrimaryKey(contractNo);
         // 认证类型；0-个人，1-企业，-1-未认证
@@ -134,4 +135,25 @@ public class UserInfoController {
 
     }
 
+    @GetMapping("/system/customer-list")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    @ApiOperation("客户列表查询")
+    @Loggable(descp = "客户列表查询")
+    @AuthScope(AuthQRole.MF_SERVICE)
+    public CommonResponse<PageDTO<CustomerInfoRspDTO>> queryCustomerList(@ModelAttribute CustomerInfoReqDTO customerInfoReqDTO,@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer  pageSize){
+      return CommonResponse.successCommonResponse(infoService.queryCustomerList(customerInfoReqDTO,pageNum,pageSize));
+    }
+
+    @PutMapping("/system/customer")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION,
+            required = true, value = "service token", dataType = "string")
+    })
+    @ApiOperation("管理员对客户的信息修改")
+    @Loggable(descp = "管理员对客户的信息修改")
+    @AuthScope(AuthQRole.MF_SERVICE)
+    public CommonResponse<Boolean> updateCustomer(@ModelAttribute CustomerInfoUpdateReqDTO customerInfoReqDTO){
+        return CommonResponse.successCommonResponse(infoService.updateCustomer(customerInfoReqDTO));
+    }
 }

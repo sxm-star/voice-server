@@ -3,6 +3,8 @@ package com.mifa.cloud.voice.server;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
+import com.mifa.cloud.voice.server.dao.AccountCapitalDetailDAO;
 import com.mifa.cloud.voice.server.dao.CustomerLoginInfoMapper;
 import com.mifa.cloud.voice.server.dao.SystemKeyValueMapper;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
@@ -30,7 +32,10 @@ public class TestDao {
 
     @Autowired
     private SystemKeyValueMapper systemKeyValueMapper;
-
+    @Autowired
+    AccountCapitalDetailDAO accountCapitalDetailDAO;
+    @Autowired
+    KeyValueDao keyValueDao;
     @Test
     public void testCustomer() {
         CustomerLoginInfo customerLoginInfo = CustomerLoginInfo.builder()
@@ -58,6 +63,16 @@ public class TestDao {
         System.out.println(infoList.get(0));
         System.out.println(JSONObject.toJSONString(infoList));
 
+    }
+
+    @Test
+    public void testKey(){
+        keyValueDao.set("123456","123456");
+    }
+
+    @Test
+    public void testDao(){
+       // System.out.println( accountCapitalDetailDAO.queryTotalByDataType());
     }
 
 

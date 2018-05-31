@@ -101,6 +101,19 @@ public class CallJobController {
         return CommonResponse.successCommonResponse(callJobService.queryCallJobList(contractNo, jobName, pageNum, pageSize));
     }
 
+    @ApiOperation(value = "管理员任务列表查询")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+            , @ApiImplicitParam(paramType = "query", name = "mobile", required = false, dataType = "string", value = "手机号"),
+            @ApiImplicitParam(paramType = "query", name = "jobName", required = false, dataType = "string", value = "计划名"),
+            @ApiImplicitParam(paramType = "query", name = "pageNum", required = true, dataType = "int", value = "页码"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", required = true, dataType = "int", value = "每页条数"),
+    })
+    @RequestMapping(value = "/system/call-job-list", method = RequestMethod.GET)
+    @Loggable(descp = "管理员任务列表查询")
+    @AuthScope(AuthQRole.MF_SERVICE)
+    public CommonResponse<PageDTO<CallJobDTO>> querySystemJobList(@RequestParam(required = false) String mobile, @RequestParam(required = false) String jobName, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+        return CommonResponse.successCommonResponse(callJobService.querySystemCallJobList(mobile, jobName, pageNum, pageSize));
+    }
 
     @ApiOperation(value = "任务拨打明细列表情况查询")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)

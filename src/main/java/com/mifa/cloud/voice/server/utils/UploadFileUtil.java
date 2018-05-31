@@ -1,15 +1,14 @@
 package com.mifa.cloud.voice.server.utils;
 
-import com.mifa.cloud.voice.server.commons.enums.FileStatusEnum;
-import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.MQMsgEnum;
-import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.commons.dto.UpLoadFilePathDTO;
 import com.mifa.cloud.voice.server.commons.dto.UploadFileVO;
+import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.FileStatusEnum;
+import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
+import com.mifa.cloud.voice.server.commons.enums.MQMsgEnum;
+import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.UploadFileLogService;
-import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -168,13 +167,13 @@ public class UploadFileUtil {
         Pattern pattern = null;
         // 如果上传的是excel文件.+(.JPEG|.jpeg|.JPG|.jpg)$
         if(FileTypeEnums.EXCEL.name().equals(fileType.name()))
-            pattern = Pattern.compile("^.+(.xlsx|.xls)$");
+            pattern = Pattern.compile("^.+(.xlsx|.xls|.XLSX|.XLS)$");
         // 如果上传的事音频
         if(FileTypeEnums.VOICE.name().equals(fileType.name()))
-            pattern = Pattern.compile("^.+(.wav)$");
+            pattern = Pattern.compile("^.+(.wav|.WAV)$");
         // 如果上传的事音频
         if(FileTypeEnums.IMAGE.name().equals(fileType.name()))
-            pattern = Pattern.compile("^.+(.jpg|.jpeg|.bmp|.png|.gif|.pdf)$");
+            pattern = Pattern.compile("^.+(.jpg|.jpeg|.bmp|.png|.gif|.pdf|.JPG|.JPEG|.BMP|.PNG|.GIF|.PDF)$");
         Matcher matcher = pattern.matcher(filename);
         return matcher.matches();
     }

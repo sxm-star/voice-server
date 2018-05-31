@@ -1,9 +1,9 @@
 package com.mifa.cloud.voice.server.component.task;
 
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.enums.BizTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.FileTypeEnums;
-import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.commons.dto.ParseLogDto;
+import com.mifa.cloud.voice.server.commons.enums.*;
+import com.mifa.cloud.voice.server.commons.event.ParseLogEvent;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
 import com.mifa.cloud.voice.server.pojo.UploadFileLog;
 import com.mifa.cloud.voice.server.service.ContactsService;
@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,9 @@ public class ContactTaskListener {
     @Autowired
     AsyncTaskExecutor asyncTaskExecutor;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @RabbitListener(queues = "q_analysis_mobile_list")
     @RabbitHandler
     public void contactTask(String groupId) {
@@ -61,8 +65,10 @@ public class ContactTaskListener {
                     @Override
                     public void run() {
                         String filePath =   uploadFileLog.getFileRealPath();
+
                         List<Map<String,Object>> list = OperExcel.readExcel(filePath, AppConst.VOICE_TEMPLATE_METAS);
                         if (CollectionUtils.isEmpty(list)) {
+                            applicationEventPublisher.publishEvent(new ParseLogEvent(BaseBizActionEnum.PARSE_LOG,groupId, ParseLogDto.builder().createdBy(uploadFileLog.getCreateBy()).createdAt(new Date()).parseTime(new Date()).parseFileId(uploadFileLog.getId()).parseFileName(uploadFileLog.getFileName()).remark("解析内容空").parseStatus(ParseStatusEnum.SUCESS.getCode()).build() ));
                             return;
                         }
                         int batchCnt =  contactTaskService.addContancts(list,uploadFileLog.getCreateBy(), taskContactGroupDO.getTaskId(),uploadFileLog.getId());
@@ -71,6 +77,7 @@ public class ContactTaskListener {
                         taskContactGroupDO.setUpdatedAt(new Date());
                         taskContactGroupDO.setUpdatedBy(uploadFileLog.getCreateBy());
                         taskContactGroupService.updateByIdSelective(taskContactGroupDO);
+                        applicationEventPublisher.publishEvent(new ParseLogEvent(BaseBizActionEnum.PARSE_LOG,groupId, ParseLogDto.builder().createdBy(uploadFileLog.getCreateBy()).createdAt(new Date()).parseTime(new Date()).parseFileId(uploadFileLog.getId()).parseFileName(uploadFileLog.getFileName()).parseStatus(ParseStatusEnum.FAIL.getCode()).remark("解析新增" + cnt).build() ));
                     }
                 });
             });

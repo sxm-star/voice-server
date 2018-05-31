@@ -4,9 +4,7 @@ import com.mifa.cloud.voice.server.api.jx.VoiceApi;
 import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
-import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
-import com.mifa.cloud.voice.server.commons.enums.JobStatusEnum;
-import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.dao.CustomerTaskUserContactsDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
@@ -52,6 +50,8 @@ public class JobTaskListener {
     TemplateVoiceService templateVoiceService;
     @Autowired
     AppProperties appProperties;
+    @Autowired
+    BlackListService blackListService;
 
     @RabbitListener(queues = "q_voice_job_pool")
     @RabbitHandler
@@ -62,6 +62,7 @@ public class JobTaskListener {
             return;
         }
         CallJobDO callJobDO = jobService.queryById(jobId);
+        int blackCnt = 0;
         if (callJobDO!=null && callJobDO.getJobStatus().equals(JobStatusEnum.RUNNING.getCode())){
 
             String taskId = callJobDO.getTaskId();
@@ -73,6 +74,14 @@ public class JobTaskListener {
                     VoiceTemplateDO voiceTemplateDO = templateVoiceService.queryById(callJobDO.getTemplateId());
                     if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
                         throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
+                    }
+                    BlackListDO blackListDO = blackListService.queryOne(BlackListDO.builder().contractNo(item.getContractNo()).tag(BlackListTagEnum.PHONE.name()).status(String.valueOf(StatusEnum.NORMAL.getCode())).type(BlackListTypeEnum.BLACK.name()).value(EncodesUtils.selfDecrypt(item.getUserPhone(),item.getSalt())).build());
+                    /**
+                     * 黑名单用户跳过
+                     */
+                    if (blackListDO!=null){
+                        blackCnt++;
+                        continue;
                     }
                     String templateId = voiceTemplateDO.getOutTemplateId();
                     log.info("拨打计划----- 三方ID号 :{}",templateId);
@@ -102,6 +111,7 @@ public class JobTaskListener {
                 callJobDO.setJobStatus(JobStatusEnum.STOP.getCode());
                 callJobDO.setUpdatedAt(new Date());
                 callJobDO.setUpdatedBy(callJobDO.getCreatedBy());
+                callJobDO.setGroupCnt(callJobDO.getGroupCnt()-blackCnt);
                 jobService.updateByIdSelective(callJobDO);
 
             }

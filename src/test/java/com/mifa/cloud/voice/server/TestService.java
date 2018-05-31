@@ -10,7 +10,10 @@ import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
-import com.mifa.cloud.voice.server.pojo.*;
+import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
+import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
+import com.mifa.cloud.voice.server.pojo.UploadFileLog;
+import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
@@ -22,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -68,9 +72,16 @@ public class TestService {
     VoiceServiceBillRateService rateService;
     @Autowired
     AccountCapitalService accountCapitalService;
+    @Autowired
+    AccountDetailService accountDetailService;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
 
     @Test
     public void testRedis() {
+        keyValueDao.set("123456","123456");
         System.out.println(keyValueDao.get("MOBILE_SMS_KEY_18225695244"));
     }
 
@@ -165,5 +176,13 @@ public class TestService {
     @Test
     public void testAccount(){
         accountCapitalService.save(AccountCapitalDO.builder().contractNo("123456").accountId(SeqProducerUtil.getAccountNo()).availableAmount(0l).freezeAccount(0l).totalAmount(0l).currPeriodBal(0l).lastPeriodBal(0l).build());
+    }
+
+    @Test
+    public void testAccountCaptial(){
+
+        System.out.println( accountDetailService.queryTotalByDataType(1));
+
+        System.out.println(accountDetailService.queryTotalRecharge(AccountTransTypeEnum.RECHARGE.getDesc()));
     }
 }

@@ -117,4 +117,6 @@ public class CallJobDTO {
     private String taskId;
     @ApiModelProperty("计划批次ID号")
     private String batchId;
+    @ApiModelProperty("商户手机号")
+    private String mobile;
 }

@@ -21,4 +21,8 @@ public class OpenApiVoiceReqDTO {
 
     @ApiModelProperty("参数值")
     private Map<String,Object> paramsValue;
+    /**
+     * 商户扩展自定义data
+     */
+    private String data;
 }

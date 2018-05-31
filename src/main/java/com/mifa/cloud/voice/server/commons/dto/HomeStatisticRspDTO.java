@@ -33,4 +33,14 @@ public class HomeStatisticRspDTO {
 
     private String companyName;
 
+    /**
+     * 拨打统计
+     */
+    private CallCollectDTO callCollect;
+
+    /**
+     * 语音体验次数
+     */
+    private VoiceExperienceDTO voiceExperience;
+
 }

@@ -3,11 +3,9 @@ package com.mifa.cloud.voice.server.controller;
 import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
-import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
-import com.mifa.cloud.voice.server.commons.dto.MenuDTO;
-import com.mifa.cloud.voice.server.commons.dto.ResourceDTO;
-import com.mifa.cloud.voice.server.commons.dto.ResourceFunctionModelDTO;
+import com.mifa.cloud.voice.server.commons.dto.*;
 import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
+import com.mifa.cloud.voice.server.service.SystemJobTimeService;
 import com.mifa.cloud.voice.server.service.SystemResourceService;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import io.swagger.annotations.Api;
@@ -37,6 +35,8 @@ public class SystemManagerController {
 
     @Autowired
     public SystemResourceService resourceService;
+    @Autowired
+    public SystemJobTimeService systemJobTimeService;
 
     @ApiOperation("添加系统菜单")
     @RequestMapping(value = "/menu", method = RequestMethod.POST)
@@ -93,4 +93,25 @@ public class SystemManagerController {
     }
 
 
+    @ApiOperation("添加系统允许拨打时间设置")
+    @RequestMapping(value = "/system/call-time", method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "添加系统允许拨打时间设置")
+    public CommonResponse<Boolean> addAllowCallTime(@RequestBody @Valid SystemJobTimeReqDto systemJobTimeReqDto) {
+
+        return CommonResponse.successCommonResponse(systemJobTimeService.addAllowCallTime(systemJobTimeReqDto));
+    }
+
+
+
+
+    @ApiOperation("查询系统允许拨打时间设置")
+    @RequestMapping(value = "/system/call-time", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "查询系统允许拨打时间设置")
+    public CommonResponse<List<SystemJobTimeRspDTO>> getAllowCallTime(@RequestParam String contractNo){
+       return CommonResponse.successCommonResponse( systemJobTimeService.getAllowCallTime(contractNo));
+    }
 }

@@ -25,6 +25,9 @@ public class ContactGroupRspDTO {
     @ApiModelProperty("批次任务ID")
     private String taskId;
 
+    @ApiModelProperty("客户号")
+    private String contractNo;
+
     /**
      * 通讯簿组表
      */
@@ -44,5 +47,7 @@ public class ContactGroupRspDTO {
     private String source;
     @ApiModelProperty("上传时间")
     private Date createdAt;
+    @ApiModelProperty("商户手机号")
+    private String mobile;
 
 }

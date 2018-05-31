@@ -5,6 +5,7 @@ import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.UserLoginDTO;
 import com.mifa.cloud.voice.server.commons.dto.UserLoginVO;
+import com.mifa.cloud.voice.server.commons.enums.UserStatusEnum;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
@@ -73,8 +74,12 @@ public class LoginController {
         loginInfo.setLastLoginIp(StringUtils.isNotEmpty(IPUtil.getRequestIp(request)) ? IPUtil.getRequestIp(request) : loginInfo.getLastLoginIp());
         loginInfoService.updateByPrimaryKeySelective(loginInfo);
 
+         if (loginInfo.getLoginStatus()!=null && loginInfo.getLoginStatus().equals(UserStatusEnum.LOCK.getCode()))
+         {
+             return CommonResponse.failCommonResponse("403","你的账号已经冻结,请联系管理员");
+         }
         // 生成token返回
-        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 1);
+        String token = JwtTokenUtil.createToken(loginInfo.getContractNo(), 60);
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .contractNo(loginInfo.getContractNo())
                 .token(token)

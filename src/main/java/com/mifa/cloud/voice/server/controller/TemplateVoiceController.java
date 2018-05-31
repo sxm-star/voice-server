@@ -51,6 +51,15 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(templateVoiceService.queryTemplateVoiceList(query,pageNum,pageSize));
     }
 
+    @ApiOperation("管理员语音模板列表")
+    @RequestMapping(value = "/system/template-voice-list", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "管理员语音模板列表")
+    public CommonResponse<PageDTO<VoiceTemplateRspDTO>> querySystemTemplateVoiceList(@ModelAttribute @Valid VoiceTemplateSysQuery query, @RequestParam(required = true, defaultValue = "1") Integer pageNum, @RequestParam(required = true,defaultValue = "10")  Integer pageSize){
+        return CommonResponse.successCommonResponse(templateVoiceService.querySystemTemplateVoiceList(query,pageNum,pageSize));
+    }
+
     @ApiOperation("获取单个语音模板")
     @RequestMapping(value = "/template-voice", method = RequestMethod.GET)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
@@ -102,13 +111,22 @@ public class TemplateVoiceController {
         return CommonResponse.successCommonResponse(templateVoiceService.alterTemplateVoiceAdmin(alterReqDto));
     }
 
-    @ApiOperation("语音模板测试")
+    @ApiOperation("语音模板在线测试")
     @RequestMapping(value = "/template-voice-test", method = RequestMethod.POST)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
     })
-    @Loggable(descp = "语音模板测试")
+    @Loggable(descp = "语音模板在线测试")
     public CommonResponse<Boolean> testTemplateVoice(@RequestBody @Valid VoiceTemplateOpenDTO templateOpenDto){
         return CommonResponse.successCommonResponse(templateVoiceService.testTemplateVoice(templateOpenDto));
+    }
+
+    @ApiOperation("语音模板免费体验")
+    @RequestMapping(value = "/template-voice-free", method = RequestMethod.POST)
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @Loggable(descp = "语音模板免费体验")
+    public CommonResponse<Boolean> TemplateVoiceFree(@RequestBody @Valid VoiceTemplateOpenDTO templateOpenDto){
+        return CommonResponse.successCommonResponse(templateVoiceService.templateVoiceFree(templateOpenDto));
     }
 
     @ApiOperation("业务类型列表")

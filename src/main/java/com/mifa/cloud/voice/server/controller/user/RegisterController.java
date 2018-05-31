@@ -4,6 +4,8 @@ import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
 import com.mifa.cloud.voice.server.commons.dto.UserRegisterDTO;
+import com.mifa.cloud.voice.server.commons.enums.BaseBizActionEnum;
+import com.mifa.cloud.voice.server.commons.event.VoiceGivenEvent;
 import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
 import com.mifa.cloud.voice.server.service.CustomerLoginInfoService;
 import com.mifa.cloud.voice.server.service.VerficationService;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,6 +40,9 @@ public class RegisterController {
 
     @Autowired
     private VerficationService verficationService;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @PostMapping("/user")
     @ApiOperation(value = "注册")
@@ -79,6 +85,8 @@ public class RegisterController {
                 .build();
         int count = customerLoginInfoService.insertSelective(customerLoginInfo);
         if (count > 0) {
+            VoiceGivenEvent voiceGivenEvent = new VoiceGivenEvent(BaseBizActionEnum.GIVE_TEN_VOICE_EXPERIENCE,customerLoginInfo.getContractNo(),null);
+            applicationEventPublisher.publishEvent(voiceGivenEvent);
             return CommonResponse.successCommonResponse("注册成功",null);
         }
         return CommonResponse.failCommonResponse("注册失败");

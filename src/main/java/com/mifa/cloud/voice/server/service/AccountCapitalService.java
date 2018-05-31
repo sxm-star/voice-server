@@ -1,6 +1,7 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.mifa.cloud.voice.server.api.jx.dto.CallBackV2Dto;
+import com.mifa.cloud.voice.server.commons.enums.AccountTransTypeEnum;
 import com.mifa.cloud.voice.server.commons.enums.ChannelEnum;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDetailDO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * 商户资金账户的业务操作
  * @author: songxm
  * @date: 2018/5/14 16:17
  * @version: v1.0.0
@@ -61,7 +63,7 @@ public class AccountCapitalService extends BaseService<AccountCapitalDO>{
 
         //租户资金账户
         AccountCapitalDO accountCapitalDO =  this.queryOne(AccountCapitalDO.builder().contractNo(contractNo).build());
-        AccountCapitalDetailDO accountCapitalDetailDO =  AccountCapitalDetailDO.builder().contractNo(contractNo).accountNo(accountCapitalDO.getAccountId()).ccy("RMB").remark("语音服务消费").amount(Long.valueOf(cost+"")).transType("支出").receiptNo(System.currentTimeMillis()+"").build();
+        AccountCapitalDetailDO accountCapitalDetailDO =  AccountCapitalDetailDO.builder().contractNo(contractNo).accountNo(accountCapitalDO.getAccountId()).ccy("RMB").remark("语音服务消费").amount(Long.valueOf(cost+"")).transType(AccountTransTypeEnum.COST.getDesc()).receiptNo(System.currentTimeMillis()+"").build();
         accountCapitalDetailDO.setBeforeBal(accountCapitalDO.getAvailableAmount());
         long availableAmount = accountCapitalDO.getAvailableAmount();
         if (availableAmount > cost){
@@ -69,7 +71,7 @@ public class AccountCapitalService extends BaseService<AccountCapitalDO>{
             accountCapitalDO.setAvailableAmount(availableAmount);
         }else {
             availableAmount = availableAmount -cost;
-            long creditAmount = accountCapitalDO.getCreditAmount() + availableAmount;
+            long creditAmount = availableAmount;
             //信用额度透支
             accountCapitalDO.setCreditAmount(creditAmount);
             accountCapitalDO.setAvailableAmount(0L);

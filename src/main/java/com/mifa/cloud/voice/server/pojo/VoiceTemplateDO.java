@@ -110,6 +110,10 @@ public class VoiceTemplateDO extends BaseDataDO {
     private String outTemplateId;
 
     /**
+     * 业务类型 0:收费;1:赠送的
+     */
+    private String templateBiz;
+    /**
      * 创建时间
      */
     @Column(name = "created_at")

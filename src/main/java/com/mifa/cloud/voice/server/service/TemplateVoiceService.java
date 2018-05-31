@@ -7,24 +7,20 @@ import com.mifa.cloud.voice.server.api.jx.dto.Info;
 import com.mifa.cloud.voice.server.api.jx.dto.JxVoiceVcodeReqDto;
 import com.mifa.cloud.voice.server.api.jx.dto.Subject;
 import com.mifa.cloud.voice.server.commons.dto.*;
-import com.mifa.cloud.voice.server.commons.enums.AuditEnum;
-import com.mifa.cloud.voice.server.commons.enums.StatusEnum;
-import com.mifa.cloud.voice.server.commons.enums.VoiceTypeEnum;
+import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.config.ConstConfig;
 import com.mifa.cloud.voice.server.dao.CustomerTaskCallDetailDAO;
 import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
-import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
-import com.mifa.cloud.voice.server.pojo.CustomerLoginInfo;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
-import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
+import com.mifa.cloud.voice.server.pojo.*;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -55,7 +51,12 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     private AppProperties appProperties;
     @Autowired
     private AccountCapitalService accountCapitalService;
-
+    @Autowired
+    private CustomerExperienceService customerExperienceService;
+    @Autowired
+    private BlackListService blackListService;
+    @Autowired
+    private VoiceServiceBillRateService rateService;
 
 
     public Boolean insertTemplateVoice(TemplateVoiceDTO templateVoiceDTO) {
@@ -64,6 +65,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         voiceTemplateDO.setCreatedAt(new Date());
         voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
         voiceTemplateDO.setAuditStatus(AuditEnum.WAIT_AUDIT.getCode());
+        voiceTemplateDO.setTemplateBiz(TemplateBizEnum.CHARGE.getCode());
         voiceTemplateDO.setTemplateType(templateVoiceDTO.getTemplateType().toString());
         int cnt = templateVoiceDAO.insert(voiceTemplateDO);
         return cnt > 0 ? Boolean.TRUE : Boolean.FALSE;
@@ -82,9 +84,57 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             rspDto.setAuditStatus(AuditEnum.getDesc(resDo.getAuditStatus()));
             rspDto.setTemplateTypeDesc(VoiceTypeEnum.getDesc(rspDto.getTemplateType()));
             rspDto.setTemplateType(VoiceTypeEnum.getDesc(resDo.getTemplateType()));
+            rspDto.setVoiceUrl(aconst.H5_URL_PATH + rspDto.getVoiceUrl());
 
         }
         return rspDto;
+    }
+
+    public PageDTO<VoiceTemplateRspDTO> querySystemTemplateVoiceList(VoiceTemplateSysQuery query, Integer pageNum, Integer pageSize) {
+        VoiceTemplateDO voiceTemplateDO = BaseBeanUtils.convert(query, VoiceTemplateDO.class);
+        voiceTemplateDO.setStatus(StatusEnum.NORMAL.getCode().toString());
+        if (StringUtils.isNotEmpty(query.getMobile())){
+            CustomerLoginInfo customerLoginInfo = customerLoginInfoService.findByLoginMobile(query.getMobile());
+            if (null!=customerLoginInfo){
+                voiceTemplateDO.setCreatedBy(customerLoginInfo.getContractNo());
+            }
+        }
+        PageDTO<VoiceTemplateRspDTO> pageDTO = null;
+        try {
+            PageInfo<VoiceTemplateDO> pageInfo = this.queryListByPageAndOrder(voiceTemplateDO, pageNum, pageSize, " created_at desc");
+            if (pageInfo != null && pageInfo.getList() != null) {
+                pageDTO = BaseBeanUtils.convert(pageInfo, PageDTO.class);
+                List<VoiceTemplateDO> doList = pageInfo.getList();
+                List<VoiceTemplateRspDTO> rspList = new ArrayList<>();
+                doList.forEach(voiceTemplateItem -> {
+                    VoiceTemplateRspDTO voiceTemplateRspDTO = BaseBeanUtils.convert(voiceTemplateItem, VoiceTemplateRspDTO.class);
+                    voiceTemplateRspDTO.setTemplateType(voiceTemplateRspDTO.getTemplateType().equals(VoiceTypeEnum.TEXT.name()) ? VoiceTypeEnum.TEXT.getDesc() : VoiceTypeEnum.VOICE.getDesc());
+                    CustomerLoginInfo customerLoginInfo = customerLoginInfoService.selectByPrimaryKey(voiceTemplateItem.getContractNo());
+                    if(null!=customerLoginInfo){
+                        voiceTemplateRspDTO.setMobile(customerLoginInfo.getMobile());
+                    }
+                    if (AuditEnum.WAIT_AUDIT.getCode().equals(voiceTemplateItem.getAuditStatus())) {
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.WAIT_AUDIT.getDesc());
+                    }
+                    if (AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateItem.getAuditStatus())) {
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_SUCCESS.getDesc());
+                    }
+                    if (AuditEnum.AUDIT_FAIL.getCode().equals(voiceTemplateItem.getAuditStatus())) {
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_FAIL.getDesc());
+                    }
+                    if (AuditEnum.AUDIT_ING.getCode().equals(voiceTemplateItem.getAuditStatus())) {
+                        voiceTemplateRspDTO.setAuditStatus(AuditEnum.AUDIT_ING.getDesc());
+                    }
+                    voiceTemplateRspDTO.setVoiceUrl(aconst.H5_URL_PATH + voiceTemplateRspDTO.getVoiceUrl());
+                    rspList.add(voiceTemplateRspDTO);
+                });
+                pageDTO.setList(rspList);
+            }
+            return pageDTO;
+        } catch (Exception e) {
+            log.error("语音模板分页查询错误:{}", e);
+            return pageDTO;
+        }
     }
 
     public PageDTO<VoiceTemplateRspDTO> queryTemplateVoiceList(VoiceTemplateQuery query, Integer pageNum, Integer pageSize) {
@@ -123,6 +173,7 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             return pageDTO;
         }
     }
+
 
     public PageDTO<VoiceTemplateAuditVO> queryAuditList(VoiceTemplateAuditQuery query, Integer pageNum, Integer pageSize) {
         PageDTO<VoiceTemplateAuditVO> pageDTO = null;
@@ -258,21 +309,32 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
     }
 
     public boolean testTemplateVoice(VoiceTemplateOpenDTO openDto) {
-        AccountCapitalDO accountCapitalDO =  accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(openDto.getContractNo()).build());
-        if (accountCapitalDO==null){
-            throw new BaseBizException("400","还未开通资金账户,请先完成充值");
+        AccountCapitalDO accountCapitalDO = accountCapitalService.queryOne(AccountCapitalDO.builder().contractNo(openDto.getContractNo()).build());
+        if (accountCapitalDO == null || accountCapitalDO.getAvailableAmount()<1*100) {
+            throw new BaseBizException("400", "资金账户余额不足,请先完成充值");
         }
         VoiceTemplateDO voiceTemplateDO = this.queryById(openDto.getTemplateId());
         if (voiceTemplateDO == null || voiceTemplateDO.getOutTemplateId() == null || !AuditEnum.AUDIT_SUCCESS.getCode().equals(voiceTemplateDO.getAuditStatus())) {
             throw new BaseBizException("400", "不存在的模板或未审核通过的模板");
         }
+
+        BlackListDO blackListDO = blackListService.queryOne(BlackListDO.builder().tag(BlackListTagEnum.PHONE.name()).contractNo(openDto.getContractNo()).type(BlackListTypeEnum.BLACK.name()).value(openDto.getPhone()).status(String.valueOf(StatusEnum.NORMAL.getCode())).build());
+        if (null!=blackListDO){
+            throw new BaseBizException("400", "拨打的手机号号在黑名单里");
+        }
+
+        VoiceServiceBillRateDO voiceServiceBillRateDO =  rateService.queryOne(VoiceServiceBillRateDO.builder().contractNo(openDto.getContractNo()).build());
+        if (null==voiceServiceBillRateDO){
+            throw new BaseBizException("400","租户的费率信息没有配置");
+        }
+
         String templateId = voiceTemplateDO.getOutTemplateId();
         String called = openDto.getPhone();
         String calledDisplay = "";
 
         String taskId = BaseStringUtils.uuid();
         String batchId = BaseStringUtils.uuid();
-        String data = openDto.getContractNo() +"|" + taskId +"|" + batchId + "|" + called;
+        String data = openDto.getContractNo() + "|" + taskId + "|" + batchId + "|" + called + "|" + TemplateBizEnum.CHARGE.getCode();
         int playTimes = 1;
         List<String> params = new ArrayList<>();
         Info info = Info.builder().appID(appProperties.getJixinVoice().getAppId()).callID("call" + BaseStringUtils.uuid()).sessionID("session" + BaseStringUtils.uuid()).build();
@@ -283,12 +345,12 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
         jxVoiceVcodeReqDto.setSubject(subject);
         log.info(JSON.toJSONString(jxVoiceVcodeReqDto));
         try {
-            VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto,appProperties.getJixinVoice().getAccountId(),appProperties.getJixinVoice().getAuthToken());
+            VoiceApi.sendVoiceNotification(jxVoiceVcodeReqDto, appProperties.getJixinVoice().getAccountId(), appProperties.getJixinVoice().getAuthToken());
             CustomerTaskCallDetailDO customerTaskCallDetailDO = new CustomerTaskCallDetailDO();
             customerTaskCallDetailDO.setPhone(called);
             customerTaskCallDetailDO.setTaskId(taskId);
             customerTaskCallDetailDO.setBatchId(batchId);
-            customerTaskCallDetailDO.setNote("测试接口记录");
+            customerTaskCallDetailDO.setNote("在线发送");
             customerTaskCallDetailDO.setCreatedAt(new Date());
             customerTaskCallDetailDO.setCallCnt(1);
             customerTaskCallDetailDO.setContractNo(openDto.getContractNo());
@@ -299,7 +361,23 @@ public class TemplateVoiceService extends BaseService<VoiceTemplateDO> {
             taskCallDetailDAO.insert(customerTaskCallDetailDO);
         } catch (Exception e) {
             log.error("发送异常:{}", e);
+            return Boolean.FALSE;
         }
         return Boolean.TRUE;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public VoiceExperienceDTO templateVoiceFree(VoiceTemplateOpenDTO openDTO) {
+        CustomerExperienceDO customerExperienceDO = customerExperienceService.queryOne(CustomerExperienceDO.builder().templateId(openDTO.getTemplateId()).contractNo(openDTO.getContractNo()).build());
+
+        if (customerExperienceDO.getExperienceTotalCnt().equals(customerExperienceDO.getCurrentCnt())){
+            throw new BaseBizException("400","您的语音体验次数已经用完");
+        }
+        boolean flag =  this.testTemplateVoice(openDTO);
+        if (flag){
+            customerExperienceDO.setCurrentCnt(customerExperienceDO.getCurrentCnt() + 1);
+            customerExperienceService.updateByIdSelective(customerExperienceDO);
+        }
+        return VoiceExperienceDTO.builder().experienceTotalCnt(customerExperienceDO.getExperienceTotalCnt()).currentCnt(customerExperienceDO.getCurrentCnt()).leftCnt(customerExperienceDO.getExperienceTotalCnt()-customerExperienceDO.getCurrentCnt()).build();
     }
 }

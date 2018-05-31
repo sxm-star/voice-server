@@ -29,3 +29,8 @@ appConfig:
 
   salt: RcHd65KfaB+bFVvbPQzvtA==
   appkeyGenerator: 6ZV0BnzHQFvKgUjHEwS1FA==
+
+  #商户注册免费获得额度
+  tenant:
+    freeAmount: 0
+    freeVoiceCnt: 10

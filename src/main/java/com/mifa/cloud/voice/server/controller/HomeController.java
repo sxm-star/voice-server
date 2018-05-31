@@ -4,7 +4,9 @@ import com.google.common.net.HttpHeaders;
 import com.mifa.cloud.voice.server.annotation.Loggable;
 import com.mifa.cloud.voice.server.commons.constants.AppConst;
 import com.mifa.cloud.voice.server.commons.dto.CommonResponse;
+import com.mifa.cloud.voice.server.commons.dto.DateTypeEnum;
 import com.mifa.cloud.voice.server.commons.dto.HomeStatisticRspDTO;
+import com.mifa.cloud.voice.server.commons.dto.SystemHomeStatisticRspDTO;
 import com.mifa.cloud.voice.server.service.HomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +34,17 @@ public class HomeController {
     })
     @RequestMapping(value = "/home-statistic",method = RequestMethod.GET)
     @Loggable(descp = "首页统计信息")
-    public CommonResponse<HomeStatisticRspDTO> homeStatistic(@RequestParam("contactNo") String contactNo){
-        return CommonResponse.successCommonResponse(homeService.homeStatistic(contactNo));
+    public CommonResponse<HomeStatisticRspDTO> homeStatistic(@RequestParam("contactNo") String contactNo,@RequestParam(required = false) String dataTime){
+        return CommonResponse.successCommonResponse(homeService.homeStatistic(contactNo,dataTime));
+    }
+
+
+    @ApiOperation(value = "管理员首页统计信息")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "header", name = HttpHeaders.AUTHORIZATION, required = true, value = "service token", dataType = "string", defaultValue = AppConst.SAMPLE_TOKEN)
+    })
+    @RequestMapping(value = "/system/home-statistic",method = RequestMethod.GET)
+    @Loggable(descp = "首页统计信息")
+    public CommonResponse<SystemHomeStatisticRspDTO> homeStatistic(@RequestParam("contactNo") String contactNo, @RequestParam(required = false) DateTypeEnum dataTimeEnum){
+        return CommonResponse.successCommonResponse(homeService.sysHomeStatistic(contactNo,dataTimeEnum));
     }
 }

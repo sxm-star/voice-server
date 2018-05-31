@@ -25,8 +25,7 @@ public class VoiceTemplateOpenDTO {
     @NotEmpty(message = "测试手机号不能为空")
     private String phone;
     @ApiModelProperty("测试姓名")
-   // @NotEmpty(message = "测试姓名不能为空")
+
     private String name;
-    //@NotEmpty(message = "公司名称不能为空")
     private String orgName;
 }

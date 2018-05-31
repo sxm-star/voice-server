@@ -102,4 +102,6 @@ public class VoiceTemplateRspDTO {
     @ApiModelProperty("供应商三方平台模板ID")
     private String outTemplateId;
 
+    @ApiModelProperty("商户手机号")
+    private String mobile;
 }
