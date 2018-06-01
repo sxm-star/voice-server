@@ -9,6 +9,7 @@ import com.mifa.cloud.voice.server.commons.enums.ChannelEnum;
 import com.mifa.cloud.voice.server.pojo.CustomerTaskCallDetailDO;
 import com.mifa.cloud.voice.server.pojo.VoiceCheckBillLogDO;
 import com.mifa.cloud.voice.server.pojo.VoiceNotifyLogDO;
+import com.mifa.cloud.voice.server.service.CustomerCallStatisticsService;
 import com.mifa.cloud.voice.server.service.CustomerTaskCallDetailService;
 import com.mifa.cloud.voice.server.service.VoiceCheckBillService;
 import com.mifa.cloud.voice.server.service.VoiceNotifyLogService;
@@ -39,6 +40,8 @@ public class CallBackController {
     VoiceNotifyLogService voiceNotifyLogService;
     @Autowired
     VoiceCheckBillService voiceCheckBillService;
+    @Autowired
+    CustomerCallStatisticsService customerCallStatisticsService;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -97,22 +100,26 @@ public class CallBackController {
             }
             break;
             case CALLEND: {
+
+                CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
+                taskCallDetailDO.setContractNo(meta[0]);
+                taskCallDetailDO.setBatchId(meta[2]);
+                taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
+                taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
+                CustomerTaskCallDetailDO updateTaskCallDO = taskCallDetailService.queryOne(taskCallDetailDO);
                 if (callBackDto.getSubject().getCause() == 0 && callBackDto.getSubject().getDisposition().equalsIgnoreCase("recv_refuse")) {
-                    CustomerTaskCallDetailDO taskCallDetailDO = new CustomerTaskCallDetailDO();
-                    taskCallDetailDO.setContractNo(meta[0]);
-                    taskCallDetailDO.setBatchId(meta[2]);
-                    taskCallDetailDO.setTaskId(voiceCheckBillLogDO.getData());
-                    taskCallDetailDO.setPhone(voiceCheckBillLogDO.getCalled());
-                    CustomerTaskCallDetailDO updateTaskCallDO = taskCallDetailService.queryOne(taskCallDetailDO);
                     if (updateTaskCallDO == null) {
                         log.warn("更新拨打计划为空updateTaskCallDO :{}", updateTaskCallDO);
                         return;
                     }
                     updateTaskCallDO.setCallFlag(CallFlagEnum.NO_CALLED.getCode());
                     updateTaskCallDO.setCallTime(0);
-                    taskCallDetailService.updateByIdSelective(updateTaskCallDO);
                     log.info("拨打状态结束更新 :{}", updateTaskCallDO);
+
+                }else {
+                    updateTaskCallDO.setCallFlag(CallFlagEnum.HAS_CALLED.getCode());
                 }
+                taskCallDetailService.updateByIdSelective(updateTaskCallDO);
             }
             break;
             default:

@@ -1,25 +1,27 @@
 package com.mifa.cloud.voice.server.listener;
 
+import com.mifa.cloud.voice.server.commons.dto.CallStatisticsDTO;
 import com.mifa.cloud.voice.server.commons.enums.BaseBizActionEnum;
 import com.mifa.cloud.voice.server.commons.enums.TemplateBizEnum;
 import com.mifa.cloud.voice.server.commons.event.BaseBizAction;
+import com.mifa.cloud.voice.server.commons.event.CallStatisticsEvent;
 import com.mifa.cloud.voice.server.commons.event.ParseLogEvent;
 import com.mifa.cloud.voice.server.commons.event.VoiceGivenEvent;
 import com.mifa.cloud.voice.server.component.properties.AppProperties;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
+import com.mifa.cloud.voice.server.pojo.CustomerCallStatisticsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerExperienceDO;
 import com.mifa.cloud.voice.server.pojo.VoiceTemplateDO;
-import com.mifa.cloud.voice.server.service.AccountCapitalService;
-import com.mifa.cloud.voice.server.service.CustomerExperienceService;
-import com.mifa.cloud.voice.server.service.ParseLogService;
-import com.mifa.cloud.voice.server.service.TemplateVoiceService;
+import com.mifa.cloud.voice.server.service.*;
+import com.mifa.cloud.voice.server.utils.BaseDateUtils;
 import com.mifa.cloud.voice.server.utils.SeqProducerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +42,8 @@ public class BaseBizListener {
     AppProperties appProperties;
     @Autowired
     ParseLogService parseLogService;
+    @Autowired
+    CustomerCallStatisticsService customerCallStatisticsService;
 
 
     @EventListener
@@ -75,6 +79,22 @@ public class BaseBizListener {
 
         if (parseLogEvent != null) {
 
+        }
+    }
+
+    @EventListener
+    public void handlerParse(CallStatisticsEvent callStatisticsEvent) {
+        log.info("接收到行为事件:{}", callStatisticsEvent);
+
+        if (callStatisticsEvent != null) {
+          CallStatisticsDTO callStatisticsDTO =  callStatisticsEvent.getBaseBizAction().getData();
+            CustomerCallStatisticsDO callCollectDO =  customerCallStatisticsService.queryOneByContactNoAndCreateAt(callStatisticsDTO.getContractNo(), BaseDateUtils.getDayStart(new Date()),BaseDateUtils.getDayEnd(new Date()));
+            if (callCollectDO!=null){
+                callCollectDO.setCalledCnt(callCollectDO.getCalledCnt() + 1);
+                callCollectDO.setNoCalledCnt(callCollectDO.getNoCalledCnt()-1);
+                callCollectDO.setCallTime(callCollectDO.getCallTime() + callStatisticsDTO.getCnt());
+                customerCallStatisticsService.updateByIdSelective(callCollectDO);
+            }
         }
     }
 }

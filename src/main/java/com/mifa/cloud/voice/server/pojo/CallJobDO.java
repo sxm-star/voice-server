@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author 
@@ -118,5 +119,6 @@ public class CallJobDO extends BaseDataDO {
      */
     private String status;
 
+    private Date createdAt;
 
 }

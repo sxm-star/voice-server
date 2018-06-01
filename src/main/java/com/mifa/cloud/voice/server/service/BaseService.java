@@ -246,33 +246,35 @@ public abstract class BaseService<T extends BaseDataDO> {
         return new PageInfo<T>(list);
     }
 
-//    public T queryOneAndCreateAtGreaterThan(T t) throws Exception{
-//        // 如果条件为null，直接返回
-//        if (t == null) {
-//            return null;
-//        }else {
-//            // 声明一个example
-//            Example example = new Example(this.clazz);
-//            // 声明条件
-//            Criteria createCriteria = example.createCriteria();
-//            // 获取t的字段
-//            Field[] fields = t.getClass().getDeclaredFields();
-//            for (Field field : fields) {
-//                // 设置为true，可以获取声明的私有字段的值
-//                field.setAccessible(true);
-//                if (field.get(t) != null&& StringUtils.isNotEmpty(field.get(t).toString())) {
-//                    if (field.getName().equalsIgnoreCase("createAt")){
-//                        createCriteria.andGreaterThan(field.getName(),)
-//                    }
-//                    // 非空的字段的值，加入到条件中
-//                    createCriteria.andEqualTo(field.getName(), field.get(t));
-//                }
-//            }
-//
-//            List<T> list = this.getMapper().selectByExample(example);
-//        }
-//        return this.getMapper().selectOne(t);
-//    }
+    public List<T> queryListAndCreateAtGreaterThan(T t) throws Exception{
+        // 如果条件为null，直接返回
+        if (t == null) {
+            return null;
+        }else {
+            // 声明一个example
+            Example example = new Example(this.clazz);
+            // 声明条件
+            Criteria createCriteria = example.createCriteria();
+            // 获取t的字段
+            Field[] fields = t.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                // 设置为true，可以获取声明的私有字段的值
+                field.setAccessible(true);
+                if (field.get(t) != null&& StringUtils.isNotEmpty(field.get(t).toString())) {
+                    if (field.getName().equalsIgnoreCase("createAt")){
+                        createCriteria.andGreaterThan(field.getName(),field.get(t));
+                    }else {
+                        // 非空的字段的值，加入到条件中
+                        createCriteria.andEqualTo(field.getName(), field.get(t));
+                    }
+                }
+            }
+
+            List<T> list = this.getMapper().selectByExample(example);
+            return list;
+        }
+
+    }
 
     public PageInfo<T> queryListByPageAndOrderLike(T t, Integer page, Integer rows, String order)
             throws Exception {

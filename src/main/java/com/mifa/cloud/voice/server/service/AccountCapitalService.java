@@ -1,14 +1,17 @@
 package com.mifa.cloud.voice.server.service;
 
 import com.mifa.cloud.voice.server.api.jx.dto.CallBackV2Dto;
+import com.mifa.cloud.voice.server.commons.dto.CallStatisticsDTO;
 import com.mifa.cloud.voice.server.commons.enums.AccountTransTypeEnum;
 import com.mifa.cloud.voice.server.commons.enums.ChannelEnum;
+import com.mifa.cloud.voice.server.commons.event.CallStatisticsEvent;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDetailDO;
 import com.mifa.cloud.voice.server.pojo.CustomerVoiceBillDO;
 import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,9 @@ public class AccountCapitalService extends BaseService<AccountCapitalDO>{
     VoiceServiceBillRateService rateService;
     @Autowired
     CustomerVoiceBillService customerVoiceBillService;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Async
     @Transactional(rollbackFor = Exception.class)
@@ -56,8 +62,10 @@ public class AccountCapitalService extends BaseService<AccountCapitalDO>{
         }
         else if(callBackDto.getSubject().getDuration()>0 && left!=0){
             cost = voiceServiceBillRateDO.getRateAmt() * (cnt + 1);
+            cnt = cnt + 1;
         }
-
+        CallStatisticsEvent callStatisticsEvent = new CallStatisticsEvent("CallStatisticsEvent",contractNo, CallStatisticsDTO.builder().cnt(cnt).cost(cost).contractNo(contractNo).build());
+        applicationEventPublisher.publishEvent(callStatisticsEvent);
         //租户账单明细
         customerVoiceBillService.save(CustomerVoiceBillDO.builder().contractNo(contractNo).called(called).channel(ChannelEnum.JIXIN.getName()).notify(callBackDto.getNotify()).duration(callBackDto.getSubject().getDuration()).data(batchId).cost(cost).build());
 

@@ -1,5 +1,6 @@
 package com.mifa.cloud.voice.server.pojo;
 
+import com.mifa.cloud.voice.server.utils.BaseDateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,11 +55,13 @@ public class CustomerCallStatisticsDO extends BaseDataDO {
      */
     private String note;
 
-
-
     /**
-     * 创建时间
+     * 创建人
      */
+    private String createdBy;
+
     private Date createdAt;
+
+
 
 }

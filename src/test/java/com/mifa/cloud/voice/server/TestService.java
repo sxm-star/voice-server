@@ -10,10 +10,7 @@ import com.mifa.cloud.voice.server.commons.enums.*;
 import com.mifa.cloud.voice.server.component.RandomSort;
 import com.mifa.cloud.voice.server.component.redis.KeyValueDao;
 import com.mifa.cloud.voice.server.config.ConstConfig;
-import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
-import com.mifa.cloud.voice.server.pojo.CustomerTaskContactGroupDO;
-import com.mifa.cloud.voice.server.pojo.UploadFileLog;
-import com.mifa.cloud.voice.server.pojo.VoiceServiceBillRateDO;
+import com.mifa.cloud.voice.server.pojo.*;
 import com.mifa.cloud.voice.server.service.*;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import com.mifa.cloud.voice.server.utils.OperExcel;
@@ -74,6 +71,8 @@ public class TestService {
     AccountCapitalService accountCapitalService;
     @Autowired
     AccountDetailService accountDetailService;
+    @Autowired
+    CallJobService callJobService;
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
@@ -184,5 +183,10 @@ public class TestService {
         System.out.println( accountDetailService.queryTotalByDataType(1));
 
         System.out.println(accountDetailService.queryTotalRecharge(AccountTransTypeEnum.RECHARGE.getDesc()));
+    }
+    @Test
+    public void testJob() throws Exception{
+      List<CallJobDO>  callJobDOs = callJobService.queryListAndCreateAtGreaterThan(CallJobDO.builder().contractNo("8001489512062976").createdAt(new Date()).status(String.valueOf(JobStatusEnum.WAIT_START.getCode())).build());
+        System.out.println(callJobDOs);
     }
 }

@@ -1,9 +1,24 @@
 package com.mifa.cloud.voice.server.commons.dto;
 
-/**
- * @author: songxm
- * @date: 2018/6/1 08:33
- * @version: v1.0.0
- */
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CallStatisticsDTO {
+    /**
+     * 分钟数
+     */
+    int cost;
+
+    /**
+     * 次数
+     */
+    int cnt;
+
+    String contractNo;
 }

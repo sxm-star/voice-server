@@ -283,6 +283,10 @@ public class BaseDateUtils {
         return getDayStart(new Date());
     }
 
+    public static String getDayStartStr() {
+        return DATE_FORMAT.format(getDayStart(new Date()));
+    }
+
     public static Date getDayStart(Date date) {
         Preconditions.checkArgument(date != null, "时间对象不能为空");
         return parseDate(format(date, "yyyy-MM-dd"), new String[]{"yyyy-MM-dd"});
@@ -372,5 +376,9 @@ public class BaseDateUtils {
         defaultPatterns =new ImmutableMap.Builder<Pattern, FastDateFormat>().put(Pattern.compile("\\d{4}-\\d{2}-\\d{2}"), DATE_FORMAT).put(Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"), TIME_FORMAT).put(Pattern.compile("\\d{4}-\\d{2}-\\d{2}\'T\'\\d{2}:\\d{2}:\\d{2}.\\d{3}.*"), STANDARD_FORMAT).put(Pattern.compile("\\d{8}"), defaultFormats.get("yyyyMMdd")).put(Pattern.compile("\\d{14}"), defaultFormats.get("yyyyMMddHHmmss")).put(Pattern.compile("\\d{17}"), defaultFormats.get("yyyyMMddHHmmssSSS")).put(Pattern.compile("\\d{4}-\\d{1,2}-\\d{2}"), defaultFormats.get("yyyy-M-dd")).put(Pattern.compile("\\d{4}-\\d{2}"), defaultFormats.get("yyyy-MM")).put(Pattern.compile("\\d{4}-\\d{1,2}"), defaultFormats.get("yyyy-M")).put(Pattern.compile("\\d{13,14}"), defaultFormats.get("yyyyMddHHmmss")).put(Pattern.compile("\\d{6}"), defaultFormats.get("yyyyMM")).put(Pattern.compile("\\d{5,6}"), defaultFormats.get("yyyyM")).build();
         millsPerDay = Long.valueOf(86400000L);
         TIME_PATTERN = Pattern.compile("(-?\\d+)(y|M|d|h|m|s|ms)");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getDayStartStr());
     }
 }

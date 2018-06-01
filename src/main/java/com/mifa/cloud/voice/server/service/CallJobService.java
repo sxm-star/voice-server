@@ -15,6 +15,7 @@ import com.mifa.cloud.voice.server.dao.TemplateVoiceDAO;
 import com.mifa.cloud.voice.server.exception.BaseBizException;
 import com.mifa.cloud.voice.server.pojo.*;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
+import com.mifa.cloud.voice.server.utils.BaseDateUtils;
 import com.mifa.cloud.voice.server.utils.BaseStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +53,8 @@ public class CallJobService extends BaseService<CallJobDO> {
     private CustomerLoginInfoService customerLoginInfoService;
     @Autowired
     VoiceServiceBillRateService rateService;
+    @Autowired
+    CustomerCallStatisticsService customerCallStatisticsService;
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean addCallJob(CustomerCallJobDto customerCallJobDto) {
@@ -86,6 +89,14 @@ public class CallJobService extends BaseService<CallJobDO> {
             customerCallJobDO.setSource(temCustomerTaskContactGroupDO.getSource());
             customerCallJobDO.setGroupName(temCustomerTaskContactGroupDO.getGroupName());
 
+        }
+        CustomerCallStatisticsDO callCollectDO =  customerCallStatisticsService.queryOneByContactNoAndCreateAt(customerCallJobDO.getContractNo(), BaseDateUtils.getDayStart(new Date()),BaseDateUtils.getDayEnd(new Date()));
+        if (callCollectDO==null){
+            customerCallStatisticsService.save(CustomerCallStatisticsDO.builder().createdBy(customerCallJobDO.getContractNo()).noCalledCnt(customerCallJobDO.getGroupCnt()).contractNo(customerCallJobDO.getContractNo()).calledCnt(0).callTime(0).note("").build());
+        }else
+        {
+            callCollectDO.setNoCalledCnt(callCollectDO.getNoCalledCnt() + customerCallJobDO.getGroupCnt());
+            customerCallStatisticsService.updateByIdSelective(callCollectDO);
         }
         try {
             int cnt = customerCallJobDAO.insert(customerCallJobDO);

@@ -1,9 +1,7 @@
 package com.mifa.cloud.voice.server.service;
 
-import com.mifa.cloud.voice.server.commons.dto.CallCollectDTO;
 import com.mifa.cloud.voice.server.pojo.CustomerCallStatisticsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerCallStatisticsDOExample;
-import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,12 +22,14 @@ public class CustomerCallStatisticsService extends BaseService<CustomerCallStati
      * @param endDateTime
      * @return
      */
-    CallCollectDTO queryOneByContactNoAndCreateAt(String contractNo,Date startDateTime,Date endDateTime){
+
+
+    public CustomerCallStatisticsDO queryOneByContactNoAndCreateAt(String contractNo,Date startDateTime,Date endDateTime){
         CustomerCallStatisticsDOExample example = new CustomerCallStatisticsDOExample();
         example.createCriteria().andContractNoEqualTo(contractNo).andCreatedAtGreaterThan(startDateTime).andCreatedAtLessThan(endDateTime);
         List<CustomerCallStatisticsDO> list =  this.getMapper().selectByExample(example);
         if (null!=list&&list.size()>0){
-            return BaseBeanUtils.convert(list.get(0),CallCollectDTO.class);
+            return list.get(0);
         }
         return null;
     }

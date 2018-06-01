@@ -6,6 +6,7 @@ import com.mifa.cloud.voice.server.commons.enums.AuthEnum;
 import com.mifa.cloud.voice.server.commons.enums.AuthTypeEnum;
 import com.mifa.cloud.voice.server.pojo.AccountCapitalDO;
 import com.mifa.cloud.voice.server.pojo.CustomerAuthAudit;
+import com.mifa.cloud.voice.server.pojo.CustomerCallStatisticsDO;
 import com.mifa.cloud.voice.server.pojo.CustomerExperienceDO;
 import com.mifa.cloud.voice.server.utils.BaseBeanUtils;
 import com.mifa.cloud.voice.server.utils.BaseDateUtils;
@@ -64,7 +65,12 @@ public class HomeService {
             }else {
                 homeStatisticRspDTO.setCompanyName(authAudit.getCustomerName());
             }
-            CallCollectDTO callCollectDTO =  customerCallStatisticsService.queryOneByContactNoAndCreateAt(contractNo, BaseDateUtils.getDayStart(date),BaseDateUtils.getDayEnd(date));
+            CustomerCallStatisticsDO customerCallStatisticsDO =  customerCallStatisticsService.queryOneByContactNoAndCreateAt(contractNo, BaseDateUtils.getDayStart(date),BaseDateUtils.getDayEnd(date));
+            CallCollectDTO callCollectDTO = null;
+            if (null!=customerCallStatisticsDO){
+                callCollectDTO =  BaseBeanUtils.convert(customerCallStatisticsDO,CallCollectDTO.class);
+            }
+
             homeStatisticRspDTO.setCallCollect(callCollectDTO!=null?callCollectDTO:CallCollectDTO.builder().callTime(0L).calledCnt(0L).noCalledCnt(0L).build());
         }else {
             homeStatisticRspDTO.setCallCollect(CallCollectDTO.builder().callTime(0L).calledCnt(0L).noCalledCnt(0L).build());
