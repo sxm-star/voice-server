@@ -2,6 +2,7 @@ spring:
   application:
     name: voice-server-api #应用名称,与application.properities中保持一致
   session:
+<<<<<<< HEAD
     store-type: none
   rabbitmq:
     host: 192.168.2.181
@@ -53,12 +54,35 @@ h5:
    path: http://192.168.2.186
 
 
+=======
+    store-type: none 
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mfivc-cloud?characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: false
+    generate-ddl: false
+
+    
+>>>>>>> 初始化语音云微服务
 server:
   port: 5001  #Tomcat端口
   max-http-header-size: 4194304
   tomcat:
     max-http-post-size: 0
+<<<<<<< HEAD
 
+=======
+    
+#mybatis
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true  #表字段自动映射-驼峰
+    useColumnLabel: true
+>>>>>>> 初始化语音云微服务
 
 #服务注册与发现
 eureka:
@@ -82,6 +106,7 @@ hystrix:
           thread:
             timeoutInMilliseconds: 30000  #Feign超时时间
 
+<<<<<<< HEAD
 #pagehelper分页插件配置
 pagehelper:
   helperDialect: mysql
@@ -91,3 +116,6 @@ pagehelper:
 
 mifa.cloud.https.poolSize: 5
 mifa.cloud.https.timeout: 10000
+=======
+  
+>>>>>>> 初始化语音云微服务
