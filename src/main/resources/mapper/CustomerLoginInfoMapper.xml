@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mifa.cloud.voice.server.dao.CustomerLoginInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
+    <id column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="contract_type" property="contractType" jdbcType="CHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="contract_no_role_id" property="contractNoRoleId" jdbcType="BIGINT" />
+    <result column="login_passwd" property="loginPasswd" jdbcType="VARCHAR" />
+    <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="login_status" property="loginStatus" jdbcType="CHAR" />
+    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="BIGINT" />
+    <result column="active_code" property="activeCode" jdbcType="VARCHAR" />
+    <result column="active_status" property="activeStatus" jdbcType="CHAR" />
+    <result column="regist_type" property="registType" jdbcType="CHAR" />
+    <result column="is_manager" property="isManager" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    contract_no, contract_type, login_name, mobile, contract_no_role_id, login_passwd, 
+    avatar_url, salt, nick_name, login_status, last_login_ip, last_login_time, active_code, 
+    active_status, regist_type, is_manager, created_by, created_at, updated_by, updated_at
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_customer_login_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_login_info
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_customer_login_info
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfoExample" >
+    delete from t_customer_login_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
+    insert into t_customer_login_info (contract_no, contract_type, login_name, 
+      mobile, contract_no_role_id, login_passwd, 
+      avatar_url, salt, nick_name, 
+      login_status, last_login_ip, last_login_time, 
+      active_code, active_status, regist_type, 
+      is_manager, created_by, created_at, 
+      updated_by, updated_at)
+    values (#{contractNo,jdbcType=VARCHAR}, #{contractType,jdbcType=CHAR}, #{loginName,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{contractNoRoleId,jdbcType=BIGINT}, #{loginPasswd,jdbcType=VARCHAR}, 
+      #{avatarUrl,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
+      #{loginStatus,jdbcType=CHAR}, #{lastLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=BIGINT}, 
+      #{activeCode,jdbcType=VARCHAR}, #{activeStatus,jdbcType=CHAR}, #{registType,jdbcType=CHAR}, 
+      #{isManager,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
+    insert into t_customer_login_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="contractNo != null" >
+        contract_no,
+      </if>
+      <if test="contractType != null" >
+        contract_type,
+      </if>
+      <if test="loginName != null" >
+        login_name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="contractNoRoleId != null" >
+        contract_no_role_id,
+      </if>
+      <if test="loginPasswd != null" >
+        login_passwd,
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="loginStatus != null" >
+        login_status,
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+      <if test="activeCode != null" >
+        active_code,
+      </if>
+      <if test="activeStatus != null" >
+        active_status,
+      </if>
+      <if test="registType != null" >
+        regist_type,
+      </if>
+      <if test="isManager != null" >
+        is_manager,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="contractNo != null" >
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        #{contractType,jdbcType=CHAR},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNoRoleId != null" >
+        #{contractNoRoleId,jdbcType=BIGINT},
+      </if>
+      <if test="loginPasswd != null" >
+        #{loginPasswd,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null" >
+        #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginStatus != null" >
+        #{loginStatus,jdbcType=CHAR},
+      </if>
+      <if test="lastLoginIp != null" >
+        #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=BIGINT},
+      </if>
+      <if test="activeCode != null" >
+        #{activeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activeStatus != null" >
+        #{activeStatus,jdbcType=CHAR},
+      </if>
+      <if test="registType != null" >
+        #{registType,jdbcType=CHAR},
+      </if>
+      <if test="isManager != null" >
+        #{isManager,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_customer_login_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_customer_login_info
+    <set >
+      <if test="record.contractNo != null" >
+        contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractType != null" >
+        contract_type = #{record.contractType,jdbcType=CHAR},
+      </if>
+      <if test="record.loginName != null" >
+        login_name = #{record.loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractNoRoleId != null" >
+        contract_no_role_id = #{record.contractNoRoleId,jdbcType=BIGINT},
+      </if>
+      <if test="record.loginPasswd != null" >
+        login_passwd = #{record.loginPasswd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avatarUrl != null" >
+        avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salt != null" >
+        salt = #{record.salt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickName != null" >
+        nick_name = #{record.nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginStatus != null" >
+        login_status = #{record.loginStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.lastLoginIp != null" >
+        last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastLoginTime != null" >
+        last_login_time = #{record.lastLoginTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.activeCode != null" >
+        active_code = #{record.activeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeStatus != null" >
+        active_status = #{record.activeStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.registType != null" >
+        regist_type = #{record.registType,jdbcType=CHAR},
+      </if>
+      <if test="record.isManager != null" >
+        is_manager = #{record.isManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null" >
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null" >
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedAt != null" >
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_customer_login_info
+    set contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      contract_type = #{record.contractType,jdbcType=CHAR},
+      login_name = #{record.loginName,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      contract_no_role_id = #{record.contractNoRoleId,jdbcType=BIGINT},
+      login_passwd = #{record.loginPasswd,jdbcType=VARCHAR},
+      avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
+      salt = #{record.salt,jdbcType=VARCHAR},
+      nick_name = #{record.nickName,jdbcType=VARCHAR},
+      login_status = #{record.loginStatus,jdbcType=CHAR},
+      last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
+      last_login_time = #{record.lastLoginTime,jdbcType=BIGINT},
+      active_code = #{record.activeCode,jdbcType=VARCHAR},
+      active_status = #{record.activeStatus,jdbcType=CHAR},
+      regist_type = #{record.registType,jdbcType=CHAR},
+      is_manager = #{record.isManager,jdbcType=VARCHAR},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
+    update t_customer_login_info
+    <set >
+      <if test="contractType != null" >
+        contract_type = #{contractType,jdbcType=CHAR},
+      </if>
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNoRoleId != null" >
+        contract_no_role_id = #{contractNoRoleId,jdbcType=BIGINT},
+      </if>
+      <if test="loginPasswd != null" >
+        login_passwd = #{loginPasswd,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginStatus != null" >
+        login_status = #{loginStatus,jdbcType=CHAR},
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=BIGINT},
+      </if>
+      <if test="activeCode != null" >
+        active_code = #{activeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activeStatus != null" >
+        active_status = #{activeStatus,jdbcType=CHAR},
+      </if>
+      <if test="registType != null" >
+        regist_type = #{registType,jdbcType=CHAR},
+      </if>
+      <if test="isManager != null" >
+        is_manager = #{isManager,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mifa.cloud.voice.server.pojo.CustomerLoginInfo" >
+    update t_customer_login_info
+    set contract_type = #{contractType,jdbcType=CHAR},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      contract_no_role_id = #{contractNoRoleId,jdbcType=BIGINT},
+      login_passwd = #{loginPasswd,jdbcType=VARCHAR},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      login_status = #{loginStatus,jdbcType=CHAR},
+      last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=BIGINT},
+      active_code = #{activeCode,jdbcType=VARCHAR},
+      active_status = #{activeStatus,jdbcType=CHAR},
+      regist_type = #{registType,jdbcType=CHAR},
+      is_manager = #{isManager,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where contract_no = #{contractNo,jdbcType=VARCHAR}
+  </update>
+</mapper>
